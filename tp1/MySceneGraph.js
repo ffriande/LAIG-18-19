@@ -238,12 +238,12 @@ class MySceneGraph {
                 this.onXMLMinorError("failed to parse coordinates of initial translation; assuming zero");
             }
 
-            //TODO: Save translation data
+            // Save translation data
             this.initialTranslate.push(tx,ty,tz);
 
         }
 
-        //TODO: Parse Third Rotation
+        // Parse Third Rotation
         if (thirdRotationIndex == -1)
             this.onXMLMinorError("initial rotation undefined; assuming R = (0, 1, 0, 0)");
         else {
@@ -256,12 +256,12 @@ class MySceneGraph {
                 this.onXMLMinorError("failed to parse coordinates of initial rotation; assuming zero");
             }
 
-            //TODO: Save rotation data
+            // Save rotation data
             this.initialRotations.push(raxis,rangle);
 
         }
 
-        //TODO: Parse Second Rotation
+        // Parse Second Rotation
         if (secondRotationIndex == -1)
             this.onXMLMinorError("initial rotation undefined; assuming R = (0, 0, 1, 0)");
         else {
@@ -274,12 +274,12 @@ class MySceneGraph {
                 this.onXMLMinorError("failed to parse coordinates of initial rotation; assuming zero");
             }
 
-            //TODO: Save rotation data
+            // Save rotation data
             this.initialRotations.push(raxis,rangle);
 
         }
 
-        //TODO: Parse First Rotation
+        // Parse First Rotation
         if (firstRotationIndex == -1)
             this.onXMLMinorError("initial rotation undefined; assuming R = (0, 0, 0, 1)");
         else {
@@ -292,12 +292,12 @@ class MySceneGraph {
                 this.onXMLMinorError("failed to parse coordinates of initial rotation; assuming zero");
             }
 
-            //TODO: Save rotation data
+            // Save rotation data
             this.initialRotations.push(raxis,rangle);
 
         }
 
-        //TODO: Parse Scaling
+        // Parse Scaling
         if (scalingIndex == -1)
             this.onXMLMinorError("initial translation undefined; assuming S = (1, 1, 1)");
         else {
@@ -312,13 +312,13 @@ class MySceneGraph {
                 this.onXMLMinorError("failed to parse coordinates of initial scaling; assuming zero");
             }
 
-            //TODO: Save scaling data
+            // Save scaling data
             this.initialScaling.push(sx,sy,sz);
 
         }
 
 
-        //TODO: Parse Reference length
+        // Parse Reference length
  
         var indexReference = nodeNames.indexOf("reference");
         if (indexReference == -1) {
@@ -343,7 +343,7 @@ class MySceneGraph {
      * @param {illumination block element} illuminationNode
      */
     parseIllumination(illuminationNode) {
-        // TODO: Parse Illumination node
+        //  Parse Illumination node
 
         var children = illuminationNode.children;
 
@@ -534,11 +534,76 @@ class MySceneGraph {
                 return "ambient component undefined for ID = " + lightId;
 
             // TODO: Retrieve the diffuse component
+            var diffuseIllumination = [];
+            if (diffuseIndex != -1) {
+                // R
+                var r = this.reader.getFloat(grandChildren[diffuseIndex], 'r');
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+                    return "unable to parse R component of the diffuse illumination for ID = " + lightId;
+                else
+                    diffuseIllumination.push(r);
+
+                // G
+                var g = this.reader.getFloat(grandChildren[diffuseIndex], 'g');
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+                    return "unable to parse G component of the diffuse illumination for ID = " + lightId;
+                else
+                    diffuseIllumination.push(g);
+
+                // B
+                var b = this.reader.getFloat(grandChildren[diffuseIndex], 'b');
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+                    return "unable to parse B component of the diffuse illumination for ID = " + lightId;
+                else
+                    diffuseIllumination.push(b);
+
+                // A
+                var a = this.reader.getFloat(grandChildren[diffuseIndex], 'a');
+                if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+                    return "unable to parse A component of the diffuse illumination for ID = " + lightId;
+                else
+                    diffuseIllumination.push(a);
+            }
+            else
+                return "diffuse component undefined for ID = " + lightId;
 
             // TODO: Retrieve the specular component
+            var specularIllumination = [];
+            if (specularIndex != -1) {
+                // R
+                var r = this.reader.getFloat(grandChildren[specularIndex], 'r');
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+                    return "unable to parse R component of the specular illumination for ID = " + lightId;
+                else
+                    specularIllumination.push(r);
+
+                // G
+                var g = this.reader.getFloat(grandChildren[specularIndex], 'g');
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+                    return "unable to parse G component of the specular illumination for ID = " + lightId;
+                else
+                    specularIllumination.push(g);
+
+                // B
+                var b = this.reader.getFloat(grandChildren[specularIndex], 'b');
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+                    return "unable to parse B component of the specular illumination for ID = " + lightId;
+                else
+                    specularIllumination.push(b);
+
+                // A
+                var a = this.reader.getFloat(grandChildren[specularIndex], 'a');
+                if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+                    return "unable to parse A component of the specular illumination for ID = " + lightId;
+                else
+                    specularIllumination.push(a);
+            }
+            else
+                return "specular component undefined for ID = " + lightId;
 
             // TODO: Store Light global information.
-            //this.lights[lightId] = ...;
+            this.lights.push([enableLight, positionLight, ambientIllumination, diffuseIllumination, specularIllumination]);
+            
             numLights++;
         }
 
@@ -557,7 +622,47 @@ class MySceneGraph {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
-        // TODO: Parse block
+        // Parse block
+        var children = texturesNode.children;
+
+        this.textures = [];
+        var numTextures = 0;
+
+        var grandChildren = [];
+        var nodeNames = [];
+
+        // Any number of textures.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "TEXTURE") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current texture.
+            var textureId = this.reader.getString(children[i], 'id');
+            if (textureId == null)
+                return "no ID defined for light";
+
+            // Checks for repeated IDs.
+            if (this.textures[textureId] != null)
+                return "ID must be unique for each light (conflict: ID = " + lightId + ")";
+
+            grandChildren = children[i].children;
+            // Specifications for the current light.
+
+            nodeNames = [];
+            for (var j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            // Gets indices of each element.
+            var enableIndex = nodeNames.indexOf("enable");
+            var positionIndex = nodeNames.indexOf("position");
+            var ambientIndex = nodeNames.indexOf("ambient");
+            var diffuseIndex = nodeNames.indexOf("diffuse");
+            var specularIndex = nodeNames.indexOf("specular");
+        }
 
         console.log("Parsed textures");
 
