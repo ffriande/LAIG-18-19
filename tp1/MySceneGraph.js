@@ -1,12 +1,15 @@
 var DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
-var INITIALS_INDEX = 0;
-var ILLUMINATION_INDEX = 1;
-var LIGHTS_INDEX = 2;
-var TEXTURES_INDEX = 3;
-var MATERIALS_INDEX = 4;
-var NODES_INDEX = 5;
+var SCENE_INDEX = 0;
+var VIEWS_INDEX = 1;
+var AMBIENT_INDEX = 2;
+var LIGHTS_INDEX = 3;
+var TEXTURES_INDEX = 4;
+var MATERIALS_INDEX = 5;
+var TRANSFORMATIONS_INDEX = 6;
+var PRIMITIVES_INDEX = 7;
+var COMPONENTS_INDEX = 8;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -70,8 +73,8 @@ class MySceneGraph {
      * @param {XML root element} rootElement
      */
     parseXMLFile(rootElement) {
-        if (rootElement.nodeName != "SCENE")
-            return "root tag <SCENE> missing";
+        if (rootElement.nodeName != "yas")
+            return "root tag <yas> missing";
 
         var nodes = rootElement.children;
 
@@ -86,84 +89,264 @@ class MySceneGraph {
 
         // Processes each node, verifying errors.
 
-        // <INITIALS>
+        // <scene>
         var index;
-        if ((index = nodeNames.indexOf("INITIALS")) == -1)
-            return "tag <INITIALS> missing";
+        if ((index = nodeNames.indexOf("scene")) == -1)
+            return "tag <scene> missing";
         else {
-            if (index != INITIALS_INDEX)
-                this.onXMLMinorError("tag <INITIALS> out of order");
+            if (index != SCENE_INDEX)
+                this.onXMLMinorError("tag <scene> out of order");
 
-            //Parse INITIAL block
-            if ((error = this.parseInitials(nodes[index])) != null)
+            //Parse scene block
+            if ((error = this.parseScene(nodes[index])) != null)
                 return error;
         }
 
-        // <ILLUMINATION>
-        if ((index = nodeNames.indexOf("ILLUMINATION")) == -1)
-            return "tag <ILLUMINATION> missing";
+        // <views>
+        if ((index = nodeNames.indexOf("views")) == -1)
+            return "tag <views> missing";
         else {
-            if (index != ILLUMINATION_INDEX)
-                this.onXMLMinorError("tag <ILLUMINATION> out of order");
+            if (index != VIEWS_INDEX)
+                this.onXMLMinorError("tag <views> out of order");
 
-            //Parse ILLUMINATION block
-            if ((error = this.parseIllumination(nodes[index])) != null)
+            //Parse views block
+            if ((error = this.parseViews(nodes[index])) != null)
                 return error;
         }
 
-        // <LIGHTS>
-        if ((index = nodeNames.indexOf("LIGHTS")) == -1)
-            return "tag <LIGHTS> missing";
+        // <ambient>
+        if ((index = nodeNames.indexOf("ambient")) == -1)
+            return "tag <ambient> missing";
+        else {
+            if (index != AMBIENT_INDEX)
+                this.onXMLMinorError("tag <ambient> out of order");
+
+            //Parse ambient block
+            if ((error = this.parseAmbient(nodes[index])) != null)
+                return error;
+        }
+
+        // <lights>
+        if ((index = nodeNames.indexOf("lights")) == -1)
+            return "tag <lights> missing";
         else {
             if (index != LIGHTS_INDEX)
-                this.onXMLMinorError("tag <LIGHTS> out of order");
+                this.onXMLMinorError("tag <lights> out of order");
 
-            //Parse LIGHTS block
+            //Parse lights block
             if ((error = this.parseLights(nodes[index])) != null)
                 return error;
         }
 
-        // <TEXTURES>
-        if ((index = nodeNames.indexOf("TEXTURES")) == -1)
-            return "tag <TEXTURES> missing";
+        // <textures>
+        if ((index = nodeNames.indexOf("textures")) == -1)
+            return "tag <textures> missing";
         else {
             if (index != TEXTURES_INDEX)
-                this.onXMLMinorError("tag <TEXTURES> out of order");
+                this.onXMLMinorError("tag <textures> out of order");
 
-            //Parse TEXTURES block
+            //Parse textures block
             if ((error = this.parseTextures(nodes[index])) != null)
                 return error;
         }
 
-        // <MATERIALS>
-        if ((index = nodeNames.indexOf("MATERIALS")) == -1)
-            return "tag <MATERIALS> missing";
+        // <materials>
+        if ((index = nodeNames.indexOf("materials")) == -1)
+            return "tag <materials> missing";
         else {
             if (index != MATERIALS_INDEX)
-                this.onXMLMinorError("tag <MATERIALS> out of order");
+                this.onXMLMinorError("tag <materials> out of order");
 
-            //Parse MATERIALS block
+            //Parse materials block
             if ((error = this.parseMaterials(nodes[index])) != null)
                 return error;
         }
 
-        // <NODES>
-        if ((index = nodeNames.indexOf("NODES")) == -1)
-            return "tag <NODES> missing";
+        // <transformations>
+        if ((index = nodeNames.indexOf("transformations")) == -1)
+            return "tag <transformations> missing";
         else {
-            if (index != NODES_INDEX)
-                this.onXMLMinorError("tag <NODES> out of order");
+            if (index != TRANSFORMATIONS_INDEX)
+                this.onXMLMinorError("tag <transformations> out of order");
 
-            //Parse NODES block
-            if ((error = this.parseNodes(nodes[index])) != null)
+            //Parse transformations block
+            if ((error = this.parseTransformations(nodes[index])) != null)
+                return error;
+        }
+
+        // <primitives>
+        if ((index = nodeNames.indexOf("primitives")) == -1)
+            return "tag <primitives> missing";
+        else {
+            if (index != PRIMITIVES_INDEX)
+                this.onXMLMinorError("tag <primitives> out of order");
+
+            //Parse primitives block
+            if ((error = this.parsePrimitives(nodes[index])) != null)
+                return error;
+        }
+
+        // <components>
+        if ((index = nodeNames.indexOf("components")) == -1)
+            return "tag <transformations> missing";
+        else {
+            if (index != COMPONENTS_INDEX)
+                this.onXMLMinorError("tag <components> out of order");
+
+            //Parse components block
+            if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
         }
     }
 
     /**
-     * Parses the <INITIALS> block.
+     * Parses the <scene> block.
      */
-    parseInitials(initialsNode) {
+    parseScene(sceneNode) {
+        this.root = this.reader.getFloat(sceneNode, 'root');
+        this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
+
+        if (!(this.root != null)) {
+                this.root = "";
+                this.onXMLMinorError("unable to parse value for root; assuming 'root = '''");
+            }
+            else if (!(this.axis_length != null && !isNaN(this.axis_length))) {
+                this.axis_length = 5;
+                this.onXMLMinorError("unable to parse value for far axis length; assuming 'axis_length = 5'");
+            }
+    }
+
+     /**
+     * Parses the <views> node.
+     * @param {lights block element} lightsNode
+     */
+    parseViews(viewsNode) {
+
+        var children = viewsNode.children;
+
+        this.views = [];
+        var numViews = 0;
+
+        var grandChildren = [];
+        var nodeNames = [];
+
+        // One or two views.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "perspective" && children[i].nodeName != "ortho") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current view.
+            var viewId = this.reader.getString(children[i], 'id');
+            if (viewId == null)
+                return "no ID defined for view";
+
+            // Checks for repeated IDs.
+            if (this.views[viewId] != null)
+                return "ID must be unique for each view (conflict: ID = " + viewId + ")";
+
+            var near = this.reader.getFloat(children[i], 'near');
+            var far = this.reader.getFloat(children[i], 'far');
+
+            if (children[i].nodeName == "perspective") {
+                var angle = this.reader.getFloat(children[i], 'angle');
+                grandChildren = children[i].children;
+                // Specifications for the current view.
+
+                nodeNames = [];
+                for (var j = 0; j < grandChildren.length; j++) {
+                    nodeNames.push(grandChildren[j].nodeName);
+                }
+
+                // Gets indices of each element.
+                var fromIndex = nodeNames.indexOf("from");
+                var toIndex = nodeNames.indexOf("to");
+
+                // Retrieves the initial position.
+                var fromCoord = [];
+                if (fromIndex != -1) {
+                    // x
+                    var x = this.reader.getFloat(grandChildren[fromIndex], 'x');
+                    if (!(x != null && !isNaN(x)))
+                        return "unable to parse x-coordinate of the initial position for ID = " + fromCoord;
+                    else
+                        fromCoord.push(x);
+    
+                    // y
+                    var y = this.reader.getFloat(grandChildren[fromIndex], 'y');
+                    if (!(y != null && !isNaN(y)))
+                        return "unable to parse y-coordinate of the initial position for ID = " + fromCoord;
+                    else
+                        fromCoord.push(y);
+    
+                    // z
+                    var z = this.reader.getFloat(grandChildren[fromIndex], 'z');
+                    if (!(z != null && !isNaN(z)))
+                        return "unable to parse z-coordinate of the initial position for ID = " + fromCoord;
+                    else
+                        fromCoord.push(z);
+                }
+                else
+                    return "initial position undefined for ID = " + fromCoord;
+
+                var toCoord = [];
+                if (toIndex != -1) {
+                    // x
+                    var x = this.reader.getFloat(grandChildren[toIndex], 'x');
+                    if (!(x != null && !isNaN(x)))
+                        return "unable to parse x-coordinate of the final position for ID = " + toCoord;
+                    else
+                        toCoord.push(x);
+    
+                    // y
+                    var y = this.reader.getFloat(grandChildren[toIndex], 'y');
+                    if (!(y != null && !isNaN(y)))
+                        return "unable to parse y-coordinate of the final position for ID = " + toCoord;
+                    else
+                        toCoord.push(y);
+    
+                    // z
+                    var z = this.reader.getFloat(grandChildren[toIndex], 'z');
+                    if (!(z != null && !isNaN(z)))
+                        return "unable to parse z-coordinate of the final position for ID = " + toCoord;
+                    else
+                        toCoord.push(z);
+                }
+                else
+                    return "final position undefined for ID = " + toCoord;
+
+                // Store view global information.
+                this.views.push([viewId, near, far, angle, fromCoord, toCoord]);
+
+            }else{
+                var left = this.reader.getFloat(children[i], 'left');
+                var right = this.reader.getFloat(children[i], 'right');
+                var top = this.reader.getFloat(children[i], 'top');
+                var bottom = this.reader.getFloat(children[i], 'bottom');
+
+                // Store view global information.
+                this.views.push([viewId, near, far, left, right, top, bottom, fromCoord, toCoord]);
+            }
+            
+            numViews++;
+        }
+
+        if (numViews == 0)
+            return "at least one view must be defined";
+        else if (numViews > 2)
+            this.onXMLMinorError("too many views defined; WebGL imposes a limit of 2 views");
+
+        this.log("Parsed views");
+
+        return null;
+    }
+
+    /**
+     * Parses the <transformations> block.
+     */
+    parseTransformations(transformationsNode) {
 
         var children = initialsNode.children;
 
@@ -533,7 +716,7 @@ class MySceneGraph {
             else
                 return "ambient component undefined for ID = " + lightId;
 
-            // TODO: Retrieve the diffuse component
+            // Retrieve the diffuse component
             var diffuseIllumination = [];
             if (diffuseIndex != -1) {
                 // R
@@ -567,7 +750,7 @@ class MySceneGraph {
             else
                 return "diffuse component undefined for ID = " + lightId;
 
-            // TODO: Retrieve the specular component
+            // Retrieve the specular component
             var specularIllumination = [];
             if (specularIndex != -1) {
                 // R
@@ -601,7 +784,7 @@ class MySceneGraph {
             else
                 return "specular component undefined for ID = " + lightId;
 
-            // TODO: Store Light global information.
+            // Store Light global information.
             this.lights.push([enableLight, positionLight, ambientIllumination, diffuseIllumination, specularIllumination]);
             
             numLights++;
@@ -642,14 +825,14 @@ class MySceneGraph {
             // Get id of the current texture.
             var textureId = this.reader.getString(children[i], 'id');
             if (textureId == null)
-                return "no ID defined for light";
+                return "no ID defined for texture";
 
             // Checks for repeated IDs.
             if (this.textures[textureId] != null)
-                return "ID must be unique for each light (conflict: ID = " + lightId + ")";
+                return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
 
             grandChildren = children[i].children;
-            // Specifications for the current light.
+            // Specifications for the current texture.
 
             nodeNames = [];
             for (var j = 0; j < grandChildren.length; j++) {
@@ -657,11 +840,42 @@ class MySceneGraph {
             }
 
             // Gets indices of each element.
-            var enableIndex = nodeNames.indexOf("enable");
-            var positionIndex = nodeNames.indexOf("position");
-            var ambientIndex = nodeNames.indexOf("ambient");
-            var diffuseIndex = nodeNames.indexOf("diffuse");
-            var specularIndex = nodeNames.indexOf("specular");
+            var fileIndex = nodeNames.indexOf("file");
+            var amplifIndex = nodeNames.indexOf("amplif_factor");
+
+            // Retrieves the file path.
+            if (fileIndex != -1){
+                var path = this.reader.getString(grandChildren[fileIndex], 'path');
+                if (!(path != null && path != ""))
+                    return "unable to parse the file path for texture ID = " + textureId;
+            } else 
+                return "file path undefined for ID = " + textureId;
+
+
+            // Retrieves the amplification factor.
+            var amplif_factor = [];
+            if (amplifIndex != -1) {
+                // S
+                var s = this.reader.getFloat(grandChildren[amplifIndex], 's');
+                if (!(s != null && !isNaN(s) && s >= 0))
+                    return "unable to parse S component of the amplification factor for texture ID = " + textureId;
+                else
+                    amplif_factor.push(s);
+
+                // T
+                var t = this.reader.getFloat(grandChildren[amplifIndex], 't');
+                if (!(t != null && !isNaN(t) && t >= 0))
+                    return "unable to parse T component of the amplification factor for texture ID = " + textureId;
+                else
+                    amplif_factor.push(t);
+            }
+            else
+                return "amplification factor undefined for ID = " + textureId;
+
+            // Store Textures global information.
+            this.textures.push([path, amplif_factor]);
+            
+            numTextures++;
         }
 
         console.log("Parsed textures");
@@ -669,16 +883,223 @@ class MySceneGraph {
         return null;
     }
 
+   
     /**
      * Parses the <MATERIALS> node.
      * @param {materials block element} materialsNode
      */
     parseMaterials(materialsNode) {
         // TODO: Parse block
+         var children = materialsNode.children;
+
+        this.materials = [];
+        var numMaterials = 0;
+
+        var grandChildren = [];
+        var nodeNames = [];
+
+        // Any number of materials.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "MATERIAL") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current material.
+            var materialId = this.reader.getString(children[i], 'id');
+            if (materialId == null)
+                return "no ID defined for material";
+
+            // Checks for repeated IDs.
+            if (this.materials[materialId] != null)
+                return "ID must be unique for each material (conflict: ID = " + materialId + ")";
+
+            grandChildren = children[i].children;
+            // Specifications for the current material.
+
+            nodeNames = [];
+            for (var j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            // Gets indices of each element.  
+            var shininessIndex = nodeNames.indexOf("shininess");
+            var specularIndex = nodeNames.indexOf("specular");
+            var diffuseIndex = nodeNames.indexOf("diffuse");
+            var ambientIndex = nodeNames.indexOf("ambient");
+            var emissionIndex = nodeNames.indexOf("emission");
+
+            
+          // Shininess
+            var materialShininess = true;
+            if (shininessIndex == -1) {
+                this.onXMLMinorError("shininess value missing for ID = " + materialId + "; assuming 'value = 1'");
+            }
+            else {
+                var aux = this.reader.getInteger(grandChildren[shininessIndex], 'value');
+                if (!(aux != null && !isNaN(aux) && (aux == 0 || aux == 1)))
+                    ;//this.onXMLMinorError("unable to parse value component of the 'shininess' field for ID = " + materialId + "; assuming 'value = 1'");
+                else
+                    materialShininess = aux == 0 ? false : true;
+            }
+
+             // TODO: Retrieve the specular component
+            var specularMaterial = [];
+            if (specularIndex != -1) {
+                // R
+                var r = this.reader.getFloat(grandChildren[specularIndex], 'r');
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+                    return "unable to parse R component of the specular Material for ID = " + materialId;
+                else
+                    specularMaterial.push(r);
+
+                // G
+                var g = this.reader.getFloat(grandChildren[specularIndex], 'g');
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+                    return "unable to parse G component of the specular Material for ID = " + materialId;
+                else
+                    specularMaterial.push(g);
+
+                // B
+                var b = this.reader.getFloat(grandChildren[specularIndex], 'b');
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+                    return "unable to parse B component of the specular Material for ID = " + materialId;
+                else
+                    specularMaterial.push(b);
+
+                // A
+                var a = this.reader.getFloat(grandChildren[specularIndex], 'a');
+                if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+                    return "unable to parse A component of the specular Material for ID = " + materialId;
+                else
+                    specularMaterial.push(a);
+            }
+            else
+                return "specular component undefined for ID = " + materialId;
+
+
+
+                // TODO: Retrieve the diffuse component
+            var diffuseMaterial = [];
+            if (diffuseIndex != -1) {
+                // R
+                var r = this.reader.getFloat(grandChildren[diffuseIndex], 'r');
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+                    return "unable to parse R component of the diffuse Material for ID = " + materialId;
+                else
+                    diffuseMaterial.push(r);
+
+                // G
+                var g = this.reader.getFloat(grandChildren[diffuseIndex], 'g');
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+                    return "unable to parse G component of the diffuse Material for ID = " + materialId;
+                else
+                    diffuseMaterial.push(g);
+
+                // B
+                var b = this.reader.getFloat(grandChildren[diffuseIndex], 'b');
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+                    return "unable to parse B component of the diffuse Material for ID = " + materialId;
+                else
+                    diffuseMaterial.push(b);
+
+                // A
+                var a = this.reader.getFloat(grandChildren[diffuseIndex], 'a');
+                if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+                    return "unable to parse A component of the diffuse Material for ID = " + materialId;
+                else
+                    diffuseMaterial.push(a);
+            }
+            else
+                return "diffuse component undefined for ID = " + materialId;
+
+           
+
+             // Retrieves the ambient component.
+            var ambientMaterial = [];
+            if (ambientIndex != -1) {
+                // R
+                var r = this.reader.getFloat(grandChildren[ambientIndex], 'r');
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+                    return "unable to parse R component of the ambient Material for ID = " + materialId;
+                else
+                    ambientMaterial.push(r);
+
+                // G
+                var g = this.reader.getFloat(grandChildren[ambientIndex], 'g');
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+                    return "unable to parse G component of the ambient Material for ID = " + materialId;
+                else
+                    ambientMaterial.push(g);
+
+                // B
+                var b = this.reader.getFloat(grandChildren[ambientIndex], 'b');
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+                    return "unable to parse B component of the ambient Material for ID = " + materialId;
+                else
+                    ambientMaterial.push(b);
+
+                // A
+                var a = this.reader.getFloat(grandChildren[ambientIndex], 'a');
+                if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+                    return "unable to parse A component of the ambient Material for ID = " + materialId;
+                else
+                    ambientMaterial.push(a);
+            }
+            else
+                return "ambient component undefined for ID = " + materialId;
+
+            
+
+            // TODO: Retrieve the emission component
+            var emissionMaterial = [];
+            if (emissionIndex != -1) {
+                // R
+                var r = this.reader.getFloat(grandChildren[emissionIndex], 'r');
+                if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+                    return "unable to parse R component of the emission Material for ID = " + materialId;
+                else
+                    emissionMaterial.push(r);
+
+                // G
+                var g = this.reader.getFloat(grandChildren[emissionIndex], 'g');
+                if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+                    return "unable to parse G component of the emission Material for ID = " + materialId;
+                else
+                    emissionMaterial.push(g);
+
+                // B
+                var b = this.reader.getFloat(grandChildren[emissionIndex], 'b');
+                if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+                    return "unable to parse B component of the emission Material for ID = " + materialId;
+                else
+                    emissionMaterial.push(b);
+
+                // A
+                var a = this.reader.getFloat(grandChildren[emissionIndex], 'a');
+                if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+                    return "unable to parse A component of the diffuse Material for ID = " + materialId;
+                else
+                    emissionMaterial.push(a);
+            }
+            else
+                return "emission component undefined for ID = " + materialId;
+
+            // TODO: Store Materials global information.
+            this.materials.push([materialShininess, specularMaterial, diffuseMaterial, ambientMaterial, emissionMaterial]);
+            
+            numMaterials++;
+        }
+
+         if (numMaterials == 0)
+            return "at least one material must be defined";
+
         this.log("Parsed materials");
         return null;
 
     }
+    
 
     /**
      * Parses the <NODES> block.
