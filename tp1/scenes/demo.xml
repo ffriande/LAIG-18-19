@@ -1,118 +1,185 @@
-<!-- Os comentarios devem ter espacos no inicio e no fim, a -->
-<!-- separar dos hifens -->
-<!-- Nao devem ser usados caracteres especiais (p.ex. acentos) -->
-<!-- Todas as tags e atributos sao obrigatorios, exceto onde for -->
-<!-- referido o contrario -->
 <!-- Na descricao abaixo, os simbolos utilizados tem o seguinte significado: -->
-<!-- ii: integer value -->
-<!-- ff: float value -->
-<!-- ss: string value -->
-<!-- cc: character "x" or "y" or "z" -->
-<!-- tt: "0" or "1" with Boolean significance -->
+    <!-- ii: integer value -->
+    <!-- ff: float value -->
+    <!-- ss: string value -->
+    <!-- cc: character "x" or "y" or "z" -->
+    <!-- tt: "0" or "1" with Boolean significance -->
+
 <yas>
     <!-- deve definir-se um objeto para raiz da arvore, assim -->
     <!-- como o comprimento dos tres eixos (cilindros) -->
-    <scene root="ss" axis_length="ff" />
-    <views default="ss">
+
+
+    <scene root="root_node1" axis_length="1" />
+
+    <views default="view1" >
         <!-- tem de existir, pelo menos, uma vista de -->
         <!-- entre as seguintes (perspective ou ortho) -->
-        <perspective id="ss" near="ff" far="ff" angle="ff">
-            <from x="ff" y="ff" z="ff" />
-            <to x="ff" y="ff" z="ff" />
+
+        <perspective id="view1" near="1" far="2" angle="3">
+            <from x="10" y="11" z="12" />
+            <to x="20" y="21" z="22" />
         </perspective>
-        <ortho id="ss" near="ff" far="ff" left="ff" right="ff" top="ff" bottom="ff" />
+
+        <ortho id="view2" near="4" far="5" left="6" right="7" top="8" bottom="9" />
+        
+        <ortho id="view3" near="4" far="5" left="6" right="7" top="8" bottom="9" />
     </views>
+
     <ambient>
-        <ambient r="ff" g="ff" b="ff" a="ff" />
-        <background r="ff" g="ff" b="ff" a="ff" />
+        <ambient r="0.1" g="0.2" b="0.3" a="0.4" />
+        <background r="0.5" g="0.6" b="0.7" a="0.8" />
     </ambient>
+
     <lights>
         <!-- Deve existir um ou mais blocos "omni" ou "spot" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <omni id="ss" enabled="tt">
-            <location x="ff" y="ff" z="ff" w="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
+
+        <omni id="light1" enabled="1" >
+            <location x="1" y="2" z="3" w="0.5" />
+            <ambient r="0.1" g="0.2" b="0.3" a="0.4" />
+            <diffuse r="0.5" g="0.6" b="0.7" a="0.8" />
+            <specular r="0.9" g="0.15" b="0.25" a="0.35" />
         </omni>
-        <spot id="ss" enabled="tt" angle="ff" exponent="ff">
+
+        <spot id="light2" enabled="0" angle="1" exponent="2">
             <!-- atencao, "target" e' diferente de "direction" -->
-            <location x="ff" y="ff" z="ff" w="ff" />
-            <target x="ff" y="ff" z="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
+            <location x="5" y="6" z="7" w="0.3" />
+            <target x="9" y="10" z="11" />
+            <ambient r="0.1" g="0.2" b="0.3" a="0.4" />
+            <diffuse r="0.5" g="0.6" b="0.7" a="0.8" />
+            <specular r="0.9" g="0.15" b="0.25" a="0.2" />
         </spot>
     </lights>
+
     <textures>
         <!-- Deve existir um ou mais blocos "texture" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <texture id="ss" file="ss" />
+
+        <texture id="texture1" file="./scenes/images/bank.jpg" />
+        <texture id="texture2" file="./scenes/images/leaves.jpg" />
+
     </textures>
+
     <materials>
         <!-- Deve existir um ou mais blocos "material" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <material id="ss" shininess = "ff">
-            <emission r="ff" g="ff" b="ff" a="ff" />
-            <ambient r="ff" g="ff" b="ff" a="ff" />
-            <diffuse r="ff" g="ff" b="ff" a="ff" />
-            <specular r="ff" g="ff" b="ff" a="ff" />
+
+        <material id="material1" shininess = "1" >
+            <emission r="0.1" g="0.2" b="0.3" a="0.4" />
+            <ambient r="0.1" g="0.2" b="0.3" a="0.4" />
+            <diffuse r="0.5" g="0.6" b="0.7" a="0.8" />
+            <specular r="0.9" g="0.15" b="0.25" a="0.2" />
         </material>
+
+        <material id="material2" shininess = "10" >
+            <emission r="0.1" g="0.2" b="0.3" a="0.4" />
+            <ambient r="0.1" g="0.2" b="0.3" a="0.4" />
+            <diffuse r="0.5" g="0.6" b="0.7" a="0.8" />
+            <specular r="0.9" g="0.15" b="0.25" a="0.2" />
+        </material>
+
     </materials>
+
     <transformations>
         <!-- Deve existir um ou mais blocos "transformation" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <!-- Os angulos sao expressos em graus -->
-        <transformation id="ss">
+
+        <transformation id="transformation1">
             <!-- instrucoes a usar sem limite nem ordem -->
             <!-- deve existir pelo menos uma transformacao -->
-            <translate x="ff" y="ff" z="ff" />
-            <rotate axis="cc" angle="ff" />
-            <scale x="ff" y="ff" z="ff" />
+
+            <translate x="1" y="2" z="3" />
+            <rotate axis="x" angle="180" />
+            <scale x="4" y="5" z="6" />
         </transformation>
+
+        <transformation id="transformation2">
+            <translate x="1" y="2" z="3" />
+            <rotate axis="x" angle="180" />
+            <translate x="7" y="8" z="9" />
+            <scale x="4" y="5" z="6" />
+        </transformation>
+
+        <transformation id="transformation3">
+            <translate x="1" y="2" z="3" />
+            <rotate axis="x" angle="180" />
+            <translate x="7" y="8" z="9" />
+            <scale x="4" y="5" z="6" />
+            <rotate axis="y" angle="180" />
+            <translate x="7" y="8" z="9" />
+            <scale x="4" y="5" z="6" />
+        </transformation>
+
     </transformations>
+
     <primitives>
         <!-- Uma "primitive" e' uma primitiva e pode ser usada em nos folha -->
         <!-- Deve existir um ou mais blocos "primitive" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <primitive id="ss">
+
+        <primitive id="primitive1">
             <!-- apenas pode existir UMA das seguintes tags: -->
             <!-- rectangle, triangle, cylinder, sphere, torus -->
             <!-- os parametros devem ser interpretados, genericamente, -->
             <!-- como em WebGL; o cilindro deve adicionalmente ter tampas -->
-            <rectangle x1="ff" y1="ff" x2="ff" y2="ff" />
-            <triangle x1="ff" y1="ff" z1="ff" x2="ff" y2="ff" z2="ff" x3="ff" y3="ff" z3="ff" />
-            <cylinder base="ff" top="ff" height="ff" slices="ii" stacks="ii" />
-            <sphere radius="ff" slices="ii" stacks="ii" />
-            <torus inner="ff" outer="ff" slices="ii" loops="ii" />
+            
+            <rectangle x1="1" y1="2" x2="3" y2="4" />
+            
         </primitive >
+
+        <primitive id="primitive2">
+            <triangle x1="1" y1="2" z1="3" x2="4" y2="5" z2="6" x3="7" y3="8" z3="9" />
+        </primitive >
+
+        <primitive id="primitive3">
+            <cylinder base="1" top="2" height="3" slices="4" stacks="5" />
+        </primitive >
+
+        <primitive id="primitive4">
+            <sphere radius="1" slices="2" stacks="3" />
+        </primitive >
+
+        <primitive id="primitive5">
+            <torus inner="1" outer="2" slices="3" loops="4" />
+        </primitive >
+
     </primitives >
+
     <components>
-        <component id="ss">
+        <component id="id1">
             <!-- Uma "component" e' um objeto composto e pode ser -->
             <!-- usada em nos intermédios -->
             <!-- bloco "transformation" e' obrigatorio -->
+
             <transformation>
                 <!-- deve conter uma referencia a uma das "transformation" -->
                 <!-- declaradas anteriormente -->
-                <transformationref id="ss" />
+
+                <transformationref id="id2" />
+
                 <!-- ou, ALTERNATIVAMENTE, transformacoes explicitas, -->
                 <!-- usando zero ou mais das instrucoes seguintes, sem -->
                 <!-- limite nem ordem -->
                 <!-- ex: bloco transformation pode ficar sem conteudo -->
-                <translate x="ff" y="ff" z="ff" />
-                <rotate axis="cc" angle="ff" />
-                <scale x="ff" y="ff" z="ff" />
+
+                <translate x="1" y="2" z="3" />
+                <rotate axis="x" angle="45" />
+                <scale x="1" y="2" z="3" />
             </transformation>
+
             <!-- declaracao obrigatoria de pelo menos um material; -->
             <!-- o material id="inherit", mantem (herda) material do "pai" -->
             <!-- se varios materiais declarados, o default e' o -->
             <!-- primeiro material; de cada vez que se pressione a tecla m/M, -->
             <!-- o material muda para o proximo material da lista; do -->
             <!-- ultimo material da lista volta ao primeiro -->
+
             <materials>
-                <material id="ss" />
+                <material id="mat1" />
             </materials>
+
             <!-- declaracao obrigatoria de texture -->
             <!-- id="inherit" mantem (herda) a textura do objecto "pai" -->
             <!-- id="none" remove a textura recebida do pai -->
@@ -128,14 +195,17 @@
             <!-- do tipo escalamento violem esta regra. -->
             <!-- Nao e' necessario aplicar fatores de escala em -->
             <!-- quadricas (esfera, cilindro...) -->
-            <texture id="ss" length_s="ff" length_t="ff" />
+
+            <texture id="text1" length_s="2" length_t="4" />
+
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
                 <!-- deve existir uma ou mais tags "componentref" e/ou -->
                 <!-- "primitiveref", identificando outros -->
                 <!-- componentes ou primitivas -->
-                <componentref id="ss" />
-                <primitiveref id="ss" />
+
+                <componentref id="comp1" />
+                <primitiveref id="prim1" />
             </children>
         </component>
     </components>
