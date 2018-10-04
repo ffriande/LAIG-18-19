@@ -203,12 +203,12 @@ class MySceneGraph {
      * Parses the <scene> block.
      */
     parseScene(sceneNode) {
-        this.root = this.reader.getFloat(sceneNode, 'root');
+        this.root = this.reader.getString(sceneNode, 'root');
         this.axis_length = this.reader.getFloat(sceneNode, 'axis_length');
 
-        if (!(this.root != null)) {
-                this.root = "";
-                this.onXMLMinorError("unable to parse value for root; assuming 'root = '''");
+        if (!(this.root != null || this.root != "")) {
+                this.root = "n1";
+                this.onXMLMinorError("unable to parse value for root; assuming 'root = n1");
             }
             else if (!(this.axis_length != null && !isNaN(this.axis_length))) {
                 this.axis_length = 5;
@@ -223,6 +223,8 @@ class MySceneGraph {
     parseViews(viewsNode) {
 
         var children = viewsNode.children;
+
+        this.default = this.reader.getString(viewsNode, 'default');
 
         this.views = [];
         var numViews = 0;
@@ -248,10 +250,18 @@ class MySceneGraph {
                 return "ID must be unique for each view (conflict: ID = " + viewId + ")";
 
             var near = this.reader.getFloat(children[i], 'near');
+            if (!(near != null && !isNaN(near)))
+                return "unable to parse near value of the view for ID = " + viewId;
+
             var far = this.reader.getFloat(children[i], 'far');
+            if (!(far != null && !isNaN(far)))
+                return "unable to parse far value of the view for ID = " + viewId;
 
             if (children[i].nodeName == "perspective") {
                 var angle = this.reader.getFloat(children[i], 'angle');
+                if (!(angle != null && !isNaN(angle)))
+                    return "unable to parse angle value of the view for ID = " + viewId;
+
                 grandChildren = children[i].children;
                 // Specifications for the current view.
 
@@ -322,9 +332,20 @@ class MySceneGraph {
 
             }else{
                 var left = this.reader.getFloat(children[i], 'left');
+                if (!(left != null && !isNaN(left)))
+                    return "unable to parse left value of the view for ID = " + viewId;
+
                 var right = this.reader.getFloat(children[i], 'right');
+                if (!(right != null && !isNaN(right)))
+                    return "unable to parse right value of the view for ID = " + viewId;
+
                 var top = this.reader.getFloat(children[i], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top value of the view for ID = " + viewId;
+
                 var bottom = this.reader.getFloat(children[i], 'bottom');
+                if (!(bottom != null && !isNaN(bottom)))
+                    return "unable to parse bottom value of the view for ID = " + viewId;
 
                 // Store view global information.
                 this.views.push([viewId, near, far, left, right, top, bottom, fromCoord, toCoord]);
@@ -336,199 +357,22 @@ class MySceneGraph {
         if (numViews == 0)
             return "at least one view must be defined";
         else if (numViews > 2)
-            this.onXMLMinorError("too many views defined; WebGL imposes a limit of 2 views");
+            this.onXMLMinorError("too many views defined; you can have a maximum of 2 views (perspective and orthogonal)");
 
         this.log("Parsed views");
 
         return null;
     }
 
-    /**
-     * Parses the <transformations> block.
-     */
-    parseTransformations(transformationsNode) {
-
-        var children = initialsNode.children;
-
-        var nodeNames = [];
-
-        for (var i = 0; i < children.length; i++)
-            nodeNames.push(children[i].nodeName);
-
-        // Frustum planes
-        // (default values)
-        this.near = 0.1;
-        this.far = 500;
-        var indexFrustum = nodeNames.indexOf("frustum");
-        if (indexFrustum == -1) {
-            this.onXMLMinorError("frustum planes missing; assuming 'near = 0.1' and 'far = 500'");
-        }
-        else {
-            this.near = this.reader.getFloat(children[indexFrustum], 'near');
-            this.far = this.reader.getFloat(children[indexFrustum], 'far');
-
-            if (!(this.near != null && !isNaN(this.near))) {
-                this.near = 0.1;
-                this.onXMLMinorError("unable to parse value for near plane; assuming 'near = 0.1'");
-            }
-            else if (!(this.far != null && !isNaN(this.far))) {
-                this.far = 500;
-                this.onXMLMinorError("unable to parse value for far plane; assuming 'far = 500'");
-            }
-
-            if (this.near >= this.far)
-                return "'near' must be smaller than 'far'";
-        }
-
-        // Checks if at most one translation, three rotations, and one scaling are defined.
-        if (initialsNode.getElementsByTagName('translation').length > 1)
-            return "no more than one initial translation may be defined";
-
-        if (initialsNode.getElementsByTagName('rotation').length > 3)
-            return "no more than three initial rotations may be defined";
-
-        if (initialsNode.getElementsByTagName('scale').length > 1)
-            return "no more than one scaling may be defined";
-
-        // Initial transforms.
-        this.initialTranslate = [];
-        this.initialScaling = [];
-        this.initialRotations = [];
-
-        // Gets indices of each element.
-        var translationIndex = nodeNames.indexOf("translation");
-        var thirdRotationIndex = nodeNames.indexOf("rotation");
-        var secondRotationIndex = nodeNames.indexOf("rotation", thirdRotationIndex + 1);
-        var firstRotationIndex = nodeNames.lastIndexOf("rotation");
-        var scalingIndex = nodeNames.indexOf("scale");
-
-        // Checks if the indices are valid and in the expected order.
-        // Translation.
-        this.initialTransforms = mat4.create();
-        mat4.identity(this.initialTransforms);
-
-        if (translationIndex == -1)
-            this.onXMLMinorError("initial translation undefined; assuming T = (0, 0, 0)");
-        else {
-            var tx = this.reader.getFloat(children[translationIndex], 'x');
-            var ty = this.reader.getFloat(children[translationIndex], 'y');
-            var tz = this.reader.getFloat(children[translationIndex], 'z');
-
-            if (tx == null || ty == null || tz == null) {
-                tx = 0;
-                ty = 0;
-                tz = 0;
-                this.onXMLMinorError("failed to parse coordinates of initial translation; assuming zero");
-            }
-
-            // Save translation data
-            this.initialTranslate.push(tx,ty,tz);
-
-        }
-
-        // Parse Third Rotation
-        if (thirdRotationIndex == -1)
-            this.onXMLMinorError("initial rotation undefined; assuming R = (0, 1, 0, 0)");
-        else {
-            var raxis = this.reader.getString(children[thirdRotationIndex], 'axis');
-            var rangle = this.reader.getFloat(children[thirdRotationIndex], 'angle');
-
-            if (raxis == null || rangle == null) {
-                raxis = "x";
-                rangle = 0;
-                this.onXMLMinorError("failed to parse coordinates of initial rotation; assuming zero");
-            }
-
-            // Save rotation data
-            this.initialRotations.push(raxis,rangle);
-
-        }
-
-        // Parse Second Rotation
-        if (secondRotationIndex == -1)
-            this.onXMLMinorError("initial rotation undefined; assuming R = (0, 0, 1, 0)");
-        else {
-            var raxis = this.reader.getString(children[secondRotationIndex], 'axis');
-            var rangle = this.reader.getFloat(children[secondRotationIndex], 'angle');
-
-            if (raxis == null || rangle == null) {
-                raxis = "y";
-                rangle = 0;
-                this.onXMLMinorError("failed to parse coordinates of initial rotation; assuming zero");
-            }
-
-            // Save rotation data
-            this.initialRotations.push(raxis,rangle);
-
-        }
-
-        // Parse First Rotation
-        if (firstRotationIndex == -1)
-            this.onXMLMinorError("initial rotation undefined; assuming R = (0, 0, 0, 1)");
-        else {
-            var raxis = this.reader.getString(children[firstRotationIndex], 'axis');
-            var rangle = this.reader.getFloat(children[firstRotationIndex], 'angle');
-
-            if (raxis == null || rangle == null) {
-                raxis = "z";
-                rangle = 0;
-                this.onXMLMinorError("failed to parse coordinates of initial rotation; assuming zero");
-            }
-
-            // Save rotation data
-            this.initialRotations.push(raxis,rangle);
-
-        }
-
-        // Parse Scaling
-        if (scalingIndex == -1)
-            this.onXMLMinorError("initial translation undefined; assuming S = (1, 1, 1)");
-        else {
-            var sx = this.reader.getFloat(children[scalingIndex], 'sx');
-            var sy = this.reader.getFloat(children[scalingIndex], 'sy');
-            var sz = this.reader.getFloat(children[scalingIndex], 'sz');
-
-            if (sx == null || sy == null || sz == null) {
-                sx = 1;
-                sy = 1;
-                sz = 1;
-                this.onXMLMinorError("failed to parse coordinates of initial scaling; assuming zero");
-            }
-
-            // Save scaling data
-            this.initialScaling.push(sx,sy,sz);
-
-        }
-
-
-        // Parse Reference length
- 
-        var indexReference = nodeNames.indexOf("reference");
-        if (indexReference == -1) {
-            this.onXMLMinorError("reference length missing; assuming 'length = 1'");
-        }
-        else {
-            this.length = this.reader.getInteger(children[indexReference], 'length');
-
-            if (!(this.length != null && !isNaN(this.length))) {
-                this.length = 1;
-                this.onXMLMinorError("unable to parse value for length; assuming 'length = 1'");
-            }
-        }
-
-        this.log("Parsed initials");
-
-        return null;
-    }
 
     /**
-     * Parses the <ILLUMINATION> block.
+     * Parses the <ambient> block.
      * @param {illumination block element} illuminationNode
      */
-    parseIllumination(illuminationNode) {
-        //  Parse Illumination node
+    parseAmbient(ambientNode) {
+        //  Parse Ambient node
 
-        var children = illuminationNode.children;
+        var children = ambientNode.children;
 
         var nodeNames = []; 
 
@@ -583,14 +427,14 @@ class MySceneGraph {
         }
         
 
-        this.log("Parsed illumination");
+        this.log("Parsed ambient");
 
         return null;
     }
 
 
     /**
-     * Parses the <LIGHTS> node.
+     * Parses the <lights> node.
      * @param {lights block element} lightsNode
      */
     parseLights(lightsNode) {
@@ -606,7 +450,7 @@ class MySceneGraph {
         // Any number of lights.
         for (var i = 0; i < children.length; i++) {
 
-            if (children[i].nodeName != "LIGHT") {
+            if (children[i].nodeName != "omni" || children[i].nodeName != "spot") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
@@ -619,6 +463,14 @@ class MySceneGraph {
             // Checks for repeated IDs.
             if (this.lights[lightId] != null)
                 return "ID must be unique for each light (conflict: ID = " + lightId + ")";
+            
+            // Light enable/disable
+            var enabled = true;
+            var aux = this.reader.getInteger(children[i], 'enabled');
+            if (!(aux != null && !isNaN(aux) && (aux == 0 || aux == 1)))
+                this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
+            else
+                enabled = aux == 0 ? false : true;
 
             grandChildren = children[i].children;
             // Specifications for the current light.
@@ -628,59 +480,55 @@ class MySceneGraph {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
+            if (children[i].nodeName == "spot"){
+                var angle = this.reader.getFloat(children[i], 'angle');
+                if (!(angle != null && !isNaN(angle)))
+                    return "unable to parse angle value of the light for ID = " + lightId;
+                
+                var exponent = this.reader.getFloat(children[i], 'exponent');
+                if (!(exponent != null && !isNaN(exponent)))
+                    return "unable to parse exponent value of the light for ID = " + lightId;
+            }
+
             // Gets indices of each element.
-            var enableIndex = nodeNames.indexOf("enable");
-            var positionIndex = nodeNames.indexOf("position");
+            var locationIndex = nodeNames.indexOf("location");
             var ambientIndex = nodeNames.indexOf("ambient");
             var diffuseIndex = nodeNames.indexOf("diffuse");
             var specularIndex = nodeNames.indexOf("specular");
 
-            // Light enable/disable
-            var enableLight = true;
-            if (enableIndex == -1) {
-                this.onXMLMinorError("enable value missing for ID = " + lightId + "; assuming 'value = 1'");
-            }
-            else {
-                var aux = this.reader.getFloat(grandChildren[enableIndex], 'value');
-                if (!(aux != null && !isNaN(aux) && (aux == 0 || aux == 1)))
-                    this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
-                else
-                    enableLight = aux == 0 ? false : true;
-            }
-
-            // Retrieves the light position.
-            var positionLight = [];
-            if (positionIndex != -1) {
+            // Retrieves the light location.
+            var locationLight = [];
+            if (locationIndex != -1) {
                 // x
-                var x = this.reader.getFloat(grandChildren[positionIndex], 'x');
+                var x = this.reader.getFloat(grandChildren[locationIndex], 'x');
                 if (!(x != null && !isNaN(x)))
-                    return "unable to parse x-coordinate of the light position for ID = " + lightId;
+                    return "unable to parse x-coordinate of the light location for ID = " + lightId;
                 else
-                    positionLight.push(x);
+                    locationLight.push(x);
 
                 // y
-                var y = this.reader.getFloat(grandChildren[positionIndex], 'y');
+                var y = this.reader.getFloat(grandChildren[locationIndex], 'y');
                 if (!(y != null && !isNaN(y)))
-                    return "unable to parse y-coordinate of the light position for ID = " + lightId;
+                    return "unable to parse y-coordinate of the light location for ID = " + lightId;
                 else
-                    positionLight.push(y);
+                    locationLight.push(y);
 
                 // z
-                var z = this.reader.getFloat(grandChildren[positionIndex], 'z');
+                var z = this.reader.getFloat(grandChildren[locationIndex], 'z');
                 if (!(z != null && !isNaN(z)))
-                    return "unable to parse z-coordinate of the light position for ID = " + lightId;
+                    return "unable to parse z-coordinate of the light location for ID = " + lightId;
                 else
-                    positionLight.push(z);
+                    locationLight.push(z);
 
                 // w
-                var w = this.reader.getFloat(grandChildren[positionIndex], 'w');
+                var w = this.reader.getFloat(grandChildren[locationIndex], 'w');
                 if (!(w != null && !isNaN(w) && w >= 0 && w <= 1))
-                    return "unable to parse x-coordinate of the light position for ID = " + lightId;
+                    return "unable to parse x-coordinate of the light location for ID = " + lightId;
                 else
-                    positionLight.push(w);
+                    locationLight.push(w);
             }
             else
-                return "light position undefined for ID = " + lightId;
+                return "light location undefined for ID = " + lightId;
 
             // Retrieves the ambient component.
             var ambientIllumination = [];
@@ -784,8 +632,41 @@ class MySceneGraph {
             else
                 return "specular component undefined for ID = " + lightId;
 
+            if (children[i].nodeName == "spot"){
+                // Retrieves the light's target.
+                var targetIndex = nodeNames.indexOf("target");
+                var targetCoord = [];
+                if (targetIndex != -1) {
+                    // x
+                    var x = this.reader.getFloat(grandChildren[targetIndex], 'x');
+                    if (!(x != null && !isNaN(x)))
+                        return "unable to parse x-coordinate of the target for ID = " + lightId;
+                    else
+                        targetCoord.push(x);
+    
+                    // y
+                    var y = this.reader.getFloat(grandChildren[targetIndex], 'y');
+                    if (!(y != null && !isNaN(y)))
+                        return "unable to parse y-coordinate of the target for ID = " + lightId;
+                    else
+                        targetCoord.push(y);
+    
+                    // z
+                    var z = this.reader.getFloat(grandChildren[targetIndex], 'z');
+                    if (!(z != null && !isNaN(z)))
+                        return "unable to parse z-coordinate of the target for ID = " + lightId;
+                    else
+                        targetCoord.push(z);
+                }
+                else
+                    return "target coordinates undefined for ID = " + lightId;
+            }
+
             // Store Light global information.
-            this.lights.push([enableLight, positionLight, ambientIllumination, diffuseIllumination, specularIllumination]);
+            if (children[i].nodeName == "omni")
+                this.lights.push([locationLight, ambientIllumination, diffuseIllumination, specularIllumination]);
+            else
+                this.lights.push([locationLight, targetCoord, ambientIllumination, diffuseIllumination, specularIllumination]);
             
             numLights++;
         }
@@ -799,6 +680,7 @@ class MySceneGraph {
 
         return null;
     }
+
 
     /**
      * Parses the <TEXTURES> block. 
@@ -1100,6 +982,187 @@ class MySceneGraph {
 
     }
     
+
+
+    /**
+     * Parses the <transformations> block.
+     */
+    parseTransformations(transformationsNode) {
+
+        var children = initialsNode.children;
+
+        var nodeNames = [];
+
+        for (var i = 0; i < children.length; i++)
+            nodeNames.push(children[i].nodeName);
+
+        // Frustum planes
+        // (default values)
+        this.near = 0.1;
+        this.far = 500;
+        var indexFrustum = nodeNames.indexOf("frustum");
+        if (indexFrustum == -1) {
+            this.onXMLMinorError("frustum planes missing; assuming 'near = 0.1' and 'far = 500'");
+        }
+        else {
+            this.near = this.reader.getFloat(children[indexFrustum], 'near');
+            this.far = this.reader.getFloat(children[indexFrustum], 'far');
+
+            if (!(this.near != null && !isNaN(this.near))) {
+                this.near = 0.1;
+                this.onXMLMinorError("unable to parse value for near plane; assuming 'near = 0.1'");
+            }
+            else if (!(this.far != null && !isNaN(this.far))) {
+                this.far = 500;
+                this.onXMLMinorError("unable to parse value for far plane; assuming 'far = 500'");
+            }
+
+            if (this.near >= this.far)
+                return "'near' must be smaller than 'far'";
+        }
+
+        // Checks if at most one translation, three rotations, and one scaling are defined.
+        if (initialsNode.getElementsByTagName('translation').length > 1)
+            return "no more than one initial translation may be defined";
+
+        if (initialsNode.getElementsByTagName('rotation').length > 3)
+            return "no more than three initial rotations may be defined";
+
+        if (initialsNode.getElementsByTagName('scale').length > 1)
+            return "no more than one scaling may be defined";
+
+        // Initial transforms.
+        this.initialTranslate = [];
+        this.initialScaling = [];
+        this.initialRotations = [];
+
+        // Gets indices of each element.
+        var translationIndex = nodeNames.indexOf("translation");
+        var thirdRotationIndex = nodeNames.indexOf("rotation");
+        var secondRotationIndex = nodeNames.indexOf("rotation", thirdRotationIndex + 1);
+        var firstRotationIndex = nodeNames.lastIndexOf("rotation");
+        var scalingIndex = nodeNames.indexOf("scale");
+
+        // Checks if the indices are valid and in the expected order.
+        // Translation.
+        this.initialTransforms = mat4.create();
+        mat4.identity(this.initialTransforms);
+
+        if (translationIndex == -1)
+            this.onXMLMinorError("initial translation undefined; assuming T = (0, 0, 0)");
+        else {
+            var tx = this.reader.getFloat(children[translationIndex], 'x');
+            var ty = this.reader.getFloat(children[translationIndex], 'y');
+            var tz = this.reader.getFloat(children[translationIndex], 'z');
+
+            if (tx == null || ty == null || tz == null) {
+                tx = 0;
+                ty = 0;
+                tz = 0;
+                this.onXMLMinorError("failed to parse coordinates of initial translation; assuming zero");
+            }
+
+            // Save translation data
+            this.initialTranslate.push(tx,ty,tz);
+
+        }
+
+        // Parse Third Rotation
+        if (thirdRotationIndex == -1)
+            this.onXMLMinorError("initial rotation undefined; assuming R = (0, 1, 0, 0)");
+        else {
+            var raxis = this.reader.getString(children[thirdRotationIndex], 'axis');
+            var rangle = this.reader.getFloat(children[thirdRotationIndex], 'angle');
+
+            if (raxis == null || rangle == null) {
+                raxis = "x";
+                rangle = 0;
+                this.onXMLMinorError("failed to parse coordinates of initial rotation; assuming zero");
+            }
+
+            // Save rotation data
+            this.initialRotations.push(raxis,rangle);
+
+        }
+
+        // Parse Second Rotation
+        if (secondRotationIndex == -1)
+            this.onXMLMinorError("initial rotation undefined; assuming R = (0, 0, 1, 0)");
+        else {
+            var raxis = this.reader.getString(children[secondRotationIndex], 'axis');
+            var rangle = this.reader.getFloat(children[secondRotationIndex], 'angle');
+
+            if (raxis == null || rangle == null) {
+                raxis = "y";
+                rangle = 0;
+                this.onXMLMinorError("failed to parse coordinates of initial rotation; assuming zero");
+            }
+
+            // Save rotation data
+            this.initialRotations.push(raxis,rangle);
+
+        }
+
+        // Parse First Rotation
+        if (firstRotationIndex == -1)
+            this.onXMLMinorError("initial rotation undefined; assuming R = (0, 0, 0, 1)");
+        else {
+            var raxis = this.reader.getString(children[firstRotationIndex], 'axis');
+            var rangle = this.reader.getFloat(children[firstRotationIndex], 'angle');
+
+            if (raxis == null || rangle == null) {
+                raxis = "z";
+                rangle = 0;
+                this.onXMLMinorError("failed to parse coordinates of initial rotation; assuming zero");
+            }
+
+            // Save rotation data
+            this.initialRotations.push(raxis,rangle);
+
+        }
+
+        // Parse Scaling
+        if (scalingIndex == -1)
+            this.onXMLMinorError("initial translation undefined; assuming S = (1, 1, 1)");
+        else {
+            var sx = this.reader.getFloat(children[scalingIndex], 'sx');
+            var sy = this.reader.getFloat(children[scalingIndex], 'sy');
+            var sz = this.reader.getFloat(children[scalingIndex], 'sz');
+
+            if (sx == null || sy == null || sz == null) {
+                sx = 1;
+                sy = 1;
+                sz = 1;
+                this.onXMLMinorError("failed to parse coordinates of initial scaling; assuming zero");
+            }
+
+            // Save scaling data
+            this.initialScaling.push(sx,sy,sz);
+
+        }
+
+
+        // Parse Reference length
+ 
+        var indexReference = nodeNames.indexOf("reference");
+        if (indexReference == -1) {
+            this.onXMLMinorError("reference length missing; assuming 'length = 1'");
+        }
+        else {
+            this.length = this.reader.getInteger(children[indexReference], 'length');
+
+            if (!(this.length != null && !isNaN(this.length))) {
+                this.length = 1;
+                this.onXMLMinorError("unable to parse value for length; assuming 'length = 1'");
+            }
+        }
+
+        this.log("Parsed initials");
+
+        return null;
+    }
+
+
 
     /**
      * Parses the <NODES> block.
