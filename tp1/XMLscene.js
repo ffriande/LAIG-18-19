@@ -10,7 +10,7 @@ class XMLscene extends CGFscene {
      */
     constructor(myinterface) {
         super();
-
+     
         this.interface = myinterface;
         this.lightValues = {};
     }
@@ -63,6 +63,11 @@ class XMLscene extends CGFscene {
                 this.lights[i].setDiffuse(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setSpecular(light[4][0], light[4][1], light[4][2], light[4][3]);
 
+                if(light.length>5){
+                    this.lights[i].setSpotDirection(light[4][0], light[4][1], light[4][2]);
+                     this.lights[i].setSpotCutOff(light[1]);
+                     this.lights[i].setSpotExponent(light[2]);
+                 }
                 this.lights[i].setVisible(true);
                 if (light[0])
                     this.lights[i].enable();
@@ -81,20 +86,32 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.camera.near = this.graph.near;
-        this.camera.far = this.graph.far;
+         this.camera.near = this.graph.near;
+         this.camera.far = this.graph.far;
 
+        if(this.graph.views[0] == 'perspective'){
+             this.camera.fov=this.graph.views[4];
+             this.camera.position=this.graph.views[5];
+             this.camera.target=this.graph.views[6];
+        }
+
+//         else if(this.graph.views[0] == 'ortho'){
+//             this.camera= new CGFcameraOrtho(this.graph.views[4],this.graph.views[5],this.graph.views[7],this.graph.views[6], this.graph.near,this.graph.far, this.graph.views[8],this.graph.views[9]);
+//         }
+
+         console.log(this.camera.position);
         //TODO: Change reference length according to parsed graph
+
         this.axis = new CGFaxis(this, this.graph.axis_length);
 
         // TODO: Change ambient and background details according to parsed graph
-        this.setGlobalAmbientLight(this.graph.ambient[0],this.graph.ambient[1],this.graph.ambient[2],this.graph.ambient[3]);
-        this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
+          this.setGlobalAmbientLight(this.graph.ambient[0],this.graph.ambient[1],this.graph.ambient[2],this.graph.ambient[3]);
+          this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 
         this.initLights();
-
-        // Adds lights group.
-        this.interface.addLightsGroup(this.graph.lights);
+ 
+      // Adds lights group.
+         this.interface.addLightsGroup(this.graph.lights);
 
         this.sceneInited = true;
     }
@@ -116,10 +133,11 @@ class XMLscene extends CGFscene {
 
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
-
+ 
         this.pushMatrix();
 
         if (this.sceneInited) {
+            
             // Draw axis
             this.axis.display();
 
@@ -138,7 +156,7 @@ class XMLscene extends CGFscene {
                     i++;
                 }
             }
-
+ 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
         }

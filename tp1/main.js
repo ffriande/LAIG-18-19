@@ -12,7 +12,8 @@ function getUrlVars() {
 }	 
 //Include additional files here
 serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js',
-
+				'primitives/MyRectangle.js', 'primitives/MyTriangle.js',
+				
 main=function()
 {
 	// Standard application, scene and interface setup
