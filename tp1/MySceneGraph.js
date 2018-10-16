@@ -27,7 +27,7 @@ class MySceneGraph {
 
         this.nodes = [];
 
-        this.idRoot = null;
+        this.root = null;
         // The id of the root element.
 
         this.axisCoords = [];
@@ -1303,6 +1303,10 @@ class MySceneGraph {
 
                 else {
                     var componentID = this.reader.getString(children[i], 'id');
+
+                    if (this.nodes[componentID] != null)
+                        return "node ID " + componentID + " cant be repeated";
+
                     this.children = [];
                     this.texture = [];
                     this.materials = [];
@@ -1310,6 +1314,8 @@ class MySceneGraph {
 
                     this.component = [componentID, this.transformation, this.materials, this.texture, this.children];
                     this.component.push(componentID);
+
+                    this.nodes[componentID] = new MyNode(this, componentID);
 
                     nodeNames = [];
                     grandChildren = children[i].children;
@@ -1329,20 +1335,43 @@ class MySceneGraph {
                                 if (childrenNodeNames[n] == "transformationref") {
                                     var id = this.reader.getString(grandGrandChildren[n], 'id');
                                     this.transformation.push(["transformationref", id]);
+                                    for (var a = 0; a < this.transformations.length; a++)   //search the transformation reference
+                                        if(this.transformations[a][0]==id){
+                                            for(var b = 0; b < this.transformations[a][1].length; b++){
+                                                 var tx = this.transformations[a][1][b][0];
+                                                 var ty = this.transformations[a][1][b][1];
+                                                 var tz = this.transformations[a][1][b][2];
+                                                mat4.translate(this.nodes[componentID].transformMatrix, this.nodes[componentID].transformMatrix, [tx, ty, tz]);
+                                            }
+                                            for(var b = 0; b < this.transformations[a][2].length; b++){
+                                                 var axis = this.transformations[a][2][b][0];
+                                                 var angle = this.transformations[a][2][b][1];
+                                                 mat4.rotate(this.nodes[componentID].transformMatrix, this.nodes[componentID].transformMatrix, angle * DEGREE_TO_RAD, this.axisCoords[axis]);
+                                            }
+                                            for(var b = 0; b < this.transformations[a][3].length; b++){
+                                                 var sx = this.transformations[a][3][b][0];
+                                                 var sy = this.transformations[a][3][b][1];
+                                                 var sz = this.transformations[a][3][b][2];
+                                                 mat4.scale(this.nodes[componentID].transformMatrix, this.nodes[componentID].transformMatrix, [sx, sy, sz]);
+                                            }
+                                        }
                                 } else if (childrenNodeNames[n] == "translate") {
                                     var tx = this.reader.getString(grandGrandChildren[n], 'x');
                                     var ty = this.reader.getString(grandGrandChildren[n], 'y');
                                     var tz = this.reader.getString(grandGrandChildren[n], 'z');
                                     this.transformation.push(["translate", tx, ty, tz]);
+                                    mat4.translate(this.nodes[componentID].transformMatrix, this.nodes[componentID].transformMatrix, [tx, ty, tz]);
                                 } else if (childrenNodeNames[n] == "rotate") {
                                     var axis = this.reader.getString(grandGrandChildren[n], 'axis');
                                     var angle = this.reader.getString(grandGrandChildren[n], 'angle');
                                     this.transformation.push(["rotate", axis, angle]);
+                                    mat4.rotate(this.nodes[componentID].transformMatrix, this.nodes[componentID].transformMatrix, angle * DEGREE_TO_RAD, this.axisCoords[axis]);
                                 } else if (childrenNodeNames[n] == "scale") {
                                     var sx = this.reader.getString(grandGrandChildren[n], 'x');
                                     var sy = this.reader.getString(grandGrandChildren[n], 'y');
                                     var sz = this.reader.getString(grandGrandChildren[n], 'z');
                                     this.transformation.push(["scale", sx, sy, sz]);
+                                    mat4.scale(this.nodes[componentID].transformMatrix, this.nodes[componentID].transformMatrix, [sx, sy, sz]);
                                 }
                             }
                         } else if ((nodeNames[k] == "materials")) {
@@ -1356,6 +1385,7 @@ class MySceneGraph {
                                 if (childrenNodeNames[n] == "material") {
                                     var id = this.reader.getString(grandGrandChildren[n], 'id');
                                     this.materials.push(id);
+                                    this.nodes[componentID].addMaterial(id);
                                 }
                             }
                         } else if ((nodeNames[k] == "texture")) {
@@ -1363,6 +1393,7 @@ class MySceneGraph {
                             var length_s = this.reader.getFloat(grandChildren[k], 'length_s');
                             var length_t = this.reader.getFloat(grandChildren[k], 'length_t');
                             this.texture.push(id, length_s, length_t);
+                            this.nodes[componentID].addTexture(id, length_s, length_t);
 
                         } else if ((nodeNames[k] == "children")) {
                             var childrenNodeNames = [];
@@ -1375,9 +1406,13 @@ class MySceneGraph {
                                 if (childrenNodeNames[n] == "componentref") {
                                     var id = this.reader.getString(grandGrandChildren[n], 'id');
                                     this.children.push(id);
+                                    this.nodes[componentID].addChild(id);
                                 } else if (childrenNodeNames[n] == "primitiveref") {
                                     var id = this.reader.getString(grandGrandChildren[n], 'id');
                                     this.children.push(id);
+                                    for (var a = 0; a < this.primitivesData.length; a++)    //search the primitive reference
+                                        if(this.primitivesData[a][0]==id)
+                                            this.nodes[componentID].addLeaf(new MyLeaf(this, this.primitivesData[a]));
                                 }
                             }
                         }
@@ -1416,9 +1451,24 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {// entry point for graph rendering
-    //TODO: Render loop starting at root of graph
-    /*for (var i = 0; i < this.componentsData.length; i++) {
-            this.componentsData[i].display();
-        }*/
+        //TODO: Render loop starting at root of graph
+        this.searchGraph(this.root);
+    }
+
+
+    searchGraph(nodeID) {
+        var current = this.nodes[nodeID];
+        this.scene.multMatrix(current.transformMatrix);
+    
+        for (let i = 0; i < current.leaves.length; i++) {
+            if(current.leaves[i].type=="rectangle")     //apenas para testar, pois só temos rectangle e triangle nas primitivas
+                current.leaves[i].primitive.display();
+        }
+    
+        for (let i = 0; i < current.children.length; i++) {
+            this.scene.pushMatrix();
+            this.searchGraph(current.children[i]);
+            this.scene.popMatrix();
+        }
     }
 }
