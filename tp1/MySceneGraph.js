@@ -358,8 +358,8 @@ class MySceneGraph {
 
         if (numViews == 0)
             return "at least one view must be defined";
-        else if (numViews > 1)
-            this.onXMLMinorError("too many views defined; you can have 1 view (perspective or orthogonal)");
+//         else if (numViews > 1)
+//             this.onXMLMinorError("too many views defined; you can have 1 view (perspective or orthogonal)");
         this.log("Parsed views");
 
         return null;
@@ -673,7 +673,7 @@ class MySceneGraph {
         return null;
     }
 
-    /**
+  /**
      * Parses the <textures> block. 
      * @param {textures block element} texturesNode
      */
@@ -709,7 +709,9 @@ class MySceneGraph {
                 return "unable to parse the file path for texture ID = " + textureId;
 
             // Store Textures global information.
-            this.textures.push([textureId, path]);
+            var newTexture = new CGFappearance(this.scene);
+            newTexture.loadTexture(path);
+            this.textures[textureId] = newTexture;
 
             numTextures++;
         }
@@ -718,6 +720,7 @@ class MySceneGraph {
 
         return null;
     }
+
 
     /**
      * Parses the <materials> node.
@@ -751,8 +754,9 @@ class MySceneGraph {
                 return "ID must be unique for each material (conflict: ID = " + materialId + ")";
 
             // Shininess
-            var materialShininess = this.reader.getFloat(children[i], 'shininess');
-            if (!(materialShininess != null && !isNaN(materialShininess) && materialShininess >= 0 /*&& materialShininess <= 1*/))
+            var shininessMaterial = this.reader.getFloat(children[i], 'shininess');
+            if (!(shininessMaterial != null && !isNaN(shininessMaterial) && shininessMaterial >= 0 /*&& shininessMaterial <= 1*/
+            ))
                 return "unable to parse the shininess component of the Material for ID = " + materialId;
 
             grandChildren = children[i].children;
@@ -776,31 +780,26 @@ class MySceneGraph {
                 var r = this.reader.getFloat(grandChildren[emissionIndex], 'r');
                 if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
                     return "unable to parse R component of the emission Material for ID = " + materialId;
-                else
-                    emissionMaterial.push(r);
 
                 // G
                 var g = this.reader.getFloat(grandChildren[emissionIndex], 'g');
                 if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
                     return "unable to parse G component of the emission Material for ID = " + materialId;
-                else
-                    emissionMaterial.push(g);
 
                 // B
                 var b = this.reader.getFloat(grandChildren[emissionIndex], 'b');
                 if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
                     return "unable to parse B component of the emission Material for ID = " + materialId;
-                else
-                    emissionMaterial.push(b);
 
                 // A
                 var a = this.reader.getFloat(grandChildren[emissionIndex], 'a');
                 if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
                     return "unable to parse A component of the diffuse Material for ID = " + materialId;
-                else
-                    emissionMaterial.push(a);
+
             } else
                 return "emission component undefined for ID = " + materialId;
+
+            emissionMaterial = [r, g, b, a];
 
             // Retrieves the ambient component.
             var ambientMaterial = [];
@@ -809,31 +808,24 @@ class MySceneGraph {
                 var r = this.reader.getFloat(grandChildren[ambientIndex], 'r');
                 if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
                     return "unable to parse R component of the ambient Material for ID = " + materialId;
-                else
-                    ambientMaterial.push(r);
 
                 // G
                 var g = this.reader.getFloat(grandChildren[ambientIndex], 'g');
                 if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
                     return "unable to parse G component of the ambient Material for ID = " + materialId;
-                else
-                    ambientMaterial.push(g);
 
                 // B
                 var b = this.reader.getFloat(grandChildren[ambientIndex], 'b');
                 if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
                     return "unable to parse B component of the ambient Material for ID = " + materialId;
-                else
-                    ambientMaterial.push(b);
-
                 // A
                 var a = this.reader.getFloat(grandChildren[ambientIndex], 'a');
                 if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
                     return "unable to parse A component of the ambient Material for ID = " + materialId;
-                else
-                    ambientMaterial.push(a);
             } else
                 return "ambient component undefined for ID = " + materialId;
+
+            ambientMaterial = [r, g, b, a];
 
             // Retrieve the diffuse component
             var diffuseMaterial = [];
@@ -842,32 +834,24 @@ class MySceneGraph {
                 var r = this.reader.getFloat(grandChildren[diffuseIndex], 'r');
                 if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
                     return "unable to parse R component of the diffuse Material for ID = " + materialId;
-                else
-                    diffuseMaterial.push(r);
 
                 // G
                 var g = this.reader.getFloat(grandChildren[diffuseIndex], 'g');
                 if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
                     return "unable to parse G component of the diffuse Material for ID = " + materialId;
-                else
-                    diffuseMaterial.push(g);
 
                 // B
                 var b = this.reader.getFloat(grandChildren[diffuseIndex], 'b');
                 if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
                     return "unable to parse B component of the diffuse Material for ID = " + materialId;
-                else
-                    diffuseMaterial.push(b);
 
                 // A
                 var a = this.reader.getFloat(grandChildren[diffuseIndex], 'a');
                 if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
                     return "unable to parse A component of the diffuse Material for ID = " + materialId;
-                else
-                    diffuseMaterial.push(a);
             } else
                 return "diffuse component undefined for ID = " + materialId;
-
+            diffuseMaterial = [r, g, b, a];
             // Retrieve the specular component
             var specularMaterial = [];
             if (specularIndex != -1) {
@@ -875,35 +859,34 @@ class MySceneGraph {
                 var r = this.reader.getFloat(grandChildren[specularIndex], 'r');
                 if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
                     return "unable to parse R component of the specular Material for ID = " + materialId;
-                else
-                    specularMaterial.push(r);
 
                 // G
                 var g = this.reader.getFloat(grandChildren[specularIndex], 'g');
                 if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
                     return "unable to parse G component of the specular Material for ID = " + materialId;
-                else
-                    specularMaterial.push(g);
 
                 // B
                 var b = this.reader.getFloat(grandChildren[specularIndex], 'b');
                 if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
                     return "unable to parse B component of the specular Material for ID = " + materialId;
-                else
-                    specularMaterial.push(b);
 
                 // A
                 var a = this.reader.getFloat(grandChildren[specularIndex], 'a');
                 if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
                     return "unable to parse A component of the specular Material for ID = " + materialId;
-                else
-                    specularMaterial.push(a);
             } else
                 return "specular component undefined for ID = " + materialId;
-
+            specularMaterial = [r, g, b, a];
             // Store Materials global information.
-            this.materials.push([materialId, materialShininess, emissionMaterial, ambientMaterial, diffuseMaterial, specularMaterial]);
+            var newMaterial = new CGFappearance(this.scene);
+            newMaterial.setEmission(emissionMaterial[0],emissionMaterial[1],emissionMaterial[2],emissionMaterial[3] );
+            newMaterial.setAmbient(ambientMaterial[0],ambientMaterial[1],ambientMaterial[2],ambientMaterial[3]);
+            newMaterial.setDiffuse(diffuseMaterial[0],diffuseMaterial[1],diffuseMaterial[2],diffuseMaterial[3]);
+            newMaterial.setSpecular(specularMaterial[0],specularMaterial[1],specularMaterial[2],specularMaterial[3]);
+            newMaterial.setShininess(shininessMaterial);
 
+
+            this.materials[materialId] = newMaterial;
             numMaterials++;
         }
 
@@ -1451,59 +1434,44 @@ class MySceneGraph {
         var current = this.nodes[nodeID];
         this.scene.multMatrix(current.transformMatrix);
 
-        var currMaterialID = materialID;
-        var currTextureID = textureID;
+        var currMaterial;
+        var currMaterialId=current.activeMaterial;
+        var currTexture;
+
         
-        for (let i = 0; i < this.materials.length; i++) {
-            if (this.materials[i][0] == current.activeMaterial)
-                currMaterialID = current.activeMaterial;
-        }
-        
-        for (let i = 0; i < this.textures.length; i++) {
-            if (this.textures[i][0] == current.texture)
-                if (current.texture == 'none')
-                    currTextureID = null;
-                else
-                    currTextureID = current.texture;
+        //material
+        currMaterial = this.materials[current.activeMaterial];
+        if (currMaterial == null ){
+            currMaterial = this.materials[materialID];             //acho que aqui é o default
+            currMaterialId=materialID;
         }
 
-        var currentMaterial;
-        for (let i = 0; i < this.materials.length; i++) {
-            if (this.materials[i][0] == currMaterialID)
-                currentMaterial = this.materials[i];
-        }
+        //textures
+        var currTexture = this.textures[textureID];
+        if (currTexture== current.texture)
+            if (current.texture == 'none')   //acho que aqui é o default
+                currTexture = null;        
 
-        var currentTexture = this.textures[currTextureID];
-        for (let i = 0; i < this.textures.length; i++) {
-            if (this.textures[i][0] == currTextureID)
-                currentTexture = this.textures[i];
-        }
-
-        var newMaterial = new CGFappearance(this.scene);
         var newTexture = new CGFappearance(this.scene);
-        
+
         for (let i = 0; i < current.leaves.length; i++) {
-            if (currentMaterial != null) {
-                newMaterial.setEmission(currentMaterial[2][0], currentMaterial[2][1], currentMaterial[2][2], currentMaterial[2][3]);
-                newMaterial.setAmbient(currentMaterial[3][0], currentMaterial[3][1], currentMaterial[3][2], currentMaterial[3][3]);
-		        newMaterial.setDiffuse(currentMaterial[4][0], currentMaterial[4][1], currentMaterial[4][2], currentMaterial[4][3]);
-		        newMaterial.setSpecular(currentMaterial[5][0], currentMaterial[5][1], currentMaterial[5][2], currentMaterial[5][3]);
-		        newMaterial.setShininess(currentMaterial[1]);
-                newMaterial.apply();
+            if (currMaterial != null) {
+                currMaterial.apply();
             }
 
-            if (currentTexture != null) {
-                newTexture.loadTexture(currentTexture[1]);
+            if (currTexture != null) {
+                newTexture.loadTexture(currTexture);
                 newTexture.apply();
             }
 
-            if(current.leaves[i].type=="square_at_zero" || current.leaves[i].type=="square")     //apenas para testar, pois só temos rectangle e triangle nas primitivas
+            if (current.leaves[i].type == "square_at_zero" || current.leaves[i].type == "square" || current.leaves[i].type == "sphere" || current.leaves[i].type == "cylinder" || current.leaves[i].type == "square")
+                //apenas para testar, pois só temos rectangle e triangle nas primitivas
                 current.leaves[i].primitive.display();
         }
-    
+
         for (let i = 0; i < current.children.length; i++) {
             this.scene.pushMatrix();
-            this.searchGraph(current.children[i], currMaterialID, currTextureID);
+            this.searchGraph(current.children[i], currMaterialId, currTexture);
             this.scene.popMatrix();
         }
     }

@@ -12,7 +12,9 @@ class MyNode
 	    this.leaves = [];
 	    this.materials = [];
 	    this.activeMaterial = null;
-	    this.texture = null;
+	    this.texturePath = null;
+	    this.textureS = null;
+	    this.textureT = null;
 	
 	    this.transformMatrix = mat4.create();
     	mat4.identity(this.transformMatrix);
@@ -32,8 +34,10 @@ class MyNode
 			this.activeMaterial = matId;
 	};
 
-	setTexture(texId) {
-		this.texture = texId;
+	setTexture(texId, S, T) {
+		this.texturePath = texId;
+		this.textureS = S;
+		this.textureT = T;
 	};
 
 	setActiveMaterial(matId) {
