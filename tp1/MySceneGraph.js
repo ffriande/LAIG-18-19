@@ -260,13 +260,7 @@ class MySceneGraph {
             this.far = this.reader.getFloat(children[i], 'far');
             if (!( this.far != null && !isNaN( this.far)))
                 return "unable to parse far value of the view for ID = " + viewId;
-
-            if (children[i].nodeName == "perspective") {
-                var angle = this.reader.getFloat(children[i], 'angle');
-                if (!(angle != null && !isNaN(angle)))
-                    return "unable to parse angle value of the view for ID = " + viewId;
-
-                grandChildren = children[i].children;
+             grandChildren = children[i].children;
                 // Specifications for the current view.
 
                 nodeNames = [];
@@ -329,6 +323,12 @@ class MySceneGraph {
                 } else
                     return "final position undefined for ID = " + toCoord;
 
+            if (children[i].nodeName == "perspective") {
+                var angle = this.reader.getFloat(children[i], 'angle');
+                if (!(angle != null && !isNaN(angle)))
+                    return "unable to parse angle value of the view for ID = " + viewId;
+
+               
                 // Store view PERSPECTIVE information.
                 this.views[viewId] = new CGFcamera(angle, this.near, this.far, fromCoord, toCoord);
 
@@ -709,8 +709,7 @@ class MySceneGraph {
                 return "unable to parse the file path for texture ID = " + textureId;
 
             // Store Textures global information.
-            var newTexture = new CGFappearance(this.scene);
-            newTexture.loadTexture(path);
+            var newTexture = new CGFtexture(this.scene,path);
             this.textures[textureId] = newTexture;
 
             numTextures++;
@@ -1426,7 +1425,7 @@ class MySceneGraph {
      */
     displayScene() {// entry point for graph rendering
         // Render loop starting at root of graph
-        this.searchGraph(this.root, this.nodes[this.root].activeMaterial, this.nodes[this.root].texture);
+        this.searchGraph(this.root, this.nodes[this.root].activeMaterial, this.nodes[this.root].textureId);
     }
 
 
@@ -1437,42 +1436,56 @@ class MySceneGraph {
         var currMaterial;
         var currMaterialId=current.activeMaterial;
         var currTexture;
+        var currTextureId=current.textureId;
 
         
-        //material
-        currMaterial = this.materials[current.activeMaterial];
-        if (currMaterial == null ){
-            currMaterial = this.materials[materialID];             //acho que aqui é o default
+        //material  
+        if(currMaterialId=='inherit')
+        {
+            currMaterial = this.materials[materialID];             
             currMaterialId=materialID;
         }
+        else 
+            currMaterial = this.materials[current.activeMaterial];
 
         //textures
-        var currTexture = this.textures[textureID];
-        if (currTexture== current.texture)
-            if (current.texture == 'none')   //acho que aqui é o default
-                currTexture = null;        
+        if(currTextureId=='inherit')
+        {
+            currTexture = this.textures[textureID];           
+            currTextureId=textureID;
+        }
+        else if(currTextureId=='none')
+            currTexture = null; 
+        else
+            currTexture = this.textures[current.textureId];
+    
 
-        var newTexture = new CGFappearance(this.scene);
-
-        for (let i = 0; i < current.leaves.length; i++) {
-            if (currMaterial != null) {
+        if (currMaterial != null) { //tirar 
                 currMaterial.apply();
             }
 
-            if (currTexture != null) {
-                newTexture.loadTexture(currTexture);
-                newTexture.apply();
-            }
+        currMaterial.setTexture(currTexture);
+        currMaterial.apply();
 
-            if (current.leaves[i].type == "square_at_zero" || current.leaves[i].type == "square" || current.leaves[i].type == "sphere" || current.leaves[i].type == "cylinder" || current.leaves[i].type == "square")
-                //apenas para testar, pois só temos rectangle e triangle nas primitivas
+       //console.log(currTexture);
+      for (let i = 0; i < current.leaves.length; i++) {
+           if(current.leaves[i].type == "square"||current.leaves[i].type == "square_at_zero" )  //Isto porque as texCoords das outras primitivas estão
+                current.leaves[i].primitive.setST(current.textureS,current.textureT);           //a ser definidas sem valores S e T --> corrigir isto
+
+            if (current.leaves[i].type == "square_at_zero" || current.leaves[i].type == "square" || current.leaves[i].type == "sphere" || current.leaves[i].type == "cylinder" || current.leaves[i].type == "triangle")
+                //apenas para testar
+
                 current.leaves[i].primitive.display();
         }
 
         for (let i = 0; i < current.children.length; i++) {
             this.scene.pushMatrix();
-            this.searchGraph(current.children[i], currMaterialId, currTexture);
+            this.searchGraph(current.children[i], currMaterialId, currTextureId);
             this.scene.popMatrix();
         }
     }
+
+  
 }
+    
+//TODO: Torus

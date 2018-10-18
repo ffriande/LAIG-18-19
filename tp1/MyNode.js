@@ -12,7 +12,7 @@ class MyNode
 	    this.leaves = [];
 	    this.materials = [];
 	    this.activeMaterial = null;
-	    this.texturePath = null;
+	    this.textureId = null;
 	    this.textureS = null;
 	    this.textureT = null;
 	
@@ -34,8 +34,8 @@ class MyNode
 			this.activeMaterial = matId;
 	};
 
-	setTexture(texId, S, T) {
-		this.texturePath = texId;
+	setTexture(tex, S, T) {
+		this.textureId = tex;
 		this.textureS = S;
 		this.textureT = T;
 	};

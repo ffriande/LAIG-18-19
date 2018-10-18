@@ -149,7 +149,7 @@
                 <material id ="beige"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -181,7 +181,7 @@
                 <material id ="floor"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -197,7 +197,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -214,7 +214,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -232,7 +232,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -249,7 +249,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -266,7 +266,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -284,7 +284,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -299,7 +299,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="frontal_face"/>
@@ -322,7 +322,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -339,7 +339,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -356,7 +356,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -373,7 +373,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -390,7 +390,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -405,7 +405,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="front_right_leg"/>
@@ -427,7 +427,7 @@
                 <material id ="table_wood"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="legs"/>
@@ -447,7 +447,7 @@
                 <material id ="light_orange"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="cylinder"/>
@@ -464,7 +464,7 @@
                 <material id ="silver"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="cylinder"/>
@@ -481,7 +481,7 @@
                 <material id ="silver"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="cylinder"/>
@@ -497,7 +497,7 @@
                 <material id ="m1"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="lamp_top"/>
@@ -517,7 +517,7 @@
                 <material id ="lamp"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="cylinder"/>
@@ -533,7 +533,7 @@
                 <material id ="m1"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="lamp_curved_top"/>
@@ -553,7 +553,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -572,7 +572,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -590,7 +590,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -607,7 +607,7 @@
                 <material id ="m1"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="table"/>
@@ -624,7 +624,7 @@
                 <material id ="table_wood"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="chair_right_bar"/>
@@ -643,7 +643,7 @@
                 <material id ="lamp"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="torus"/>
@@ -661,7 +661,7 @@
                 <material id ="fuschia"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="sphere"/>
@@ -677,7 +677,7 @@
                 <material id ="m1"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="table"/>

@@ -28,15 +28,12 @@ MyRectangle.prototype.constructor=MyRectangle;
 	];
  	this.initGLBuffers();
 };
- MyRectangle.prototype.setAmpSAmpT = function (ampS, ampT) {
- 	this.ampS = ampS;
-	this.ampT = ampT;
- 	this.texCoords = [
-		0, (this.y0 - this.y1) / this.ampT,
-		(this.x1- this.x0) / this.ampS, (this.y0 - this.y1) / this.ampT,
-		0, 0,
-		(this.x1- this.x0) / this.ampS, 0,
-	];
- 	this.setTex = true;
+ MyRectangle.prototype.setST = function (S, T) {
+ 	this.S = S;
+	this.T = T;
+ 	this.texCoords = [0, (this.y0 - this.y1) / this.T,
+ 					  (this.x1- this.x0) / this.S,(this.y0 - this.y1) / this.T,
+ 					  0,0,
+					  (this.x1- this.x0) / this.S, 0,];
  	this.updateTexCoordsGLBuffers();
 }; 
