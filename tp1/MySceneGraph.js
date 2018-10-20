@@ -876,7 +876,7 @@ class MySceneGraph {
             } else
                 return "specular component undefined for ID = " + materialId;
             specularMaterial = [r, g, b, a];
-            // Store Materials global information.
+
             var newMaterial = new CGFappearance(this.scene);
             newMaterial.setEmission(emissionMaterial[0],emissionMaterial[1],emissionMaterial[2],emissionMaterial[3] );
             newMaterial.setAmbient(ambientMaterial[0],ambientMaterial[1],ambientMaterial[2],ambientMaterial[3]);
@@ -1460,9 +1460,11 @@ class MySceneGraph {
             currTexture = this.textures[current.textureId];
     
 
-        if (currMaterial != null) { //tirar 
-                currMaterial.apply();
-            }
+        if (currMaterial == null) 
+               currMaterial=createDefaultMaterial();
+         
+        currMaterial.apply();
+            
 
         currMaterial.setTexture(currTexture);
         currMaterial.apply();
@@ -1485,7 +1487,22 @@ class MySceneGraph {
         }
     }
 
-  
+
+
+
+    createDefaultMaterial(){
+
+            var newMaterial = new CGFappearance(this.scene);
+            newMaterial.setEmission(0,0,0,0);
+            newMaterial.setAmbient(0.3,0.3,0.3,1);
+            newMaterial.setDiffuse(0.8,0.8,0.8,1);
+            newMaterial.setSpecular(0.1,0.1,0.1,1);
+            newMaterial.setShininess(0.1);
+            return newMaterial;
+    }
+
+
+
 }
     
 //TODO: Torus

@@ -9,10 +9,7 @@
       <to x="0" y="0" z="0" />
     </perspective>
 
-    <perspective id="perspective_2" near="0.1" far="50" angle="70">
-      <from x="10" y="10" z="0" />
-      <to x="0" y="0" z="0" />
-    </perspective>
+
   </views>
 
   <!-- Ambient -->

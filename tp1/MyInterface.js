@@ -44,4 +44,21 @@ class MyInterface extends CGFinterface {
             }
         }
     }
+
+     /**
+     * processKeyboard
+     * @param event {Event}
+     */
+     processKeyboard(event){
+     switch (event.keyCode)
+	   {
+	    case (109):	// only works for lower 'm', as it is
+			this.scene.changeMaterials();
+			break;
+		case (77):	// only works for capital 'M', as it is
+			this.scene.changeMaterials();
+			break;
+	   }
+    }
+
 }

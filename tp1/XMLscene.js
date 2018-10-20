@@ -170,4 +170,12 @@ class XMLscene extends CGFscene {
         this.popMatrix();
         // ---- END Background, camera and axis setup
     }
+
+        changeMaterials(){
+        for (var item in this.graph.nodes) {
+            this.graph.nodes[item].activeMaterial= this.graph.nodes[item].materials[this.graph.nodes[item].materials.indexOf( this.graph.nodes[item].activeMaterial)+ 1]
+	        if(this.graph.nodes[item].activeMaterial==null)
+	           this.graph.nodes[item].activeMaterial=this.graph.nodes[item].materials[0];
+        }
+    }
 }
