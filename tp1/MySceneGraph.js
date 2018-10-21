@@ -1177,6 +1177,45 @@ class MySceneGraph {
 
                     primitive.push(cylinderPrimitive);
 
+                } else if (grandChildren[0].nodeName == "cylinder_baseless") {
+                    var cylinderBaselessPrimitive = [];
+                    // base
+                    var base = this.reader.getFloat(grandChildren[0], 'base');
+                    if (base == null || isNaN(base))
+                        return "unable to parse cylinder's base for ID= " + primitiveId;
+                    else
+                        cylinderBaselessPrimitive.push(base);
+
+                    // top
+                    var top = this.reader.getFloat(grandChildren[0], 'top');
+                    if (top == null || isNaN(top))
+                        return "unable to parse cylinder's top for ID = " + primitiveId;
+                    else
+                        cylinderBaselessPrimitive.push(top);
+
+                    // height
+                    var height = this.reader.getFloat(grandChildren[0], 'height');
+                    if (height == null || isNaN(height))
+                        return "unable to parse cylinder's height for ID = " + primitiveId;
+                    else
+                        cylinderBaselessPrimitive.push(height);
+
+                    // slices
+                    var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                    if (slices == null || isNaN(slices) || slices <= 0)
+                        return "unable to parse cylinder's slices for ID = " + primitiveId;
+                    else
+                        cylinderBaselessPrimitive.push(slices);
+
+                    // stacks
+                    var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                    if (stacks == null || isNaN(stacks) || stacks <= 0)
+                        return "unable to parse cylinder's stacks for ID = " + primitiveId;
+                    else
+                        cylinderBaselessPrimitive.push(stacks);
+
+                    primitive.push(cylinderBaselessPrimitive);
+
                 } else if (grandChildren[0].nodeName == "sphere") {
 
                     var spherePrimitive = [];
@@ -1375,9 +1414,9 @@ class MySceneGraph {
                                     this.nodes[componentID].addChild(id);
                                 } else if (childrenNodeNames[n] == "primitiveref") {
                                     var id = this.reader.getString(grandGrandChildren[n], 'id');
-                                    if(id== "square_at_zero")
+                                    if(id== "cylinder_baseless")
                                         //id="rectangle";
-                                        ;
+                                        console.log("lol");
                                     nodeChildren.push(id);
                                     for (var a = 0; a < this.primitivesData.length; a++)    //search the primitive reference
                                         if(this.primitivesData[a][0]==id)
@@ -1457,7 +1496,7 @@ class MySceneGraph {
     
 
         if (currMaterial == null) 
-               currMaterial=createDefaultMaterial();
+               currMaterial=this.createDefaultMaterial();
          
         currMaterial.apply();
             
@@ -1470,7 +1509,7 @@ class MySceneGraph {
            if(current.leaves[i].type == "rectangle")                                            //Isto porque as texCoords das outras primitivas estão
                 current.leaves[i].primitive.setST(current.textureS,current.textureT);           //a ser definidas sem valores S e T --> corrigir isto
 
-            if (current.leaves[i].type != "torus")
+            
                 //apenas para testar
                 current.leaves[i].primitive.display();
         }

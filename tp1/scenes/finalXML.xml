@@ -36,9 +36,14 @@
 
     <textures>
         <texture id="trunk" file="./scenes/images/trunk-image.jpg"/>
-        <texture id="wax" file="./scenes/images/lane.jpg"/>  
-               <texture id="wood" file="./scenes/images/wood.jpg"/>  
-                <texture id="floor_pattern" file="./scenes/images/floor_black.jpg"/>  
+        <texture id="lane" file="./scenes/images/lane.jpg"/>  
+        <texture id="wood" file="./scenes/images/wood.jpg"/>
+        <texture id="shiny_metal" file="./scenes/images/shiny_metal.png"/>  
+        <texture id="floor_pattern" file="./scenes/images/floor_black.jpg"/>
+        <texture id="wall_pattern" file="./scenes/images/bowling_wall.jpg"/>
+        <texture id="wall_pattern2" file="./scenes/images/bowling_wall2.jpg"/>
+        <texture id="scoreboard1" file="./scenes/images/scoreboard1.jpg"/>
+        <texture id="scoreboard2" file="./scenes/images/scoreboard2.jpg"/>  
                
     </textures>
 
@@ -55,6 +60,20 @@
             <ambient r="1" g="0" b="0" a="1"/>
             <diffuse r="1" g="0" b="0" a="1"/>
             <specular r="1" g="0" b="0" a="1"/>
+        </material>
+
+        <material id="green" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="0" g="1" b="0" a="1"/>
+            <diffuse r="0" g="1" b="0" a="1"/>
+            <specular r="0" g="1" b="0" a="1"/>
+        </material>
+
+        <material id="blue" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="0" g="0" b="1" a="1"/>
+            <diffuse r="0" g="0" b="1" a="1"/>
+            <specular r="0" g="0" b="1" a="1"/>
         </material>
 
         <material id="floor" shininess="10">
@@ -112,9 +131,8 @@
         <transformation id="floor_trans">
             <translate x="0" y="0" z="21"/>
             <rotate axis="x" angle="-90"/>
-            <scale x="12" y="6" z="1"/>
+            <scale x="12.5" y="6" z="1"/>
         </transformation>
-
     </transformations>
 
        
@@ -137,6 +155,10 @@
             <sphere radius="1" slices="20" stacks="20"/>
         </primitive>
 
+        <primitive id="cylinder_baseless">
+            <cylinder_baseless base="1" top="1" height="5" slices="250" stacks="250"/>
+        </primitive>
+
         <primitive id="cylinder">
             <cylinder base="1" top="1" height="5" slices="250" stacks="250"/>
         </primitive>
@@ -157,10 +179,9 @@
 
         <component id="left_wall">
             <transformation>
-                <translate x="0" y="0" z="15"/>
-                <rotate axis="y" angle="-180"/>
-                <rotate axis="y" angle="-90"/>
-                <scale x="15" y="5" z="1"/>
+                <translate x="0" y="0" z="25"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="25" y="5" z="1"/>
                 
             </transformation>
 
@@ -168,124 +189,26 @@
                 <material id ="beige"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="wall_pattern2" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
-            </children>
-        </component>
-
-        <component id="back_wall0">
-            <transformation>
-                <scale x="13" y="5" z="1"/>
-            </transformation>
-
-            <materials>
-                <material id ="beige"/>
-                <material id ="red"/>
-                <material id ="floor"/>
-            </materials>
-
-            <texture id="inherit" length_s="1" length_t="1"/>
-
-            <children>
-                <primitiveref id="square_at_zero"/>
-            </children>
-        </component>
-
-
-        <component id="back_wall_front">
-            <transformation>
-                <translate x="0" y="1" z="2.6"/>
-                <scale x="13" y="4" z="1"/>
-            </transformation>
-
-            <materials>
-                <material id ="beige"/>
-            </materials>
-
-            <texture id="inherit" length_s="1" length_t="1"/>
-
-            <children>
-                <primitiveref id="square_at_zero"/>
-            </children>
-        </component>
-
-        <component id="back_wall_low">
-            <transformation>
-
-                <translate x="0" y="1" z="2.8"/>
-                <scale x="13" y="2" z="2.8"/>
-                <rotate axis="x" angle="-90"/>
-
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="inherit" length_s="1" length_t="1"/>
-
-            <children>
-                <primitiveref id="square_at_zero"/>
-            </children>
-        </component>
-
-        <component id="back_wall_top">
-            <transformation>
-                <scale x="1" y="1" z="0.95"/>
-                <translate x="0" y="4" z="0"/>
-
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="inherit" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="back_wall_low"/>
-            </children>
-        </component>
-
-        <component id="back_wall_cyl">
-            <transformation>
-             <translate x="13" y="1" z="2.6"/>               
-                <rotate axis="y" angle="-90"/>
-                <scale x="0.2" y="0.2" z="2.6   "/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-                <material id ="red"/>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <primitiveref id="cylinder"/>
             </children>
         </component>
 
         <component id="back_wall">
             <transformation>
+                <scale x="16" y="5" z="1"/>
             </transformation>
 
             <materials>
-                <material id ="inherit"/>
+                <material id ="beige"/>
             </materials>
 
-            <texture id="trunk" length_s="1" length_t="1"/>
+            <texture id="wall_pattern" length_s="1" length_t="1"/>
 
             <children>
-                <componentref id="back_wall0"/>
-                <componentref id="back_wall_low"/>
-                <componentref id="back_wall_top"/>
-                <componentref id="back_wall_front"/>
-
-                <componentref id="back_wall_cyl"/>
+                <primitiveref id="square_at_zero"/>
             </children>
         </component>
 
@@ -298,9 +221,26 @@
                 <material id ="floor"/>
             </materials>
 
-            <texture id="wood" length_s="1" length_t="1"/>
-            
+            <texture id="wood" length_s="1" length_t="1"/>        
 
+            <children>
+                <primitiveref id="square_at_zero"/>
+            </children>
+        </component>
+
+        <component id="floor_black">
+            <transformation>
+                    <translate x="0" y="0" z="25"/>
+                    <rotate axis="x" angle="-90"/>
+                    <scale x="4" y="4" z="4"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="floor_pattern" length_s="1" length_t="1"/>
+            
             <children>
                 <primitiveref id="square_at_zero"/>
             </children>
@@ -309,21 +249,16 @@
 
         <component id="floor_black0">
             <transformation>
-                    <translate x="0" y="0" z="25"/>
-                    <rotate axis="x" angle="-90"/>
-                    <scale x="4" y="4" z="4"/>
             </transformation>
 
             <materials>
-                <material id ="floor"/>
-                <material id ="red"/>
-                <material id ="fuchsia"/>
+                <material id ="inherit"/>
             </materials>
 
             <texture id="floor_pattern" length_s="1" length_t="1"/>
             
             <children>
-                <primitiveref id="square_at_zero"/>
+                <componentref id="floor_black"/>
             </children>
         </component>
 
@@ -339,7 +274,7 @@
             <texture id="inherit" length_s="1" length_t="1"/>
             
             <children>
-                <componentref id="floor_black0"/>
+                <componentref id="floor_black"/>
             </children>
         </component>
 
@@ -356,7 +291,7 @@
             <texture id="inherit" length_s="1" length_t="1"/>
             
             <children>
-                <componentref id="floor_black0"/>
+                <componentref id="floor_black"/>
             </children>
         </component>
 
@@ -373,13 +308,14 @@
             <texture id="inherit" length_s="1" length_t="1"/>
             
             <children>
-                <componentref id="floor_black0"/>
+                <componentref id="floor_black"/>
             </children>
         </component>
         
         <component id="floor_black4">
             <transformation>
-                    <translate x="12" y="0" z="-4"/>
+                    <translate x="12.5" y="0" z="-4"/>
+                    <scale x="0.875" y="1" z="1"/>
             </transformation>
 
             <materials>
@@ -389,14 +325,14 @@
             <texture id="inherit" length_s="1" length_t="1"/>
             
             <children>
-                <componentref id="floor_black0"/>
+                <componentref id="floor_black"/>
             </children>
         </component>
-
 
         <component id="floor_black5">
             <transformation>
-                    <translate x="12" y="0" z="-8"/>
+                    <translate x="12.5" y="0" z="-8"/>
+                    <scale x="0.875" y="1" z="1"/>
             </transformation>
 
             <materials>
@@ -406,14 +342,14 @@
             <texture id="inherit" length_s="1" length_t="1"/>
             
             <children>
-                <componentref id="floor_black0"/>
+                <componentref id="floor_black"/>
             </children>
         </component>
 
-
         <component id="floor_black6">
             <transformation>
-                    <translate x="12" y="0" z="-12"/>
+                    <translate x="12.5" y="0" z="-12"/>
+                    <scale x="0.875" y="1" z="1"/>
             </transformation>
 
             <materials>
@@ -423,13 +359,14 @@
             <texture id="inherit" length_s="1" length_t="1"/>
             
             <children>
-                <componentref id="floor_black0"/>
+                <componentref id="floor_black"/>
             </children>
         </component>
 
         <component id="floor_black7">
             <transformation>
-                    <translate x="12" y="0" z="-16"/>
+                    <translate x="12.5" y="0" z="-16"/>
+                    <scale x="0.875" y="1" z="1"/>
             </transformation>
 
             <materials>
@@ -439,13 +376,14 @@
             <texture id="inherit" length_s="1" length_t="1"/>
             
             <children>
-                <componentref id="floor_black0"/>
+                <componentref id="floor_black"/>
             </children>
         </component>
 
- <component id="floor_black8">
+        <component id="floor_black8">
             <transformation>
-                    <translate x="12" y="0" z="-20"/>
+                    <translate x="12.5" y="0" z="-26.25"/>
+                    <scale x="0.875" y="1" z="1.25"/>
             </transformation>
 
             <materials>
@@ -455,16 +393,19 @@
             <texture id="inherit" length_s="1" length_t="1"/>
             
             <children>
-                <componentref id="floor_black0"/>
+                <componentref id="floor_black"/>
             </children>
         </component>
 
-          <component id="floor_black">
+
+          <component id="floor_black_all">
             <transformation>
             </transformation>
 
             <materials>
-                <material id ="inherit"/>
+                <material id ="floor"/>
+                <material id ="red"/>
+                <material id ="fuchsia"/>
             </materials>
 
             <texture id="none" length_s="1" length_t="1"/>
@@ -478,7 +419,6 @@
                 <componentref id="floor_black5"/>
                 <componentref id="floor_black6"/>
                 <componentref id="floor_black7"/>
-
                 <componentref id="floor_black8"/>
             </children>
         </component>
@@ -500,7 +440,7 @@
                 <material id ="floor"/>
             </materials>
 
-            <texture id="wax" length_s="1" length_t="1"/>
+            <texture id="lane" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -523,7 +463,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -540,7 +480,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -558,7 +498,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -575,7 +515,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -592,7 +532,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -610,7 +550,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="square"/>
@@ -625,7 +565,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="frontal_face"/>
@@ -747,7 +687,7 @@
                 <material id ="table_wood"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="none" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="barrier1"/>
@@ -773,7 +713,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -790,7 +730,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -807,7 +747,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -824,7 +764,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -841,7 +781,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -856,7 +796,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="front_right_leg"/>
@@ -876,7 +816,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="legs"/>
@@ -893,7 +833,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="table"/>
@@ -909,7 +849,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="table"/>
@@ -925,7 +865,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="table"/>
@@ -941,7 +881,7 @@
                 <material id ="table_wood"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="table1"/>
@@ -988,8 +928,8 @@
             <texture id="none" length_s="1" length_t="1"/>
 
          <children>
-                 <primitiveref id="cylinder"/>
-            </children>
+                <primitiveref id="cylinder"/>
+         </children>
         </component>
 		
 		
@@ -1224,6 +1164,9 @@
 
             <materials>
                 <material id ="fuchsia"/>
+                <material id ="green"/>
+                <material id ="blue"/>
+                <material id ="yellow"/>
             </materials>
 
             <texture id="none" length_s="1" length_t="1"/>
@@ -1234,7 +1177,9 @@
         </component>
 
         <!--END OF BALL-->
-		 <!--TELEVISION-->
+
+
+		<!--TELEVISION-->
 
         <component id="screen">
             <transformation>
@@ -1243,10 +1188,10 @@
             </transformation>
 
             <materials>
-                <material id ="beige"/>
+                <material id ="inherit"/>
             </materials>
 
-            <texture id="glass" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -1263,7 +1208,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="shiny_metal" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -1272,15 +1217,13 @@
 
         <component id="television">
             <transformation>
-                <translate x="-0.5" y="-1" z="2.6"/>
-                <scale x="1.25" y="1.25" z="1"/>
             </transformation>
 
             <materials>
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="screen"/>
@@ -1304,7 +1247,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="shiny_metal" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="cube"/>
@@ -1321,11 +1264,11 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="shiny_metal" length_s="1" length_t="1"/>
                 
             <children>
                 <primitiveref id="sphere"/>
-                <primitiveref id="cylinder"/>
+                <primitiveref id="cylinder_baseless"/>
             </children>
         </component>
 
@@ -1421,7 +1364,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="shiny_metal" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="ball_machine_bottom"/>
@@ -1430,168 +1373,7 @@
             </children>
         </component>
 
-        <!--END OF BALL RETURN MACHINE-->1
-        
-        <!--CHAIRS-->
-
-        <component id="chair_right_bar">
-            <transformation>
-                <translate x="0.925" y="0.9" z="0"/>
-                <scale x="0.1" y="0.5" z="0.1"/>
-                <translate x="0.5" y="0.5" z="0.3"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="cube"/>
-            </children>
-        </component>
-
-        <component id="chair_left_bar">
-            <transformation>
-                <translate x="-0.025" y="0.9" z="0"/>
-                <scale x="0.1" y="0.5" z="0.1"/>
-                <translate x="0.5" y="0.5" z="0.3"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="cube"/>
-            </children>
-        </component>
-
-        <component id="chair_bottom">
-            <transformation>
-                <translate x="-0.4" y="0" z="-0.8"/>
-                <scale x="1" y="1" z="1"/>
-            </transformation>
-
-            <materials>
-                <material id ="m1"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="table"/>
-            </children>
-        </component>
-
-        <component id="chair_top">
-            <transformation>
-                <translate x="0" y="1" z="0"/>
-                <scale x="1" y="0.3" z="0.1"/>
-                <translate x="0.5" y="0.5" z="0.5"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="cube"/>
-            </children>
-        </component>
-
-        <component id="chair">
-            <transformation>
-                <translate x="1.5" y="0" z="20"/>
-                <rotate axis="y" angle="180"/>
-                <scale x="0.5" y="0.5" z="0.5"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="chair_right_bar"/>
-                <componentref id="chair_left_bar"/>
-                <componentref id="chair_bottom"/>
-                <componentref id="chair_top"/>
-            </children>
-        </component>
-
-        <component id="chair1">
-            <transformation>
-                <translate x="0" y="0" z="0"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="chair"/>
-            </children>
-        </component>
-
-        <component id="chair2">
-            <transformation>
-                <translate x="0" y="0" z="1"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="chair"/>
-            </children>
-        </component>
-
-        <component id="chair3">
-            <transformation>
-                <translate x="0" y="0" z="2"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="chair"/>
-            </children>
-        </component>
-
-        <component id="chair_set">
-            <transformation>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="chair1"/>
-                <componentref id="chair2"/>
-                <componentref id="chair3"/>
-            </children>
-        </component>
-
-        <!--END OF CHAIRS-->
+        <!--END OF BALL RETURN MACHINE-->
 
 
         <!--LANES-->
@@ -1604,16 +1386,14 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="lane_floor"/>
                 <componentref id="pin_set"/>
                 <componentref id="ball"/>
                 <componentref id="ball_machine"/>
-                <!--<componentref id="chair_set"/>-->
 				<componentref id="television"/>
-
             </children>
         </component>
 
@@ -1626,7 +1406,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="scoreboard1" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="lane"/>
@@ -1642,7 +1422,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="scoreboard2" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="lane"/>
@@ -1658,7 +1438,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="scoreboard1" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="lane"/>
@@ -1674,32 +1454,13 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="scoreboard2" length_s="1" length_t="1"/>
 
             <children>
                 <componentref id="lane"/>
             </children>
         </component>
 
-        <component id="edge">
-            <transformation>          
-               <translate x="6" y="0" z="15"/>               
-                <rotate axis="y" angle="-90"/>
-                <scale x="0.05" y="0.01" z="12 "/>
-            </transformation>
-
-            <materials>
-                <material id ="red"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <componentref id="cube"/>
-            </children>
-        </component>
-
-        
         <component id="lanes">
             <transformation>
             </transformation>
@@ -1715,11 +1476,8 @@
                 <componentref id="lane2"/>
                 <componentref id="lane3"/>
                 <componentref id="lane4"/>
-                <componentref id="edge"/>
             </children>
         </component>
-
-
 
         <!--END OF LANES-->
         
@@ -1735,7 +1493,7 @@
             <texture id="none" length_s="1" length_t="1"/>
 
             <children>
-                <componentref id="floor_black"/>   
+                <componentref id="floor_black_all"/>   
                 <componentref id="left_wall"/>
                 <componentref id="back_wall"/>
                 <componentref id="floor"/>         

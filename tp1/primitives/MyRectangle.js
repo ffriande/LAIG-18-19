@@ -31,9 +31,10 @@ MyRectangle.prototype.constructor=MyRectangle;
  MyRectangle.prototype.setST = function (S, T) {
  	this.S = S;
 	this.T = T;
- 	this.texCoords = [0,  this.T,
- 					 this.S, this.T,
- 					  0,0,
-					 this.S, 0,];
+ 	this.texCoords = [0,0,
+ 					  this.S, 0,
+ 					  0,  this.T,
+ 					  this.S, this.T
+					 ];
  	this.updateTexCoordsGLBuffers();
 }; 
