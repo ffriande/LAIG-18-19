@@ -232,6 +232,7 @@ class MySceneGraph {
 
         this.views = [];
         var numViews = 0;
+        this.viewsIDs=[];
 
         var grandChildren = [];
         var nodeNames = [];
@@ -330,6 +331,7 @@ class MySceneGraph {
 
                
                 // Store view PERSPECTIVE information.
+                this.viewsIDs.push(viewId);
                 this.views[viewId] = new CGFcamera(angle, this.near, this.far, fromCoord, toCoord);
 
             } else {
@@ -350,6 +352,7 @@ class MySceneGraph {
                     return "unable to parse bottom value of the view for ID = " + viewId;
 
                 // Store view ORTHO information.
+                this.viewsIDs.push(viewId);
                 this.views[viewId] = new CGFcameraOrtho(left, right, bottom, top, this.near, this.far, fromCoord, toCoord, vec3.fromValues(0, 1, 0));
             }
 

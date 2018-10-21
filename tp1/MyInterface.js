@@ -61,4 +61,13 @@ class MyInterface extends CGFinterface {
 	   }
     }
 
+    addSelectDropDown(selectables){
+    	var scene=this.scene;
+       selectables.splice(0, 0, " ");
+        var group = this.gui.add(scene, 'views', selectables);
+        group.onFinishChange(function(value){
+            	scene.setNewCamera(value);
+        });
+    }
+
 }
