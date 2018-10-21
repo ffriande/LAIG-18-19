@@ -4,21 +4,18 @@
  */
 class MyLeaf 
 {
-    constructor(graph,element)
+    constructor(graph,type,values)
     {
         this.graph = graph;
-        this.type = element[0];
-        this.values = element[1];
+        this.type = type;
+        this.values = values;
 
         switch (this.type)
         {
             case 'triangle':
                 this.primitive = new MyTriangle(this.graph.scene, this.values[0], this.values[1], this.values[2], this.values[3], this.values[4], this.values[5], this.values[6], this.values[7], this.values[8]);
                 break;
-            case 'square':
-                this.primitive = new MyRectangle(this.graph.scene, this.values[0], this.values[1], this.values[2], this.values[3]);
-                break;
-            case 'square_at_zero':
+            case 'rectangle':
                 this.primitive = new MyRectangle(this.graph.scene, this.values[0], this.values[1], this.values[2], this.values[3]);
                 break;
             case 'sphere':

@@ -1035,6 +1035,7 @@ class MySceneGraph {
                 var primitive = [];
 
                 primitive.push(primitiveId);
+                primitive.push(grandChildren[0].nodeName);
 
                 if (grandChildren[0].nodeName == "rectangle") {
 
@@ -1067,7 +1068,6 @@ class MySceneGraph {
                     else
                         rectanglePrimitive.push(y2);
                         
-                    //primitive.push("rectangle");
                     primitive.push(rectanglePrimitive);
 
                 } else if (grandChildren[0].nodeName == "triangle") {
@@ -1136,7 +1136,6 @@ class MySceneGraph {
                     else
                         trianglePrimitive.push(z3);
 
-                    //primitive.push("triangle");
                     primitive.push(trianglePrimitive);
 
                 } else if (grandChildren[0].nodeName == "cylinder") {
@@ -1176,7 +1175,6 @@ class MySceneGraph {
                     else
                         cylinderPrimitive.push(stacks);
 
-                    //primitive.push("cylinder");
                     primitive.push(cylinderPrimitive);
 
                 } else if (grandChildren[0].nodeName == "sphere") {
@@ -1203,7 +1201,6 @@ class MySceneGraph {
                     else
                         spherePrimitive.push(stacks);
 
-                    //primitive.push("sphere");
                     primitive.push(spherePrimitive);
 
                 } else if (grandChildren[0].nodeName == "torus") {
@@ -1236,7 +1233,6 @@ class MySceneGraph {
                     else
                         torusPrimitive.push(loops);
 
-                    //primitive.push("torus");
                     primitive.push(torusPrimitive);
                 }
                 this.primitivesData.push(primitive);
@@ -1385,7 +1381,7 @@ class MySceneGraph {
                                     nodeChildren.push(id);
                                     for (var a = 0; a < this.primitivesData.length; a++)    //search the primitive reference
                                         if(this.primitivesData[a][0]==id)
-                                            this.nodes[componentID].addLeaf(new MyLeaf(this, this.primitivesData[a]));
+                                            this.nodes[componentID].addLeaf(new MyLeaf(this, this.primitivesData[a][1], this.primitivesData[a][2]));
                                 }
                             }
                         }
@@ -1471,12 +1467,11 @@ class MySceneGraph {
 
        //console.log(currTexture);
       for (let i = 0; i < current.leaves.length; i++) {
-           if(current.leaves[i].type == "square"||current.leaves[i].type == "square_at_zero" )  //Isto porque as texCoords das outras primitivas estão
+           if(current.leaves[i].type == "rectangle")                                            //Isto porque as texCoords das outras primitivas estão
                 current.leaves[i].primitive.setST(current.textureS,current.textureT);           //a ser definidas sem valores S e T --> corrigir isto
 
-            if (current.leaves[i].type == "square_at_zero" || current.leaves[i].type == "square" || current.leaves[i].type == "sphere" || current.leaves[i].type == "cylinder" || current.leaves[i].type == "triangle")
+            if (current.leaves[i].type != "torus")
                 //apenas para testar
-
                 current.leaves[i].primitive.display();
         }
 
