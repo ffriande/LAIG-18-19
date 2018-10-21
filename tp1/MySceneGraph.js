@@ -361,8 +361,7 @@ class MySceneGraph {
 
         if (numViews == 0)
             return "at least one view must be defined";
-//         else if (numViews > 1)
-//             this.onXMLMinorError("too many views defined; you can have 1 view (perspective or orthogonal)");
+            
         this.log("Parsed views");
 
         return null;
@@ -1417,9 +1416,6 @@ class MySceneGraph {
                                     this.nodes[componentID].addChild(id);
                                 } else if (childrenNodeNames[n] == "primitiveref") {
                                     var id = this.reader.getString(grandGrandChildren[n], 'id');
-                                    if(id== "cylinder_baseless")
-                                        //id="rectangle";
-                                        console.log("lol");
                                     nodeChildren.push(id);
                                     for (var a = 0; a < this.primitivesData.length; a++)    //search the primitive reference
                                         if(this.primitivesData[a][0]==id)

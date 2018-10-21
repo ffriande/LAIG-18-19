@@ -1,14 +1,22 @@
 <yas>
     <scene root="bowling_alley" axis_length="5"/>
-    <views default="v1">
-        <perspective id="v1" near="0.1" far="500" angle="0.4">
-            <from x="50" y="40" z="50   "/>
+    <views default="overview">
+        <perspective id="overview" near="0.1" far="500" angle="0.4">
+            <from x="55" y="30" z="55"/>
             <to x="0" y="0" z="0"/>
         </perspective>
-        <ortho id="v2" near="0.1" far="500" left="-16" right="16" top="9" bottom="-9" >
+        <ortho id="orthogonal" near="0.1" far="500" left="-16" right="16" top="9" bottom="-9" >
             <from x="10" y="10" z="10" />
             <to x="0" y="0" z="0" />
         </ortho>
+        <perspective id="front_view" near="0.1" far="500" angle="0.4">
+            <from x="5" y="5" z="35"/>
+            <to x="5" y="0" z="0"/>
+        </perspective>
+        <perspective id="television" near="0.1" far="500" angle="0.4">
+            <from x="5" y="4" z="5"/>
+            <to x="5" y="4" z="0"/>
+        </perspective>
     </views>
 
     <ambient>
@@ -17,16 +25,24 @@
     </ambient>
 
     <lights>
-        <omni id="g_light" enabled="1">
+        <omni id="top_light" enabled="1">
             <location x="3.5" y="15" z="3.5" w="0" />
             <ambient r="0.1" g="0.1" b="0.1" a="1"/>
             <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
             <specular r="0.7" g="0.7" b="0.7" a="1"/>
         </omni>
 
-        <spot id="s_light" enabled="0" angle="55" exponent="20">
-            <location x="15" y="5" z="15" w="0" />
-            <target x="0" y="0" z="0" />
+        <spot id="tables_light" enabled="0" angle="55" exponent="20">
+            <location x="6" y="5" z="22" w="0" />
+            <target x="6" y="0" z="22" />
+            <ambient r="0" g="0" b="0" a="0"/>
+            <diffuse r="0.5" g="0.5" b="0.5" a="0"/>
+            <specular r="0.5" g="0.5" b="0.5" a="0"/>
+        </spot>
+
+        <spot id="pins_light" enabled="0" angle="55" exponent="40">
+            <location x="6" y="5" z="2" w="0" />
+            <target x="6" y="0" z="2" />
             <ambient r="0" g="0" b="0" a="0"/>
             <diffuse r="0.5" g="0.5" b="0.5" a="0"/>
             <specular r="0.5" g="0.5" b="0.5" a="0"/>
@@ -43,7 +59,8 @@
         <texture id="wall_pattern" file="./scenes/images/bowling_wall.jpg"/>
         <texture id="wall_pattern2" file="./scenes/images/bowling_wall2.jpg"/>
         <texture id="scoreboard1" file="./scenes/images/scoreboard1.jpg"/>
-        <texture id="scoreboard2" file="./scenes/images/scoreboard2.jpg"/>  
+        <texture id="scoreboard2" file="./scenes/images/scoreboard2.jpg"/>
+        <texture id="pizza" file="./scenes/images/pizza.jpg"/>  
                
     </textures>
 
@@ -74,6 +91,13 @@
             <ambient r="0" g="0" b="1" a="1"/>
             <diffuse r="0" g="0" b="1" a="1"/>
             <specular r="0" g="0" b="1" a="1"/>
+        </material>
+
+        <material id="yellow" shininess="10">
+            <emission r="0" g="0" b="0" a="0"/>
+            <ambient r="1" g="1" b="0" a="1"/>
+            <diffuse r="1" g="1" b="0" a="1"/>
+            <specular r="1" g="1" b="0" a="1"/>
         </material>
 
         <material id="floor" shininess="10">
@@ -156,15 +180,11 @@
         </primitive>
 
         <primitive id="cylinder_baseless">
-            <cylinder_baseless base="1" top="1" height="5" slices="250" stacks="250"/>
+            <cylinder_baseless base="1" top="1" height="5" slices="25" stacks="25"/>
         </primitive>
 
         <primitive id="cylinder">
-            <cylinder base="1" top="1" height="5" slices="250" stacks="250"/>
-        </primitive>
-
-        <primitive id="cut_cone">
-            <cylinder base="3" top="1" height="5" slices="250" stacks="250"/>
+            <cylinder base="1" top="1" height="5" slices="25" stacks="25"/>
         </primitive>
 
         <primitive id="torus">
@@ -1480,7 +1500,146 @@
         </component>
 
         <!--END OF LANES-->
+
+
+        <!--PILLOW-->
+
+        <component id="pillow">
+            <transformation>
+                <scale x="12" y="6" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="none" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="torus"/>
+            </children>
+        </component>
+
+        <!--END OF PILLOW-->
+
+
+        <!--PIZZA-->
+
+        <component id="pizza_top">
+            <transformation>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="triangle"/>
+            </children>
+        </component>
+
+        <component id="pizza_bottom">
+            <transformation>
+                <translate x="0" y="0" z="-1"/>
+                <rotate axis="y" angle="180"/>
+                <rotate axis="z" angle="180"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="triangle"/>
+            </children>
+        </component>
+
+        <component id="pizza_left_side">
+            <transformation>
+                <translate x="-0.5" y="0" z="-0.5"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="1" y="1.75" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="pizza_right_side">
+            <transformation>
+                <translate x="-0.5" y="0" z="-0.5"/>
+                <rotate axis="y" angle="90"/>
+                <rotate axis="z" angle="-45"/>
+                <scale x="1" y="1.75" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="pizza_back_side">
+            <transformation>
+                <translate x="-0.5" y="0" z="-0.5"/>
+                <rotate axis="y" angle="90"/>
+                <rotate axis="z" angle="45"/>
+                <scale x="1" y="1.75" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="inherit" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="pizza_slice">
+            <transformation>
+                <translate x="2" y="1" z="22"/>
+                <rotate axis="x" angle="90"/>
+                <scale x="0.2" y="0.2" z="0.2"/>
+            </transformation>
+
+            <materials>
+                <material id ="yellow"/>
+            </materials>
+
+            <texture id="pizza" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="pizza_top"/>
+                <componentref id="pizza_bottom"/>
+                <componentref id="pizza_left_side"/>
+                <componentref id="pizza_right_side"/>
+                <componentref id="pizza_back_side"/>
+            </children>
+        </component>
+
+        <!--END OF PIZZA-->
         
+        
+        <!--SCENE-->
 
         <component id="bowling_alley">
             <transformation>
@@ -1501,9 +1660,12 @@
                 <componentref id="barriers"/>
                 <componentref id="ball_machine"/>
 				<componentref id="tables"/>
-  
+				<componentref id="pillow"/>
+				<componentref id="pizza_slice"/>
             </children>
         </component>
+
+        <!--END OF SCENE-->
 
     </components>
 
