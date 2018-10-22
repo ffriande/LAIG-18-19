@@ -37,6 +37,9 @@
     <textures>
         <texture id="trunk" file="./scenes/images/trunk-image.jpg"/>
         <texture id="wax" file="./scenes/images/lane.jpg"/>  
+               <texture id="wood" file="./scenes/images/wood.jpg"/>  
+                <texture id="floor_pattern" file="./scenes/images/floor_black.jpg"/>  
+               
     </textures>
 
     <materials>
@@ -107,11 +110,21 @@
 
     <transformations >
         <transformation id="floor_trans">
-            <translate x="0" y="0" z="40"/>
+            <translate x="0" y="0" z="21"/>
             <rotate axis="x" angle="-90"/>
-            <scale x="13" y="20" z="1"/>
+            <scale x="13" y="6" z="1"/>
+        </transformation>
+
+    </transformations>
+
+        <transformations >
+        <transformation id="floor_black_trans">
+            <translate x="0" y="0" z="28"/>
+            <rotate axis="x" angle="-90"/>
+            <scale x="5" y="5" z="1"/>
         </transformation>
     </transformations>
+
 
     <primitives>
         <primitive id="square">
@@ -195,7 +208,25 @@
                 <material id ="floor"/>
             </materials>
 
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="wood" length_s="2" length_t="1"/>
+            
+
+            <children>
+                <primitiveref id="square_at_zero"/>
+            </children>
+        </component>
+
+        <component id="floor_black">
+            <transformation>
+                <transformationref id="floor_black_trans" />
+            </transformation>
+
+            <materials>
+                <material id ="floor"/>
+            </materials>
+
+            <texture id="floor_pattern" length_s="1" length_t="1"/>
+            
 
             <children>
                 <primitiveref id="square_at_zero"/>
@@ -225,6 +256,8 @@
                 <primitiveref id="square_at_zero"/>
             </children>
         </component>
+
+
         
         <!--END OF LANE FLOOR--> 
         
@@ -585,8 +618,9 @@
         
         <component id="table">
             <transformation>
-                <translate x="1.75" y="0" z="18"/>
+                <translate x="1.75" y="0" z="24"/>
                 <scale x="0.3" y="0.3" z="0.3"/>
+
             </transformation>
 
             <materials>
@@ -1009,7 +1043,7 @@
 
         <component id="ball_machine">
             <transformation>
-                <translate x="3.25" y="0" z="16"/>
+                <translate x="3.25" y="0" z="18"/>
             </transformation>
 
             <materials>
@@ -1310,7 +1344,7 @@
             <children>
                 <componentref id="left_wall"/>
                 <componentref id="back_wall"/>
-        <!--    <componentref id="floor"/>         -->
+                <componentref id="floor"/>         
                 <componentref id="lanes"/>
                 <componentref id="barriers"/>
                 <componentref id="ball_machine"/>
