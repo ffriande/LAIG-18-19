@@ -43,8 +43,9 @@ class MySceneGraph {
          * After the file is read, the reader calls onXMLReady on this object.
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
-
+    
         this.reader.open('scenes/' + filename, this);
+        this.totalTime =0;
     }
 
     /*
@@ -1466,6 +1467,17 @@ class MySceneGraph {
     searchGraph(nodeID, materialID, textureID) {
         var current = this.nodes[nodeID];
         this.scene.multMatrix(current.transformMatrix);
+        
+        //////////////////////////////////////////////////////
+        if(nodeID=='ball1'||nodeID=='ball2'||nodeID=='ball3'||nodeID=='ball4'){
+           this.animations=[];
+           var anima=new LinearAnimation(5,[[0,0,0],[2,2,2],[1,1,1]]); 
+           this.animations['id1']=anima;
+           this.nodes[nodeID].addAnimation(anima); 
+                   this.scene.multMatrix(current.animationMatrix);
+        }
+        ///////////////////////////////////////////////////////
+
 
         var currMaterial;
         var currMaterialId=current.activeMaterial;
@@ -1513,12 +1525,45 @@ class MySceneGraph {
                 current.leaves[i].primitive.display();
         }
 
+
+
         for (let i = 0; i < current.children.length; i++) {
             this.scene.pushMatrix();
             this.searchGraph(current.children[i], currMaterialId, currTextureId);
             this.scene.popMatrix();
         }
     }
+
+
+    
+    update(currTime){
+
+         this.totalTime += currTime;
+        var rootNode = this.nodes[this.root];
+
+        if(rootNode == null)
+            return "there is not root node";
+
+	      this.updateAux(rootNode.children);
+
+    }
+
+    updateAux(children){
+
+        for(var i=0; i < children.length;i++){
+
+            var node = this.nodes[children[i]];
+            if(node instanceof MyNode){
+
+                node.updateAnimations(this.totalTime );
+                this.updateAux(node.children);
+
+            }
+        }
+    }
+    
+    
+
 
 
 

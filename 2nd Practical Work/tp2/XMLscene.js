@@ -36,6 +36,9 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
+        this.lastUpdateTime = (new Date()).getTime();   
+
+        this.before_updateTime = -1;
     }
 
     /**
@@ -121,8 +124,13 @@ class XMLscene extends CGFscene {
  
         // Adds lights group.
         this.interface.addLightsGroup(this.graph.lights);
+
+        //Adds views group
         this.interface.addSelectDropDown(this.graph.viewsIDs);
 
+    
+	    this.setUpdatePeriod(1000/60);
+        
         this.sceneInited = true;
     }
 
@@ -179,7 +187,7 @@ class XMLscene extends CGFscene {
         // ---- END Background, camera and axis setup
     }
 
-        changeMaterials(){
+    changeMaterials(){
         for (var item in this.graph.nodes) {
             this.graph.nodes[item].activeMaterial= this.graph.nodes[item].materials[this.graph.nodes[item].materials.indexOf( this.graph.nodes[item].activeMaterial)+ 1]
 	        if(this.graph.nodes[item].activeMaterial==null)
@@ -194,5 +202,17 @@ class XMLscene extends CGFscene {
     
      getDefaultView(){
         return this.graph.default;
+    }
+
+    update(currTime){
+        
+        //  this.time = (Math.cos(currTime/1000))/ 2 + 0.5;
+        if(this.before_updateTime == -1)
+  		    this.graph.update(0);
+    	else
+  		    this.graph.update(currTime-this.before_updateTime);
+
+	    this.before_updateTime = currTime;
+
     }
 }
