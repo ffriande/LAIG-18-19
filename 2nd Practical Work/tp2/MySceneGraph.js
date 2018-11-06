@@ -1045,13 +1045,13 @@ class MySceneGraph {
                 return "ID must be unique for each animation (conflict: ID = " + animationId + ")";
 
             var span = this.reader.getFloat(children[i], 'span');
-            if ( span == null || !isNaN(span) || span<=0)
+            if ( span == null || isNaN(span) || span<=0)
                 return "unable to parse span value of the animation for ID = " + animationId;
             
             if (children[i].nodeName == "linear") {
                 var control_points=[];
                 //more than 2 control points
-                if((grandChildren = children[i].children)>=2){                
+                if((grandChildren = children[i].children).length>=2){                
                     for (var i = 0; i < grandChildren.length; i++) {
                         if (grandChildren[i].nodeName != "controlpoint") {
                             this.onXMLMinorError("unknown tag <" + grandChildren[i].nodeName + ">  -- Invalid control point");
