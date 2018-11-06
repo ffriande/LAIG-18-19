@@ -8,8 +8,9 @@ var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+var ANIMATIONS_INDEX = 7;
+var PRIMITIVES_INDEX = 8;
+var COMPONENTS_INDEX = 9;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -172,6 +173,18 @@ class MySceneGraph {
 
             //Parse transformations block
             if ((error = this.parseTransformations(nodes[index])) != null)
+                return error;
+        }
+
+        // <animations>
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
+        else {
+            if (index != ANIMATIONS_INDEX)
+                this.onXMLMinorError("tag <animations> out of order");
+
+            //Parse animations block
+            if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
 
@@ -909,8 +922,6 @@ class MySceneGraph {
         var children = transformationsNode.children;
 
         this.transformations = [];
-        /*this.transformations = mat4.create();
-        mat4.identity(this.transformations);*/
 
         var grandChildren = [];
 
@@ -1007,6 +1018,117 @@ class MySceneGraph {
 
         return null;
     }
+
+
+    /**
+   * Parses the <animations> node.
+   * @param {animations block element} animationsNode
+   */
+    parseAnimations(animationsNode) {
+
+        var children = animationsNode.children;
+
+        this.animations = [];
+        
+        var grandChildren = [];
+
+        // Any number of animation blocks.
+        for (var i = 0; i < children.length; i++) {
+
+            // Get id of the current animation.
+            var animationId = this.reader.getString(children[i], 'id');
+            if (animationId == null)
+                return "no ID defined for animations";
+
+            // Checks for repeated IDs.
+            if (this.animations[animationId] != null)
+                return "ID must be unique for each animation (conflict: ID = " + animationId + ")";
+
+            var span = this.reader.getFloat(children[i], 'span');
+            if ( span == null || !isNaN(span) || span<=0)
+                return "unable to parse span value of the animation for ID = " + animationId;
+            
+            if (children[i].nodeName == "linear") {
+                var control_points=[];
+                //more than 2 control points
+                if((grandChildren = children[i].children)>=2){                
+                    for (var i = 0; i < grandChildren.length; i++) {
+                        if (grandChildren[i].nodeName != "controlpoint") {
+                            this.onXMLMinorError("unknown tag <" + grandChildren[i].nodeName + ">  -- Invalid control point");
+                            continue;
+                        }
+                        
+                        var coords=[];
+                        // x
+                        var x = this.reader.getFloat(grandChildren[i], 'xx');
+                        if (!(x != null && !isNaN(x)))
+                            return "unable to parse x-coordinate of the control point " + i +" for animation ID = " + animationId;
+                        else
+                            coords.push(x);
+
+                        // y
+                        var y = this.reader.getFloat(grandChildren[i], 'yy');
+                        if (!(y != null && !isNaN(y)))
+                            return "unable to parse y-coordinate of the control point " + i +" for animation ID = " + animationId;
+                        else
+                            coords.push(y);
+
+                        // z
+                        var z = this.reader.getFloat(grandChildren[i], 'zz');
+                        if (!(z != null && !isNaN(z)))
+                            return "unable to parse z-coordinate of the control point " + i +" for animation ID = " + animationId;
+                        else
+                            coords.push(z);
+                        
+                        control_points.push(coords);
+                    }
+                    this.animations[animationId]=new LinearAnimation(span,control_points);
+                }
+            //less than 2 control points
+            else 
+                return "not enough control points defined in linear animation";
+            }
+
+            else if(children[i].nodeName == "circular"){
+
+                 // Get centre of the current circular animation.
+                var center = this.reader.getString(children[i], 'center');
+                if (center == null)
+                    return "unable to parse center values of the animation for ID = " + animationId;
+                
+                var arr_center = center.split(" ");
+                //verificação pouco concisa
+                if (arr_center.length != 3)
+                    return "wrong ammount of 'center' coordinates on the animation for ID = " + animationId;
+                
+                var radius = this.reader.getFloat(children[i], 'radius');
+                if ( radius == null || !isNaN(span) || radius<=0)
+                    return "unable to parse radius value of the animation for ID = " + animationId;
+            
+                var startang = this.reader.getFloat(children[i], 'startang');
+                if ( startang == null || !isNaN(startang))
+                    return "unable to parse startang value of the animation for ID = " + animationId;
+            
+                var rotang = this.reader.getFloat(children[i], 'rotang');
+                if ( rotang == null || !isNaN(rotang))
+                    return "unable to parse rotang value of the animation for ID = " + animationId;
+                
+
+                ///TODO: fazer circular anims
+                this.animations[animationId]=[span,arr_center,radius,startang,rotang];
+            }
+
+            else{
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+            }
+            this.log("Parsed animations");
+
+            return null;
+
+    }
+
 
     /**
    * Parses the <primitives> node.
@@ -1538,7 +1660,7 @@ class MySceneGraph {
     
     update(currTime){
 
-         this.totalTime += currTime;
+        this.totalTime += currTime;
         var rootNode = this.nodes[this.root];
 
         if(rootNode == null)
