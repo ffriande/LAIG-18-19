@@ -3,6 +3,7 @@ class Animation {
 
     constructor(time) {
         this.time = time;
+        this.finished=false;
     }
 
 

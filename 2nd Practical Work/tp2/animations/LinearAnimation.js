@@ -44,17 +44,15 @@ class LinearAnimation extends Animation {
 
     apply(node){
         mat4.identity(node.animationMatrix);
-		
-		mat4.translate(node.animationMatrix,node.animationMatrix,this.control_points[0]);         
 
     	mat4.translate(node.animationMatrix,node.animationMatrix, this.initTranslation);
 		
 		mat4.translate(node.animationMatrix, node.animationMatrix, 
 		[(this.p2[0] - this.p1[0]) * this.relativeDistance ,
 		 (this.p2[1] - this.p1[1]) * this.relativeDistance, 
-		 (this.p2[2] - this.p1[2]) * this.relativeDistance ]);
-    
-//		mat4.rotate(node.animationMatrix,node.animationMatrix, this.angle,[0,1,0]);
+		 (this.p2[2] - this.p1[2]) * this.relativeDistance ]);		
+		
+ 		mat4.rotateY(node.animationMatrix,node.animationMatrix, this.angle);
 
     }
 

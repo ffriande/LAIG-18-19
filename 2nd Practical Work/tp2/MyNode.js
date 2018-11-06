@@ -57,17 +57,18 @@ class MyNode
 	updateAnimations(deltaTime) {
 
         deltaTime=deltaTime/1000;
-
-//         for(var i=0; i<this.animations.length;i++){
-//             var animation = this.graph.animations[this.animations[i]];
-            if(this.animations.length>0)
-            if(this.animations[0].time >= deltaTime){
-                this.animations[0].update(deltaTime);
-                this.animations[0].apply(this);
-//           break;
-        }
-            else
-                deltaTime = deltaTime - this.animations[0].duration;
-//         }
+		var i=0;
+         for(i; i<this.animations.length;i++){
+			var animation = this.graph.animations[this.animations[i]];
+			if(animation.finished==false)
+				if(animation.time >= deltaTime){
+					animation.update(deltaTime);
+					animation.apply(this);
+				}
+				else{
+					deltaTime = deltaTime - animation.duration;
+					this.graph.animations[this.animations[i]].finished=true;
+				}
+			}         
 	};
 };

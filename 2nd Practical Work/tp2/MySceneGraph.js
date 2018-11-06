@@ -1052,31 +1052,31 @@ class MySceneGraph {
                 var control_points=[];
                 //more than 2 control points
                 if((grandChildren = children[i].children).length>=2){                
-                    for (var i = 0; i < grandChildren.length; i++) {
-                        if (grandChildren[i].nodeName != "controlpoint") {
-                            this.onXMLMinorError("unknown tag <" + grandChildren[i].nodeName + ">  -- Invalid control point");
+                    for (var k = 0; k < grandChildren.length; k++) {
+                        if (grandChildren[k].nodeName != "controlpoint") {
+                            this.onXMLMinorError("unknown tag <" + grandChildren[k].nodeName + ">  -- Invalid control point");
                             continue;
                         }
                         
                         var coords=[];
                         // x
-                        var x = this.reader.getFloat(grandChildren[i], 'xx');
+                        var x = this.reader.getFloat(grandChildren[k], 'xx');
                         if (!(x != null && !isNaN(x)))
-                            return "unable to parse x-coordinate of the control point " + i +" for animation ID = " + animationId;
+                            return "unable to parse x-coordinate of the control point " + k +" for animation ID = " + animationId;
                         else
                             coords.push(x);
 
                         // y
-                        var y = this.reader.getFloat(grandChildren[i], 'yy');
+                        var y = this.reader.getFloat(grandChildren[k], 'yy');
                         if (!(y != null && !isNaN(y)))
-                            return "unable to parse y-coordinate of the control point " + i +" for animation ID = " + animationId;
+                            return "unable to parse y-coordinate of the control point " + k +" for animation ID = " + animationId;
                         else
                             coords.push(y);
 
                         // z
-                        var z = this.reader.getFloat(grandChildren[i], 'zz');
+                        var z = this.reader.getFloat(grandChildren[k], 'zz');
                         if (!(z != null && !isNaN(z)))
-                            return "unable to parse z-coordinate of the control point " + i +" for animation ID = " + animationId;
+                            return "unable to parse z-coordinate of the control point " + k +" for animation ID = " + animationId;
                         else
                             coords.push(z);
                         
@@ -1102,15 +1102,15 @@ class MySceneGraph {
                     return "wrong ammount of 'center' coordinates on the animation for ID = " + animationId;
                 
                 var radius = this.reader.getFloat(children[i], 'radius');
-                if ( radius == null || !isNaN(span) || radius<=0)
+                if ( radius == null || isNaN(radius) || radius<=0)
                     return "unable to parse radius value of the animation for ID = " + animationId;
             
                 var startang = this.reader.getFloat(children[i], 'startang');
-                if ( startang == null || !isNaN(startang))
+                if ( startang == null || isNaN(startang))
                     return "unable to parse startang value of the animation for ID = " + animationId;
             
                 var rotang = this.reader.getFloat(children[i], 'rotang');
-                if ( rotang == null || !isNaN(rotang))
+                if ( rotang == null || isNaN(rotang))
                     return "unable to parse rotang value of the animation for ID = " + animationId;
                 
 
@@ -1444,6 +1444,7 @@ class MySceneGraph {
                     var texture = [];
                     var materials = [];
                     var transformations = [];
+                    var animations=[];
 
                     this.nodes[componentID] = new MyNode(this, componentID);
 
@@ -1504,6 +1505,23 @@ class MySceneGraph {
                                     mat4.scale(this.nodes[componentID].transformMatrix, this.nodes[componentID].transformMatrix, [sx, sy, sz]);
                                 }
                             }
+                        } else if((nodeNames[k] == "animations")){
+                            var childrenNodeNames = [];
+                            var grandGrandChildren = grandChildren[k].children;
+                            for (var m = 0; m < grandGrandChildren.length; m++) {
+                                childrenNodeNames.push(grandGrandChildren[m].nodeName);
+                            }
+
+                            for (var n = 0; n < childrenNodeNames.length; n++) {
+                                if (childrenNodeNames[n] == "animationref") {
+                                    var id = this.reader.getString(grandGrandChildren[n], 'id');
+                                    animations.push(id);
+                                    var anim= this.animations[id];
+                                    if(anim !=null)
+                                        this.nodes[componentID].addAnimation(id);
+                                }
+                            } 
+    
                         } else if ((nodeNames[k] == "materials")) {
                             var childrenNodeNames = [];
                             var grandGrandChildren = grandChildren[k].children;
@@ -1590,23 +1608,15 @@ class MySceneGraph {
         var current = this.nodes[nodeID];
         this.scene.multMatrix(current.transformMatrix);
         
-        //////////////////////////////////////////////////////
-        if(nodeID=='ball1'||nodeID=='ball2'||nodeID=='ball3'||nodeID=='ball4'){
-           this.animations=[];
-           var anima=new LinearAnimation(5,[[0,0,0],[2,2,2],[1,1,1]]); 
-           this.animations['id1']=anima;
-           this.nodes[nodeID].addAnimation(anima); 
-                   this.scene.multMatrix(current.animationMatrix);
-        }
-        ///////////////////////////////////////////////////////
-
-
         var currMaterial;
         var currMaterialId=current.activeMaterial;
         var currTexture;
         var currTextureId=current.textureId;
 
-        
+        //animations
+        if(current.animations.length>0)
+         this.scene.multMatrix(current.animationMatrix);
+
         //material  
         if(currMaterialId=='inherit')
         {
@@ -1647,13 +1657,15 @@ class MySceneGraph {
                 current.leaves[i].primitive.display();
         }
 
-
+        if(nodeID=='bowling_alley')
+           var i=0;
 
         for (let i = 0; i < current.children.length; i++) {
             this.scene.pushMatrix();
             this.searchGraph(current.children[i], currMaterialId, currTextureId);
             this.scene.popMatrix();
         }
+
     }
 
 
@@ -1706,3 +1718,4 @@ class MySceneGraph {
 }
     
 //TODO: Torus
+//TODO: herança das texturas não funciona bem: se mudo a textura de ball, muda de todas as balls, se mudo a textura de ball0 não muda
