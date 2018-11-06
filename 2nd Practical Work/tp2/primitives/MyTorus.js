@@ -24,7 +24,7 @@ class MyTorus extends CGFobject{
         this.deltaS = 1.0 / this.slices;
         this.deltaT = 1.0 / this.stacks;
         this.s = 0;
-			  this.t = 0;
+		this.t = 0;
 
         for (var stack_c = 0; stack_c <= this.stacks; stack_c++)
           {

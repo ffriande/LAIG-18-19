@@ -51,13 +51,13 @@ function MyTriangle(scene, x0, y0, z0, x1, y1, z1, x2, y2, z2) {
 
 /**
  * Function to set the amplif factor of a determined texture
- * @method setAmpSAmpT
- * @param      ampS
- * @param      ampT
+ * @method setST
+ * @param      S
+ * @param      T
  */
- MyTriangle.prototype.setAmpSAmpT = function (ampS, ampT) {
- 	this.ampS = ampS;
-	this.ampT = ampT;
+ MyTriangle.prototype.setST = function (S, T) {
+ 	this.S = S;
+	this.T = T;
 
 	var p1 = this.p1;
 	var p2 = this.p2;
@@ -81,8 +81,8 @@ function MyTriangle(scene, x0, y0, z0, x1, y1, z1, x2, y2, z2) {
 
 	this.texCoords = [
 	  0, 0,
-	  this.c / this.ampS, 0,
-	  (this.c - this.a * Math.cos(this.beta)) / this.ampS, (this.a*Math.sin(this.beta)) / this.ampT,
+	  this.c / 2*this.S, 0,
+	  (this.c - this.a * Math.cos(this.beta)) / 2*this.S, (this.a*Math.sin(this.beta)) / 2*this.T,
     ];
 
 	this.setTex = true;

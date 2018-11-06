@@ -28,7 +28,7 @@ class MyLeaf
                 this.primitive = new MyCylinder(this.graph.scene, this.values[0], this.values[1], this.values[2], this.values[3], this.values[4]);
                 break;
             case 'torus':
-                this.primitive = new MyTorus(this.graph.scene, this.values[0], this.values[1], this.graph.torus);
+                this.primitive = new MyTorus(this.graph.scene, this.values[0], this.values[1], this.values[2], this.values[3]);
                 break;
         }
     };

@@ -1444,7 +1444,7 @@ class MySceneGraph {
                     var texture = [];
                     var materials = [];
                     var transformations = [];
-                    var animations=[];
+                    var animations = [];
 
                     this.nodes[componentID] = new MyNode(this, componentID);
 
@@ -1521,7 +1521,6 @@ class MySceneGraph {
                                         this.nodes[componentID].addAnimation(id);
                                 }
                             } 
-    
                         } else if ((nodeNames[k] == "materials")) {
                             var childrenNodeNames = [];
                             var grandGrandChildren = grandChildren[k].children;
@@ -1616,7 +1615,7 @@ class MySceneGraph {
         //animations
         if(current.animations.length>0)
          this.scene.multMatrix(current.animationMatrix);
-
+        
         //material  
         if(currMaterialId=='inherit')
         {
@@ -1649,14 +1648,12 @@ class MySceneGraph {
 
        //console.log(currTexture);
       for (let i = 0; i < current.leaves.length; i++) {
-           if(current.leaves[i].type == "rectangle")                                            //Isto porque as texCoords das outras primitivas estão
+           if(current.leaves[i].type == "rectangle" || current.leaves[i].type == "triangle")                                            
                 current.leaves[i].primitive.setST(current.textureS,current.textureT);           //a ser definidas sem valores S e T --> corrigir isto
 
-            
-                //apenas para testar
                 current.leaves[i].primitive.display();
         }
-
+        
         if(nodeID=='bowling_alley')
            var i=0;
 
@@ -1665,7 +1662,7 @@ class MySceneGraph {
             this.searchGraph(current.children[i], currMaterialId, currTextureId);
             this.scene.popMatrix();
         }
-
+        
     }
 
 
@@ -1696,10 +1693,6 @@ class MySceneGraph {
         }
     }
     
-    
-
-
-
 
 
     createDefaultMaterial(){
@@ -1717,5 +1710,4 @@ class MySceneGraph {
 
 }
     
-//TODO: Torus
 //TODO: herança das texturas não funciona bem: se mudo a textura de ball, muda de todas as balls, se mudo a textura de ball0 não muda

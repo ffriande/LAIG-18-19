@@ -60,7 +60,8 @@
         <texture id="wall_pattern2" file="./scenes/images/bowling_wall2.jpg"/>
         <texture id="scoreboard1" file="./scenes/images/scoreboard1.jpg"/>
         <texture id="scoreboard2" file="./scenes/images/scoreboard2.jpg"/>
-        <texture id="pizza" file="./scenes/images/pizza.jpg"/>  
+        <texture id="pizza" file="./scenes/images/pizza.jpg"/>
+        <texture id="dough" file="./scenes/images/dough.jpg"/>  
                
     </textures>
 
@@ -109,9 +110,9 @@
 
         <material id="light_orange" shininess="10">
             <emission r="0" g="0" b="0" a="0"/>
-            <ambient r="1" g="0.65" b="0.29" a="1"/>
-            <diffuse r="1" g="0.65" b="0.29" a="1"/>
-            <specular r="1" g="0.65" b="0.29" a="1"/>
+            <ambient r="1" g="0.4" b="0" a="1"/>
+            <diffuse r="1" g="0.4" b="0" a="1"/>
+            <specular r="1" g="0.4" b="0" a="1"/>
         </material>
 
         <material id="fuchsia" shininess="10">
@@ -279,7 +280,7 @@
         </primitive>
 
         <primitive id="torus">
-            <torus inner="0.5" outer="1" slices="100" loops="1"/>
+            <torus inner="0.5" outer="1" slices="10" loops="100"/>
         </primitive>
 
     </primitives>
@@ -292,7 +293,7 @@
             <transformation>
                 <translate x="0" y="0" z="25"/>
                 <rotate axis="y" angle="90"/>
-                <scale x="25" y="5" z="1"/>             
+                <scale x="25" y="5" z="1"/>
             </transformation>
 
             <materials>
@@ -1276,7 +1277,7 @@
                 <animationref id="linear1" />
                 <animationref id="linear2" />
             </animations>
-            
+
             <materials>
                 <material id ="fuchsia"/>
                 <material id ="green"/>
@@ -1612,11 +1613,13 @@
         <!--END OF LANES-->
 
 
-        <!--PILLOW-->
+        <!--PILLOWS-->
 
         <component id="pillow">
             <transformation>
-                <scale x="12" y="6" z="1"/>
+                <translate x="0" y="0.25" z="0"/>
+                <rotate axis="x" angle="90"/>
+                <scale x="0.5" y="0.5" z="0.5"/>
             </transformation>
 
             <materials>
@@ -1630,13 +1633,79 @@
             </children>
         </component>
 
-        <!--END OF PILLOW-->
+        <component id="pillow1">
+            <transformation>
+                <translate x="2.5" y="0" z="24"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="none" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="pillow"/>
+            </children>
+        </component>
+
+        <component id="pillow2">
+            <transformation>
+                <translate x="6.5" y="0" z="24"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="none" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="pillow"/>
+            </children>
+        </component>
+
+        <component id="pillow3">
+            <transformation>
+                <translate x="10.5" y="0" z="24"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="none" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="pillow"/>
+            </children>
+        </component>
+
+        <component id="pillows">
+            <transformation>
+            </transformation>
+
+            <materials>
+                <material id ="light_orange"/>
+            </materials>
+
+            <texture id="none" length_s="1" length_t="1"/>
+
+            <children>
+                <componentref id="pillow1"/>
+                <componentref id="pillow2"/>
+                <componentref id="pillow3"/>
+            </children>
+        </component>
+
+        <!--END OF PILLOWS-->
 
 
         <!--PIZZA-->
 
         <component id="pizza_top">
             <transformation>
+                <translate x="0" y="0" z="-0.65"/>
             </transformation>
 
             <materials>
@@ -1652,7 +1721,7 @@
 
         <component id="pizza_bottom">
             <transformation>
-                <translate x="0" y="0" z="-1"/>
+                <translate x="0" y="0" z="-0.85"/>
                 <rotate axis="y" angle="180"/>
                 <rotate axis="z" angle="180"/>
             </transformation>
@@ -1661,7 +1730,7 @@
                 <material id ="inherit"/>
             </materials>
 
-            <texture id="inherit" length_s="1" length_t="1"/>
+            <texture id="dough" length_s="1" length_t="1"/>
 
             <children>
                 <primitiveref id="triangle"/>
@@ -1670,9 +1739,30 @@
 
         <component id="pizza_left_side">
             <transformation>
-                <translate x="-0.5" y="0" z="-0.5"/>
+                <translate x="-0.5" y="0" z="-0.75"/>
                 <rotate axis="y" angle="90"/>
-                <scale x="1" y="1.75" z="1"/>
+                <rotate axis="y" angle="180"/>
+                <scale x="0.2" y="1.75" z="1"/>
+            </transformation>
+
+            <materials>
+                <material id ="inherit"/>
+            </materials>
+
+            <texture id="dough" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="square"/>
+            </children>
+        </component>
+
+        <component id="pizza_right_side">
+            <transformation>
+                <translate x="0.258" y="0.425" z="-0.75"/>
+                <rotate axis="y" angle="90"/>
+                <rotate axis="y" angle="180"/>
+                <rotate axis="x" angle="-120"/>
+                <scale x="0.2" y="1.75" z="1"/>
             </transformation>
 
             <materials>
@@ -1686,31 +1776,13 @@
             </children>
         </component>
 
-        <component id="pizza_right_side">
-            <transformation>
-                <translate x="-0.5" y="0" z="-0.5"/>
-                <rotate axis="y" angle="90"/>
-                <rotate axis="z" angle="-45"/>
-                <scale x="1" y="1.75" z="1"/>
-            </transformation>
-
-            <materials>
-                <material id ="inherit"/>
-            </materials>
-
-            <texture id="inherit" length_s="1" length_t="1"/>
-
-            <children>
-                <primitiveref id="rectangle"/>
-            </children>
-        </component>
-
         <component id="pizza_back_side">
             <transformation>
-                <translate x="-0.5" y="0" z="-0.5"/>
+                <translate x="0.25" y="-0.4" z="-0.75"/>
                 <rotate axis="y" angle="90"/>
-                <rotate axis="z" angle="45"/>
-                <scale x="1" y="1.75" z="1"/>
+                <rotate axis="y" angle="180"/>
+                <rotate axis="x" angle="120"/>
+                <scale x="0.2" y="1.75" z="1"/>
             </transformation>
 
             <materials>
@@ -1720,19 +1792,20 @@
             <texture id="inherit" length_s="1" length_t="1"/>
 
             <children>
-                <primitiveref id="rectangle"/>
+                <primitiveref id="square"/>
             </children>
         </component>
 
         <component id="pizza_slice">
             <transformation>
-                <translate x="2" y="1" z="22"/>
+                <translate x="2.5" y="1.3" z="22"/>
                 <rotate axis="x" angle="90"/>
-                <scale x="0.2" y="0.2" z="0.2"/>
+                <rotate axis="y" angle="180"/>
+                <scale x="0.2" y="0.1" z="0.2"/>
             </transformation>
 
             <materials>
-                <material id ="yellow"/>
+                <material id ="inherit"/>
             </materials>
 
             <texture id="pizza" length_s="1" length_t="1"/>
@@ -1770,7 +1843,7 @@
                 <componentref id="barriers"/>
                 <componentref id="ball_machine"/>
 				<componentref id="tables"/>
-				<componentref id="pillow"/>
+				<componentref id="pillows"/>
 				<componentref id="pizza_slice"/>
             </children>
         </component>
