@@ -1115,7 +1115,7 @@ class MySceneGraph {
                 
 
                 ///TODO: fazer circular anims
-                this.animations[animationId]=[span,arr_center,radius,startang,rotang];
+                this.animations[animationId]=new CircularAnimation(span,arr_center,radius,startang,rotang);
             }
 
             else{
