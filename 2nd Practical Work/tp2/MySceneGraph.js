@@ -1516,9 +1516,9 @@ class MySceneGraph {
                                 if (childrenNodeNames[n] == "animationref") {
                                     var id = this.reader.getString(grandGrandChildren[n], 'id');
                                     animations.push(id);
-                                    var anim= this.animations[id];
+                                    let anim= this.animations[id];
                                     if(anim !=null)
-                                        this.nodes[componentID].addAnimation(id);
+                                        this.nodes[componentID].addAnimation(anim);
                                 }
                             } 
                         } else if ((nodeNames[k] == "materials")) {

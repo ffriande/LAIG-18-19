@@ -22,7 +22,8 @@ class MyNode
 
 	    this.animationMatrix = mat4.create();
     	mat4.identity(this.animationMatrix);
-	
+
+    	this.animation_time_passed_by=0;	
 	};
 
 	addChild(id) {
@@ -56,19 +57,22 @@ class MyNode
 
 	updateAnimations(deltaTime) {
 
-        deltaTime=deltaTime/1000;
+        deltaTime=deltaTime/1000 - this.animation_time_passed_by;
 		var i=0;
          for(i; i<this.animations.length;i++){
-			var animation = this.graph.animations[this.animations[i]];
-			if(animation.finished==false)
-				if(animation.time >= deltaTime){
-					animation.update(deltaTime);
-					animation.apply(this);
+			if(this.animations[i].finished==false)
+				if(this.animations[i].time >= deltaTime){
+					this.animations[i].update(deltaTime);
+					this.animations[i].apply(this);
+					break;
 				}
 				else{
-					deltaTime = deltaTime - animation.duration;
-					this.graph.animations[this.animations[i]].finished=true;
+					//for the n+1 iteration after n iteration is finished (when previous animation is finished)
+					deltaTime = deltaTime - this.animations[i].time;	
+					//so that the delta time of the following animation is reset(next update)	
+					this.animation_time_passed_by+=this.animations[i].time;
+					this.animations[i].finished=true;
 				}
-			}         
+			}       
 	};
 };

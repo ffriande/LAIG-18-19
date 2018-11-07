@@ -1,6 +1,6 @@
 <yas>
     <scene root="bowling_alley" axis_length="5"/>
-    <views default="front_view">
+    <views default="overview">
         <perspective id="overview" near="0.1" far="500" angle="0.4">
             <from x="55" y="30" z="55"/>
             <to x="0" y="0" z="0"/>
@@ -166,15 +166,15 @@
         <!-- O bloco animations pode ser vazio, isto é, pode -->
         <!-- não ser declarada qualquer animação, linear ou circular -->
         <!-- Span é o tempo, em segundos, que a animação deve demorar -->
-        <linear id="linear1" span="10" >
+        <linear id="linear1" span="50" >
         <!--—- devem existir pelo menos dois pontos de controlo -->
-                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="20" yy="0" zz="0" />
                 <controlpoint xx="0" yy="0" zz="-10" />
                 <controlpoint xx="5" yy="5" zz="5" />               
                 <controlpoint xx="20" yy="0" zz="0" />             
                 <controlpoint xx="25" yy="0" zz="0" />   
         </linear>
-        <linear id="linear2" span="1" >
+        <linear id="linear2" span="10" >
         <!--—- devem existir pelo menos dois pontos de controlo -->
                 <controlpoint xx="0" yy="0" zz="0" />
                 <controlpoint xx="15" yy="0" zz="-10" />
@@ -294,8 +294,7 @@
                 <translate x="0" y="0" z="25"/>
                 <rotate axis="y" angle="90"/>
                 <scale x="25" y="5" z="1"/>
-            </transformation>
-
+            </transformation>   
             <materials>
                 <material id ="beige"/>
             </materials>
@@ -923,6 +922,7 @@
                 <scale x="0.3" y="0.3" z="0.3"/>
             </transformation>
 
+
             <materials>
                 <material id ="inherit"/>
             </materials>
@@ -1274,8 +1274,8 @@
             </transformation>
 
             <animations>
-                <animationref id="linear1" />
                 <animationref id="linear2" />
+                <animationref id="linear1" />
             </animations>
 
             <materials>

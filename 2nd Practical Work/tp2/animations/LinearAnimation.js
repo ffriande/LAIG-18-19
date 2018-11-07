@@ -45,6 +45,9 @@ class LinearAnimation extends Animation {
     apply(node){
         mat4.identity(node.animationMatrix);
 
+		//so that animation 2 can start at the end of animation 1 (control points manipulation dependant)
+    	mat4.translate(node.animationMatrix,node.animationMatrix, this.control_points[0]);
+
     	mat4.translate(node.animationMatrix,node.animationMatrix, this.initTranslation);
 		
 		mat4.translate(node.animationMatrix, node.animationMatrix, 
