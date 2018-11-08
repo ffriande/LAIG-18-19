@@ -152,11 +152,63 @@
     </materials>
 
 
-    <transformations >
-        <transformation id="floor_trans">
-            <translate x="0" y="0" z="21"/>
+    <transformations>
+        <transformation id="left_wall_trans">
+            <translate x="0" y="2.5" z="12.5"/>
+            <rotate axis="y" angle="90"/>
+            <scale x="25" y="5" z="1"/>
+        </transformation>
+
+        <transformation id="back_wall_trans">
+            <translate x="8" y="2.5" z="0"/>
+            <scale x="16" y="5" z="1"/>
+        </transformation>
+
+        <transformation id="floor_wood_trans">
+            <translate x="6.25" y="0" z="18"/>
             <rotate axis="x" angle="-90"/>
             <scale x="12.5" y="6" z="1"/>
+        </transformation>
+
+        <transformation id="init_floor_black_trans">
+            <translate x="2" y="0" z="23"/>
+            <rotate axis="x" angle="-90"/>
+            <scale x="4" y="4" z="4"/>
+        </transformation>
+
+        <transformation id="init_lane_floor_trans">
+            <translate x="1.75" y="0" z="7.5"/>
+            <rotate axis="x" angle="-90"/>
+            <rotate axis="z" angle="180"/>
+            <scale x="2.5" y="15" z="1"/>
+        </transformation>
+
+        <transformation id="init_barrier_trans">
+            <translate x="0.25" y="0.1" z="7.5"/>
+            <scale x="0.5" y="0.2" z="15"/>
+        </transformation>
+
+        <transformation id="init_table_trans">
+            <translate x="2.5" y="0" z="22"/>
+            <scale x="0.3" y="0.3" z="0.3"/>
+        </transformation>
+
+        <transformation id="init_ball_trans">
+            <translate x="1.75" y="0.25" z="14.5"/>
+            <scale x="0.25" y="0.25" z="0.25"/>
+        </transformation>
+
+        <transformation id="init_pillow_trans">
+            <translate x="0" y="0.25" z="0"/>
+            <rotate axis="x" angle="90"/>
+            <scale x="0.5" y="0.5" z="0.5"/>
+        </transformation>
+
+        <transformation id="pizza_trans">
+            <translate x="2.5" y="1.3" z="22"/>
+            <rotate axis="x" angle="90"/>
+            <rotate axis="y" angle="180"/>
+            <scale x="0.2" y="0.1" z="0.2"/>
         </transformation>
     </transformations>
 
@@ -257,10 +309,6 @@
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
 
-        <primitive id="square_at_zero">
-            <rectangle x1="0" y1="0" x2="1" y2="1" />
-        </primitive>
-
         <primitive id="triangle">
             <triangle x1="1" y1="0" z1="0"
                     x2="-0.5" y2="0.866" z2="0"
@@ -291,9 +339,7 @@
 
         <component id="left_wall">
             <transformation>
-                <translate x="0" y="0" z="25"/>
-                <rotate axis="y" angle="90"/>
-                <scale x="25" y="5" z="1"/>
+                <transformationref id="left_wall_trans" />
             </transformation>
 
             <materials>
@@ -303,13 +349,13 @@
             <texture id="wall_pattern2" length_s="1" length_t="1"/>
 
             <children>
-                <primitiveref id="square_at_zero"/>
+                <primitiveref id="square"/>
             </children>
         </component>
 
         <component id="back_wall">
             <transformation>
-                <scale x="16" y="5" z="1"/>
+                <transformationref id="back_wall_trans" />
             </transformation>
 
             <materials>
@@ -319,13 +365,13 @@
             <texture id="wall_pattern" length_s="1" length_t="1"/>
 
             <children>
-                <primitiveref id="square_at_zero"/>
+                <primitiveref id="square"/>
             </children>
         </component>
 
-       <component id="floor">
+       <component id="floor_wood">
             <transformation>
-                <transformationref id="floor_trans" />
+                <transformationref id="floor_wood_trans" />
             </transformation>
 
             <materials>
@@ -335,15 +381,13 @@
             <texture id="wood" length_s="1" length_t="1"/>        
 
             <children>
-                <primitiveref id="square_at_zero"/>
+                <primitiveref id="square"/>
             </children>
         </component>
 
         <component id="floor_black">
             <transformation>
-                    <translate x="0" y="0" z="25"/>
-                    <rotate axis="x" angle="-90"/>
-                    <scale x="4" y="4" z="4"/>
+                <transformationref id="init_floor_black_trans" />
             </transformation>
 
             <materials>
@@ -353,7 +397,7 @@
             <texture id="floor_pattern" length_s="1" length_t="1"/>
             
             <children>
-                <primitiveref id="square_at_zero"/>
+                <primitiveref id="square"/>
             </children>
         </component>
 
@@ -541,10 +585,7 @@
         
          <component id="lane_floor">
             <transformation>
-                <translate x="3" y="0" z="0"/>
-                <rotate axis="x" angle="-90"/>
-                <rotate axis="z" angle="180"/>
-                <scale x="2.5" y="15" z="1"/>
+               <transformationref id="init_lane_floor_trans"/>
             </transformation>
 
             <materials>
@@ -554,11 +595,9 @@
             <texture id="lane" length_s="1" length_t="1"/>
 
             <children>
-                <primitiveref id="square_at_zero"/>
+                <primitiveref id="square"/>
             </children>
         </component>
-
-
         
         <!--END OF LANE FLOOR--> 
         
@@ -695,8 +734,7 @@
 
         <component id="barrier">
             <transformation>
-                <translate x="0.25" y="0.1" z="7.5"/>
-                <scale x="0.5" y="0.2" z="15"/>
+                <transformationref id="init_barrier_trans" />
             </transformation>
 
             <materials>
@@ -712,7 +750,6 @@
 
         <component id="barrier1">
             <transformation>
-                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -919,8 +956,7 @@
         
         <component id="table">
             <transformation>
-                <translate x="2.5" y="0" z="22"/>
-                <scale x="0.3" y="0.3" z="0.3"/>
+                <transformationref id="init_table_trans" />
             </transformation>
 
             <materials>
@@ -937,7 +973,6 @@
 
         <component id="table1">
             <transformation>
-                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -985,7 +1020,6 @@
 
         <component id="tables">
             <transformation>
-                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1005,8 +1039,8 @@
 
 
         <!--PINS-->
-		<component id="pin_body">
 
+		<component id="pin_body">
             <transformation>
                 <translate x="0" y="0.22" z="0"/>
                 <rotate axis="x" angle="90"/>
@@ -1025,7 +1059,6 @@
         </component>
 		
 		<component id="pin_body2">
-
             <transformation>
                 <translate x="0" y="0.5" z="0"/>
                 <rotate axis="x" angle="90"/>
@@ -1038,9 +1071,9 @@
 
             <texture id="none" length_s="1" length_t="1"/>
 
-         <children>
+             <children>
                 <primitiveref id="cylinder"/>
-         </children>
+             </children>
         </component>
 		
 		
@@ -1060,10 +1093,11 @@
                  <primitiveref id="sphere"/>
             </children>
         </component>
-
 	
-
         <component id="pin">
+            <transformation> 
+            </transformation>
+
             <materials>
                 <material id ="inherit"/>
 				<material id ="floor"/>
@@ -1269,8 +1303,7 @@
 
         <component id="ball">
             <transformation>
-                <translate x="1.75" y="0.25" z="14.5"/>
-                <scale x="0.25" y="0.25" z="0.25"/>
+                <transformationref id="init_ball_trans" />
             </transformation>
 
             <animations>
@@ -1299,7 +1332,7 @@
 
         <component id="screen">
             <transformation>
-                <translate x="1.75" y="4" z="0.255"/>
+                <translate x="0" y="" z="0.13"/>
                 <scale x="1" y="0.5" z="0.01"/>
             </transformation>
 
@@ -1316,7 +1349,6 @@
 
         <component id="tv_box">
             <transformation>
-                <translate x="1.75" y="4" z="0.125"/>
                 <scale x="1.25" y="0.75" z="0.25"/>
             </transformation>
 
@@ -1333,6 +1365,7 @@
 
         <component id="television">
             <transformation>
+                <translate x="1.75" y="4" z="0.125"/>
             </transformation>
 
             <materials>
@@ -1530,7 +1563,6 @@
 
         <component id="lane1">
             <transformation>
-                <translate x="0" y="0" z="0"/>
             </transformation>
 
             <materials>
@@ -1617,9 +1649,7 @@
 
         <component id="pillow">
             <transformation>
-                <translate x="0" y="0.25" z="0"/>
-                <rotate axis="x" angle="90"/>
-                <scale x="0.5" y="0.5" z="0.5"/>
+                <transformationref id="init_pillow_trans" />
             </transformation>
 
             <materials>
@@ -1798,10 +1828,7 @@
 
         <component id="pizza_slice">
             <transformation>
-                <translate x="2.5" y="1.3" z="22"/>
-                <rotate axis="x" angle="90"/>
-                <rotate axis="y" angle="180"/>
-                <scale x="0.2" y="0.1" z="0.2"/>
+                <transformationref id="pizza_trans" />
             </transformation>
 
             <animations>
@@ -1842,7 +1869,7 @@
                 <componentref id="floor_black_all"/>   
                 <componentref id="left_wall"/>
                 <componentref id="back_wall"/>
-                <componentref id="floor"/>         
+                <componentref id="floor_wood"/>         
                 <componentref id="lanes"/>
                 <componentref id="barriers"/>
                 <componentref id="ball_machine"/>
