@@ -218,7 +218,7 @@
         <!-- O bloco animations pode ser vazio, isto é, pode -->
         <!-- não ser declarada qualquer animação, linear ou circular -->
         <!-- Span é o tempo, em segundos, que a animação deve demorar -->
-        <linear id="linear1" span="50" >
+        <linear id="linear1" span="1" >
         <!--—- devem existir pelo menos dois pontos de controlo -->
                 <controlpoint xx="20" yy="0" zz="0" />
                 <controlpoint xx="0" yy="0" zz="-10" />
@@ -240,7 +240,7 @@
         <!-- startang e rotang correspondem, nomeadamente, -->
         <!-- ao angulo inicial (em graus) e -->
         <!-- total de rotação (em graus) -->
-        <circular id="circular1" span="5" center="2 2 2" radius="5" startang="0" rotang="90" />               
+        <circular id="circular1" span="15" center="0 0 0" radius="5" startang="0" rotang="5600" />               
     </animations>
        
 
@@ -249,12 +249,14 @@
     <primitives>
         <!-- Nova primitiva: plano, gerado por NURBS -->
 
-        <plane id="ss" npartsU="ii" npartsV="ii" />
+        <plane id="plane" npartsU="5" npartsV="6" />
 
         <!-- ex: <plane npartsU="5" npartsU="8" /> um plano de dimensões -->
         <!--—- 1 x 1 unidades assente em XZ, centrado na origem -->
         <!-- e com a face visível apontando para +Y -->
         <!-- com divisão em cinco partes por oito partes -->
+
+
 
         <!-- Nova primitiva: patch, gerada por NURBS -->
         <!-- — parâmetros: -->
@@ -333,9 +335,34 @@
 
     </primitives>
 
-    <components>
-        
+    <components> 
+    
+   
+        <!--TEMPORARY-->
+    
+        <component id="plane1">
+            <transformation>
+                <translate x="2.5" y="2.5" z="10"/>
+                 
+            </transformation>
+
+            <materials>
+                <material id ="yellow"/>
+            </materials>
+
+            <texture id="none" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="plane"/>
+            </children>
+        </component>
+
+         <!--TEMPORARY-->
+
+
+
         <!--GENERAL WALLS AND FLOOR-->
+    
 
         <component id="left_wall">
             <transformation>
@@ -1876,6 +1903,7 @@
 				<componentref id="tables"/>
 				<componentref id="pillows"/>
 				<componentref id="pizza_slice"/>
+                <componentref id="plane1">
             </children>
         </component>
 

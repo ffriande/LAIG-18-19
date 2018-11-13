@@ -1,7 +1,10 @@
 class MyPlane{
-    constructor(degreeU, degreeV){
+    constructor(scene, degreeU, degreeV){
+    	this.scene=scene;
         this.degreeU=degreeU;
         this.degreeV=degreeV;
+        this.findControlVertexes();
+        this.makeSurface();
     }
 
     findControlVertexes(){
@@ -18,8 +21,8 @@ class MyPlane{
 
     makeSurface() {
 			
-		var nurbsSurface = new CGFnurbsSurface(degreeU, degreeV, this.controlvertexes);
+		var nurbsSurface = new CGFnurbsSurface(this.degreeU, this.degreeV, this.controlvertexes);
 
-		this.surface = new CGFnurbsObject(this, 20, 20, nurbsSurface ); // must provide an object with the function getPoint(u, v) (CGFnurbsSurface has it)
+		this.surface = new CGFnurbsObject(this.scene, 20, 20, nurbsSurface ); // must provide an object with the function getPoint(u, v) (CGFnurbsSurface has it)
 	}
 }
