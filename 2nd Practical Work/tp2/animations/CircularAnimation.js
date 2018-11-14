@@ -1,7 +1,3 @@
-/**
- * CircularAnimation
- * @constructor
- */
 class CircularAnimation extends Animation
 {
     constructor(time, center, radius, init_ang, rot_ang) {
@@ -21,13 +17,14 @@ class CircularAnimation extends Animation
     }
 
     apply(node){
+	
         mat4.identity(node.animationMatrix);
 
     	mat4.translate(node.animationMatrix,node.animationMatrix, this.center);
 	
- 		mat4.rotateY(node.animationMatrix,node.animationMatrix, this.angle*DEGREE_TO_RAD);
+ 		mat4.rotate(node.animationMatrix,node.animationMatrix, this.angle*DEGREE_TO_RAD,[0,0,1]);
 		
-		mat4.translate(node.animationMatrix, node.animationMatrix, [this.radius, 0, 0]);	
+		mat4.translate(node.animationMatrix, node.animationMatrix, [this.radius, 0,0]);	
     }
 
 }
