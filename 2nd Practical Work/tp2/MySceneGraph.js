@@ -1734,3 +1734,6 @@ class MySceneGraph {
 }
     
 //TODO: herança das texturas não funciona bem: se mudo a textura de ball, muda de todas as balls, se mudo a textura de ball0 não muda
+//TODO: herança animations - urgente
+//TODO: perceber o que é parts vs degree nas nurbs (xml patch primitive para poder fazer MyPatch)
+//TODO: parser primitivas.
