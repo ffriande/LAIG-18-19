@@ -3,11 +3,23 @@ class MyPlane{
     	this.scene=scene;
         this.degreeU=degreeU;
         this.degreeV=degreeV;
-        this.findControlVertexes();
+//      this.findControlVertexes();
+		this.controlvertexes = [	// U = 0
+							[ // V = 0..1;
+								 [-0.5, 0, 0.5, 1 ],
+								 [-0.5, 0, -0.5, 1 ]
+								
+							],
+							// U = 1
+							[ // V = 0..1
+								 [ 0.5, 0, 0.5, 1 ],
+								 [ 0.5, 0, -0.5, 1 ]							 
+							]
+						];
         this.makeSurface();
     }
 
-    findControlVertexes(){
+   /* findControlVertexes(){
         this.controlvertexes=[];
 
         for(var i=0;i<=this.degreeU;i++){
@@ -17,12 +29,12 @@ class MyPlane{
             }
             this.controlvertexes.push(v_vertexes);
         }
-    }
+    }*/
 
     makeSurface() {
 			
-		var nurbsSurface = new CGFnurbsSurface(this.degreeU, this.degreeV, this.controlvertexes);
+		var nurbsSurface = new CGFnurbsSurface(1, 1, this.controlvertexes);
 
-		this.surface = new CGFnurbsObject(this.scene, 20, 20, nurbsSurface ); // must provide an object with the function getPoint(u, v) (CGFnurbsSurface has it)
+		this.surface = new CGFnurbsObject(this.scene, this.degreeU, this.degreeV, nurbsSurface ); // must provide an object with the function getPoint(u, v) (CGFnurbsSurface has it)
 	}
 }

@@ -1,18 +1,33 @@
 class MyPatch {
-    constructor(scene, degreeU, degreeV, controlVertexes) {
+    constructor(scene, npointsU, npointsV, npartsU, npartsV, controlVertexes) {
 
         this.scene=scene;
-        this.degreeU=degreeU;
-        this.degreeV=degreeV;
-
-    
+        this.npointsU=npointsU;
+        this.npointsV=npointsV;
+        this.npartsU=npartsU;
+        this.npartsV=npartsV;
+        this.separate_controlPoints(controlVertexes);
+        this.makeSurface();
         }
 
+    separate_controlPoints(controlVertexes){
+        var index=0;
+        this.controlPoints=[];
+        for(let i=0; i<=this.npointsU;i++){
+            let vn=[];
+            for(let k = 0; k<= this.npointsV;k++){
+                vn.push(controlVertexes[index]);
+                vn[k].push(1);
+                index++;    
+            }
+            this.controlPoints.push(vn);
+        }
+    }
+
     makeSurface(){
-        var nurbsSurface = new CGFnurbsSurface(degreeU,degreeV,controlPoints);
+        var nurbsSurface = new CGFnurbsSurface(this.npointsU,this.npointsV,this.controlPoints);
 
-        this.surface = new CGFnurbsObject(scene,nurbsSurface,20,20);
-
+        this.surface = new CGFnurbsObject(this.scene,this.npartsU,this.npartsV,nurbsSurface);
     }
 
 }

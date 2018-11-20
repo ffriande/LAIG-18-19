@@ -1325,7 +1325,7 @@ class MySceneGraph {
                         if (npointsV == null || isNaN(npointsV)|| npointsV<1)
                             return "unable to parse patch's npointsV for ID = " + primitiveId;
                         else
-                            patchPrimitive.push(npartsV);
+                            patchPrimitive.push(npointsV);
 
                         // npartsU
                         var npartsU = this.reader.getFloat(children[i], 'npartsU');
@@ -1343,32 +1343,34 @@ class MySceneGraph {
 
                         //controlPoints
                         var control_points=[];
-                        for(var k in grandChildren){
+                        if(grandChildren.length != (npointsU+1) *(npointsV+1))
+                            return "unable to parse patch's control points for ID = " + primitiveId+" --> wrong number of control points!";
+                        for(var k=0; k< grandChildren.length;k++){
 
-                            if (k.nodeName != "controlpoint") {
-                                this.onXMLMinorError("unknown tag <" + k.nodeName + ">  -- Invalid control point");
+                            if (grandChildren[k].nodeName != "controlpoint") {
+                                this.onXMLMinorError("unknown tag <" + grandChildren[k].nodeName + ">  -- Invalid control point");
                                 continue;
                             }
 
                             var coords=[];
                             // x
-                            var x = this.reader.getFloat(k, 'xx');
+                            var x = this.reader.getFloat(grandChildren[k], 'xx');
                             if (!(x != null && !isNaN(x)))
-                                return "unable to parse x-coordinate of the control point " + k +" for primitive ID = " + primitiveId;
+                                return "unable to parse x-coordinate of the control point " + grandChildren[k] +" for primitive ID = " + primitiveId;
                             else
                                 coords.push(x);
 
                             // y
-                            var y = this.reader.getFloat(k, 'yy');
+                            var y = this.reader.getFloat(grandChildren[k], 'yy');
                             if (!(y != null && !isNaN(y)))
-                                return "unable to parse y-coordinate of the control point " + k +" for primitive ID = " + primitiveId;
+                                return "unable to parse y-coordinate of the control point " + grandChildren[k] +" for primitive ID = " + primitiveId;
                             else
                                 coords.push(y);
 
                             // z
-                            var z = this.reader.getFloat(k, 'zz');
+                            var z = this.reader.getFloat(grandChildren[k], 'zz');
                             if (!(z != null && !isNaN(z)))
-                                return "unable to parse z-coordinate of the control point " + k +" for primitive ID = " + primitiveId;
+                                return "unable to parse z-coordinate of the control point " + grandChildren[k] +" for primitive ID = " + primitiveId;
                             else
                                 coords.push(z);
 
@@ -1378,7 +1380,7 @@ class MySceneGraph {
                                                         
                         patchPrimitive.push(control_points);
                         primitive.push(patchPrimitive);
-                        continue;
+                        
                        
                     } else                        
                         primitive.push(grandChildren[0].nodeName);

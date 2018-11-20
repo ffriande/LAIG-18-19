@@ -16,6 +16,10 @@ class MyLeaf
                 var prim = new MyPlane(this.graph.scene, this.values[0], this.values[1]);
                 this.primitive=prim.surface;
                 break;
+            case 'patch':
+                var prim = new MyPatch(this.graph.scene, this.values[0], this.values[1],this.values[2],this.values[3],this.values[4]);
+                this.primitive=prim.surface;
+                break;    
             case 'triangle':
                 this.primitive = new MyTriangle(this.graph.scene, this.values[0], this.values[1], this.values[2], this.values[3], this.values[4], this.values[5], this.values[6], this.values[7], this.values[8]);
                 break;
