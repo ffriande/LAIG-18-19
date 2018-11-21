@@ -3,11 +3,11 @@ var DEGREE_TO_RAD = Math.PI / 180;
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
 var VIEWS_INDEX = 1;
-var AMBIENT_INDEX = 2;
+var AMBIENT_INDEX =2;
 var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
-var TRANSFORMATIONS_INDEX = 6;
+var TRANSFORMATIONS_INDEX =6;
 var ANIMATIONS_INDEX = 7;
 var PRIMITIVES_INDEX = 8;
 var COMPONENTS_INDEX = 9;
@@ -97,7 +97,7 @@ class MySceneGraph {
             return "tag <scene> missing";
         else {
             if (index != SCENE_INDEX)
-                this.onXMLMinorError("tag <scene> out of order");
+                this.onXMLMinorError("tag <scene> out of order ");
 
             //Parse scene block
             if ((error = this.parseScene(nodes[index])) != null)
@@ -1159,12 +1159,12 @@ class MySceneGraph {
                   
                     if (primitiveId == null)
                       return "no ID defined for primitive";
-                }   
-
+                    }
+                else
+                    primitiveId = 'cylinder2';
                 var primitive = [];
-               
                 primitive.push(primitiveId);
-
+                
                 if(children[i].nodeName == "plane"){
                     primitive.push(primitiveId);
                     var planePrimitive=[];
@@ -1191,7 +1191,8 @@ class MySceneGraph {
 
                 } else if(children[i].nodeName == "cylinder2"){
                     var cylinder2Primitive=[];
- 
+                    
+                    primitive.push(children[i].nodeName);
                     // base
                     var base = this.reader.getFloat(children[i], 'base');
                     if (base == null || isNaN(base))
@@ -1311,7 +1312,7 @@ class MySceneGraph {
                     
                     if(children[i].nodeName == "patch"){
                         
-                        primitive.push(primitiveId);
+                        primitive.push(children[i].nodeName);
                         var patchPrimitive = [];
                         // npointsU
                         var npointsU = this.reader.getFloat(children[i], 'npointsU');
@@ -1343,7 +1344,7 @@ class MySceneGraph {
 
                         //controlPoints
                         var control_points=[];
-                        if(grandChildren.length != (npointsU+1) *(npointsV+1))
+                        if(grandChildren.length != (npointsU) *(npointsV))
                             return "unable to parse patch's control points for ID = " + primitiveId+" --> wrong number of control points!";
                         for(var k=0; k< grandChildren.length;k++){
 
@@ -1375,7 +1376,7 @@ class MySceneGraph {
                                 coords.push(z);
 
                             control_points.push(coords);
-                            console.log(control_points);
+                      
                         }
                                                         
                         patchPrimitive.push(control_points);
@@ -1876,7 +1877,8 @@ class MySceneGraph {
       for (let i = 0; i < current.leaves.length; i++) {
            if(current.leaves[i].type == "rectangle" || current.leaves[i].type == "triangle")                                            
                 current.leaves[i].primitive.setST(current.textureS,current.textureT);           //a ser definidas sem valores S e T --> corrigir isto
-
+                           
+                         
                 current.leaves[i].primitive.display();
         }
         
@@ -1938,4 +1940,3 @@ class MySceneGraph {
     
 //TODO: herança das texturas não funciona bem: se mudo a textura de ball, muda de todas as balls, se mudo a textura de ball0 não muda
 //TODO: herança animations - urgente
-//TODO: perceber o que é parts vs degree nas nurbs (xml patch primitive para poder fazer MyPatch)
