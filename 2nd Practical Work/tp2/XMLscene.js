@@ -15,6 +15,8 @@ class XMLscene extends CGFscene {
         this.lightValues = {};
         this.selectables=[];
         this.views=" ";
+ 
+        this.lastTime = 0;     
     }
 
     /**
@@ -35,9 +37,21 @@ class XMLscene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
+        // this.shaders["Red Pulse"] = new CGFshader(this.gl, "shaders/shader.vert", "shaders/shader.frag");
+        // this.shadersRefs.push("Red Pulse");
+        // this.shaders["Red Pulse"].setUniformsValues({selectedRed: 1.0, selectedGreen: 0.0, selectedBlue: 0.0});
+    
+        // this.shaders["Orange Pulse"] = new CGFshader(this.gl, "shaders/shaderOrange.vert", "shaders/shaderOrange.frag");
+        // this.shadersRefs.push("Orange Pulse");
+        // this.shaders["Orange Pulse"].setUniformsValues({selectedRed: 1.0, selectedGreen: 0.5, selectedBlue: 0.0});
+
         this.axis = new CGFaxis(this);
         
         this.before_updateTime = -1;
+          
+	    this.setUpdatePeriod(1000/60);
+        
+     //this.updateUniformValues();
     }
 
     /**
@@ -127,9 +141,6 @@ class XMLscene extends CGFscene {
         //Adds views group
         this.interface.addSelectDropDown(this.graph.viewsIDs);
 
-    
-	    this.setUpdatePeriod(1000/60);
-        
         this.sceneInited = true;
     }
 
@@ -213,5 +224,12 @@ class XMLscene extends CGFscene {
 
 	    this.before_updateTime = currTime;
 
+       this.updateUniformValues(currTime);
     }
+
+    updateUniformValues(date)
+    {
+//         for(var i=0;i<this.graph.shaders.length;i++)
+//             this.graph.shaders[i].setUniformsValues({timeFactor: date});
+    };
 }

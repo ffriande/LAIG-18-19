@@ -1,6 +1,6 @@
 <yas>
     <scene root="bowling_alley" axis_length="5"/>
-    <views default="front_view">
+    <views default="overview">
         <perspective id="overview" near="0.1" far="500" angle="0.4">
             <from x="55" y="30" z="55"/>
             <to x="0" y="0" z="0"/>
@@ -61,8 +61,15 @@
         <texture id="scoreboard1" file="./scenes/images/scoreboard1.jpg"/>
         <texture id="scoreboard2" file="./scenes/images/scoreboard2.jpg"/>
         <texture id="pizza" file="./scenes/images/pizza.jpg"/>
-        <texture id="dough" file="./scenes/images/dough.jpg"/>  
+        <texture id="dough" file="./scenes/images/dough.jpg"/> 
+        
+        <texture id="terrain" file="./scenes/images/terrain.jpg"/> 
+        <texture id="water" file="./scenes/images/water.jpg"/> 
                
+        <texture id="heightmap_128" file="./scenes/images/heightmap_128.jpg"/>  
+        <texture id="heightmap2_128" file="./scenes/images/heightmap2_128.jpg"/>  
+        <texture id="heightmap_waves_128" file="./scenes/images/heightmap_waves_128.jpg"/>  
+ 
     </textures>
 
     <materials>
@@ -307,7 +314,7 @@
 
         <!-- — Nova primitiva: cilindro baseado em NURBS -->
         <!-- parâmetros iguais ao cilindro original -->
-        <cylinder2 base="3" top="5" height="1" slices="10" stacks="10" />
+        <cylinder2 base="1" top="2" height="1" slices="10" stacks="10" />
 
         <!-- Nova primitiva: terreno baseado em shaders -->
         <!-- parametros: -->
@@ -319,7 +326,7 @@
         divisoes -->
         <!-- fator de escala das alturas -->
 
-        <terrain id="terrain" idtexture="text" idheightmap="string1" parts="10" heightscale="12"/>
+        <terrain id="terrain" idtexture="terrain" idheightmap="heightmap_128" parts="150" heightscale="0.5"/>
 
         <!-- Nova primitiva: plano de água baseado em shaders -->
         <!-- parametros: -->
@@ -333,7 +340,7 @@
         <!-- fator de escala das coordenadas de textura (para o numero de
         repeticoes no plano) -->
 
-        <water id="water" idtexture="text" idwavemap="string1" parts="10" heightscale="12" texscale="10" />
+        <water id="water" idtexture="water" idwavemap="heightmap_waves_128" parts="10" heightscale="0.1" texscale="10" />
 
 
         <primitive id="square">
@@ -442,14 +449,45 @@
                 <primitiveref id="patchy"/>
             </children>
         </component>
+        <component id="shader">
+            <transformation>
+                <translate x="21" y="0" z="5"/>
+                 <scale x="10" y="10" z="10"/>
+               
+            </transformation>
 
+            <materials>
+                <material id ="none"/>
+            </materials>
 
+            <texture id="none" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="terrain"/>
+            </children>
+        </component>
+
+        <component id="shaderwater">
+            <transformation>
+                <translate x="21" y="0" z="18"/>
+                 <scale x="10" y="10" z="10"/>
+               
+            </transformation>
+
+            <materials>
+                <material id ="none"/>
+            </materials>
+
+            <texture id="none" length_s="1" length_t="1"/>
+
+            <children>
+                <primitiveref id="water"/>
+            </children>
+        </component>
         <component id="patchcylinder">
             <transformation>
 
-                <translate x="6" y="2.5" z="5"/>
-                 
-                <rotate axis="x" angle="180"/>
+                <translate x="15" y="2.5" z="5"/>
             </transformation>
 
             <materials>
@@ -462,6 +500,7 @@
                 <primitiveref id="cylinder2"/>
             </children>
         </component>
+
 
          <!--TEMPORARY-->
 
@@ -1999,6 +2038,8 @@
             <texture id="none" length_s="1" length_t="1"/>
 
             <children>
+                <componentref id="shaderwater"/>
+                <componentref id="shader"/>
                 <componentref id="floor_black_all"/>   
                 <componentref id="left_wall"/>
                 <componentref id="back_wall"/>
@@ -2014,6 +2055,7 @@
                 <componentref id="patch1"/>
                 <componentref id="patch3"/>
                 <componentref id="patchcylinder"/>
+               
             </children>
         </component>
 

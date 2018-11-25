@@ -75,4 +75,8 @@ class MyNode
 				}
 			}       
 	};
+
+	updateShaders(deltaTime){
+		
+	}
 };

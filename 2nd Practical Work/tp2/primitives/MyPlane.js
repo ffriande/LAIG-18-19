@@ -1,6 +1,6 @@
-class MyPlane{
+class MyPlane extends CGFobject{
     constructor(scene, degreeU, degreeV){
-    	this.scene=scene;
+    	super(scene);
         this.degreeU=degreeU;
         this.degreeV=degreeV;
 //      this.findControlVertexes();
@@ -36,5 +36,9 @@ class MyPlane{
 		var nurbsSurface = new CGFnurbsSurface(1, 1, this.controlvertexes);
 
 		this.surface = new CGFnurbsObject(this.scene, this.degreeU, this.degreeV, nurbsSurface ); // must provide an object with the function getPoint(u, v) (CGFnurbsSurface has it)
+	}
+
+	display(){
+		this.surface.display();
 	}
 }

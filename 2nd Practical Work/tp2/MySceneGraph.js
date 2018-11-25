@@ -27,6 +27,7 @@ class MySceneGraph {
         scene.graph = this;
 
         this.nodes = [];
+        this.shaders=[];
 
         this.root = null;
         // The id of the root element.
@@ -1144,6 +1145,7 @@ class MySceneGraph {
         var numPrimitives = 0;
 
         this.primitivesData = [];
+        this.shadersData=[];
 
         for (var i = 0; i < children.length; i++) {
             if (children[i].nodeName != "primitive" && children[i].nodeName != "plane" && children[i].nodeName != "patch" &&
@@ -1233,20 +1235,20 @@ class MySceneGraph {
             
                 } else if(children[i].nodeName == "terrain"){
                     var terrainPrimitive=[];
- 
+                    primitive.push("terrain");
                     // idTexture
                     var idTexture = this.reader.getString(children[i], 'idtexture');
-                    if (idTexture == null)
+                    if (idTexture == null || this.textures[idTexture]== null)
                         return "unable to parse terrain's idtexture for ID= " + primitiveId;
-                    else
-                        terrainPrimitive.push(idTexture);
+                    else 
+                        terrainPrimitive.push(this.textures[idTexture]);
  
                      // idHeightMap
                     var idHeightMap = this.reader.getString(children[i], 'idheightmap');
-                    if (idHeightMap == null)
+                    if (idHeightMap == null || this.textures[idHeightMap]== null)
                         return "unable to parse terrain's idheightmap for ID= " + primitiveId;
                     else
-                        terrainPrimitive.push(idHeightMap);
+                        terrainPrimitive.push(this.textures[idHeightMap]);
  
                      // parts
                     var parts = this.reader.getInteger(children[i], 'parts');
@@ -1263,24 +1265,24 @@ class MySceneGraph {
                         terrainPrimitive.push(heightScale);
  
                     primitive.push(terrainPrimitive);
- 
 
                 } else if(children[i].nodeName == "water"){
                     var waterPrimitive=[];
                    
+                    primitive.push("water");
                     // idTexture
                     var idTexture = this.reader.getString(children[i], 'idtexture');
-                    if (idTexture == null)
+                    if (idTexture == null|| this.textures[idTexture]== null)
                         return "unable to parse water's idtexture for ID= " + primitiveId;
                     else
-                        waterPrimitive.push(idTexture);
+                        waterPrimitive.push(this.textures[idTexture]);
  
                      // idWaveMap
                     var idWaveMap = this.reader.getString(children[i], 'idwavemap');
-                    if (idWaveMap == null)
+                    if (idWaveMap == null|| this.textures[idWaveMap]== null)
                         return "unable to parse water's idwavemap for ID= " + primitiveId;
                     else
-                        waterPrimitive.push(idWaveMap);
+                        waterPrimitive.push(this.textures[idWaveMap]);
  
                      // parts
                     var parts = this.reader.getInteger(children[i], 'parts');
@@ -1303,9 +1305,8 @@ class MySceneGraph {
                     else
                         waterPrimitive.push(texScale);
  
-                    primitive.push(waterPrimitive);
+                   primitive.push(waterPrimitive);
 
-               
                 ///primitivas com grandchildren    
                 } else {    
                     grandChildren = children[i].children;     
@@ -1878,7 +1879,6 @@ class MySceneGraph {
            if(current.leaves[i].type == "rectangle" || current.leaves[i].type == "triangle")                                            
                 current.leaves[i].primitive.setST(current.textureS,current.textureT);           //a ser definidas sem valores S e T --> corrigir isto
                            
-                         
                 current.leaves[i].primitive.display();
         }
         
