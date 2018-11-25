@@ -33,8 +33,8 @@ class MyShaderWater extends CGFobject {
     {
     
     this.scene.setActiveShader(this.shader);
-    let factor = Math.sin(Date.now() * 0.00001) * 20;  ///nao meu
-    this.shader.setUniformsValues({timeFactor:factor,heightmap: 1}); ///nao meu
+    var time = Math.sin(Date.now() * 0.00001) * 20;  ///nao meu
+    this.shader.setUniformsValues({timeFactor:time,heightmap: 1}); ///nao meu
 
     this.texture.bind(0);
     

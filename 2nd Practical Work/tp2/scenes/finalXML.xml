@@ -326,7 +326,7 @@
         divisoes -->
         <!-- fator de escala das alturas -->
 
-        <terrain id="terrain" idtexture="terrain" idheightmap="heightmap_128" parts="150" heightscale="0.5"/>
+        <terrain id="terrain" idtexture="terrain" idheightmap="heightmap_128" parts="150" heightscale="0.4"/>
 
         <!-- Nova primitiva: plano de água baseado em shaders -->
         <!-- parametros: -->
@@ -340,7 +340,7 @@
         <!-- fator de escala das coordenadas de textura (para o numero de
         repeticoes no plano) -->
 
-        <water id="water" idtexture="water" idwavemap="heightmap_waves_128" parts="10" heightscale="0.1" texscale="10" />
+        <water id="water" idtexture="water" idwavemap="heightmap_waves_128" parts="20" heightscale="0.5" texscale="10" />
 
 
         <primitive id="square">
@@ -451,8 +451,8 @@
         </component>
         <component id="shader">
             <transformation>
-                <translate x="21" y="0" z="5"/>
-                 <scale x="10" y="10" z="10"/>
+                <translate x="0" y="0" z="0"/>
+                 <scale x="0.1" y="0.1" z="0.1"/>
                
             </transformation>
 
@@ -469,8 +469,8 @@
 
         <component id="shaderwater">
             <transformation>
-                <translate x="21" y="0" z="18"/>
-                 <scale x="10" y="10" z="10"/>
+                <translate x="0" y="10" z="0"/>
+                 <scale x="100" y="100" z="100"/>
                
             </transformation>
 
