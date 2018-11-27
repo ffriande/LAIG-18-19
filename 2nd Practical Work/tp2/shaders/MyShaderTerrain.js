@@ -15,6 +15,10 @@ class MyShaderTerrain extends CGFobject {
     
     }
 
+    
+    /**
+     * initiates shader, links vertex and fragment files , sets uniform values and creates shader's plane.
+     */
     init(){
         
         this.shader = new CGFshader(this.scene.gl, "shaders/vertShader.vert", "shaders/fragShader.frag");
@@ -25,6 +29,9 @@ class MyShaderTerrain extends CGFobject {
         this.plane = new MyPlane(this.scene, this.parts,this.parts);
     }
     
+    /**
+     * Shader display function. Binds textures.
+     */
     display()
     {
     

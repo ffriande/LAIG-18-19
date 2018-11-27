@@ -1828,7 +1828,12 @@ class MySceneGraph {
         this.searchGraph(this.root, this.nodes[this.root].activeMaterial, this.nodes[this.root].textureId);
     }
 
-
+    /**
+     * Recursively displays each nodes' leaf and handles inheritance, starting in root node.
+     * @param {string} nodeId
+     * @param {string} materialID
+     * @param {string} textureID
+     */
     searchGraph(nodeID, materialID, textureID) {
         var current = this.nodes[nodeID];
         this.scene.multMatrix(current.transformMatrix);
@@ -1879,6 +1884,7 @@ class MySceneGraph {
            if(current.leaves[i].type == "rectangle" || current.leaves[i].type == "triangle")                                            
                 current.leaves[i].primitive.setST(current.textureS,current.textureT);           //a ser definidas sem valores S e T --> corrigir isto
                            
+
                 current.leaves[i].primitive.display();
         }
         
@@ -1894,7 +1900,10 @@ class MySceneGraph {
     }
 
 
-    
+    /**
+     * Updates whole graph.
+     * @param {float} currTime
+     */
     update(currTime){
 
         this.totalTime += currTime;
@@ -1907,6 +1916,10 @@ class MySceneGraph {
 
     }
 
+    /**
+     * Updates animations of each node.
+     * @param {float} currTime
+     */
     updateAux(children){
 
         for(var i=0; i < children.length;i++){
@@ -1922,7 +1935,9 @@ class MySceneGraph {
     }
     
 
-
+    /**
+     * Creates a default material.
+     */
     createDefaultMaterial(){
 
             var newMaterial = new CGFappearance(this.scene);
@@ -1938,5 +1953,3 @@ class MySceneGraph {
 
 }
     
-//TODO: herança das texturas não funciona bem: se mudo a textura de ball, muda de todas as balls, se mudo a textura de ball0 não muda
-//TODO: herança animations - urgente

@@ -189,6 +189,9 @@ class XMLscene extends CGFscene {
         // ---- END Background, camera and axis setup
     }
 
+    /**
+     * Switches primitives materials when 'M' or 'm' keys are pushed. This function is called by MyInterface.
+     */
     changeMaterials(){
         for (var item in this.graph.nodes) {
             this.graph.nodes[item].activeMaterial= this.graph.nodes[item].materials[this.graph.nodes[item].materials.indexOf( this.graph.nodes[item].activeMaterial)+ 1]
@@ -197,15 +200,26 @@ class XMLscene extends CGFscene {
         }
     }
 
+    /**
+     * Switches camera to id=select.This function is called by MyInterface.
+     * @param {String} select
+     */
     setNewCamera(select){
         this.camera=this.graph.views[select];
         this.interface.setActiveCamera(this.camera);
     }
-    
+
+     /**
+     * Returns default camera.
+     */
      getDefaultView(){
         return this.graph.default;
     }
 
+     /**
+     * Updates the entire scene.
+     * @param {float} currTime
+     */
     update(currTime){
         
         //  this.time = (Math.cos(currTime/1000))/ 2 + 0.5;

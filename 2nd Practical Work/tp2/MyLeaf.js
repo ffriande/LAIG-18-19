@@ -13,6 +13,9 @@ class MyLeaf
 
          switch (this.type)
         {
+            case 'vehicle':
+                this.primitive = new MyVehicle(this.graph.scene);
+                break; 
             case 'terrain':
                 var shader=new MyShaderTerrain(this.graph.scene,this.values[0],this.values[1],this.values[2],this.values[3]);
                 this.graph.shaders.push(shader);

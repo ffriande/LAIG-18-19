@@ -26,35 +26,65 @@ class MyNode
     	this.animation_time_passed_by=0;	
 	};
 
+	/**
+     * Adds Node child.
+     * @param {string} id
+     */
 	addChild(id) {
     	this.children.push(id);
 	};
 	
+	/**
+     * Adds leaf to node.
+     * @param {MyLeaf} leaf
+     */
 	addLeaf(leaf) {
    		this.leaves.push(leaf);
 	};
 
+	/**
+     * Adds material to node.
+     * @param {string} matId
+     */
 	addMaterial(matId) {
 		this.materials.push(matId);
 		if(this.activeMaterial == null)
 			this.activeMaterial = matId;
 	};
 
+	/**
+     * Adds animation to node.
+     * @param {Animation} anima
+     */
 	addAnimation(anima){
         this.animations.push(anima);
 	};
 
+	/**
+     * Sets node's texture.
+     * @param {string} tex
+     * @param {float} S
+     * @param {float} T
+     */
 	setTexture(tex, S, T) {
 		this.textureId = tex;
 		this.textureS = S;
 		this.textureT = T;
 	};
 
+
+	/**
+     * Sets node's active material.
+     * @param {string} matId
+     */
 	setActiveMaterial(matId) {
 		this.activeMaterial = matId;
 	};
 
-
+	/**
+     * Updates node's animation.
+     * @param {float} deltaTime
+     */
 	updateAnimations(deltaTime) {
 
         deltaTime=deltaTime/1000 - this.animation_time_passed_by;

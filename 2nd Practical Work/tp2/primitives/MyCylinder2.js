@@ -9,7 +9,9 @@ class MyCylinder2{
         this.calculateControlPoints();
         this.makeSurfaces();
 }
-   
+    /**
+     * sets NURB control points
+     */
    calculateControlPoints(){
        
 	this.controlPoints = 
@@ -29,10 +31,12 @@ class MyCylinder2{
                 ],
            ];
 
-        //   let controlPoints = [ [-this.top / 2, 0.0, this.height, 1.0], [-this.top / 2, Math.sqrt(2)*this.top / 2, this.height, 1.0], [this.top / 2, Math.sqrt(2)*this.top / 2, this.height, 1.0], [this.top / 2, 0.0, this.height, 1.0] ] ];
-           
+        
    }
 
+       /**
+     * Generates both halves of the cylinder.
+     */
     makeSurfaces(){
         var nurbsSurface1 = new CGFnurbsSurface(1,3,this.controlPoints);
 
@@ -45,6 +49,9 @@ class MyCylinder2{
 
     }
 
+        /**
+     * Displays both halves of the cylinder.
+     */
     display(){
         this.scene.pushMatrix();
         this.surface1.display();

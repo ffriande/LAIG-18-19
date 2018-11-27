@@ -18,6 +18,10 @@ class LinearAnimation extends Animation {
         this.speed=this.totalDistance/this.time;
     }
 
+    /**
+     * Updates animation values.
+     * @param {float} deltaT
+     */
     update(deltaT){
         this.distanceCovered = this.speed * deltaT;
         this.initTranslation =[0,0,0];
@@ -42,6 +46,10 @@ class LinearAnimation extends Animation {
         
     }
 
+        /**
+         * Applies transformation previously calculated by update function.
+         * @param {MyNode} node
+         */
     apply(node){
         mat4.identity(node.animationMatrix);
 

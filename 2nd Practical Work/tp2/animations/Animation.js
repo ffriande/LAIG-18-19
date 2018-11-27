@@ -6,15 +6,23 @@ class Animation {
         this.finished=false;
     }
 
-
+    /**
+     * Updates animation values.
+     * @param {float} deltaT
+     */
     update(){
 
     }
 
+     /**
+     * Applies transformation previously calculated by update function.
+     * @param {MyNode} node
+     */
     apply(){
 
     }
 
+    
     calculateNorm(point1,point2){
         return Math.pow((Math.pow(point2[0]-point1[0],2)+Math.pow(point2[1]-point1[1],2)+Math.pow(point2[2]-point1[2],2)),1/2);
     }

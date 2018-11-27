@@ -10,6 +10,10 @@ class MyPatch {
         this.makeSurface();
         }
 
+    /**
+     * control points are separated according to u and v degrees and w factor is added.
+     * @param {float array} controlVertexes
+     */
     separate_controlPoints(controlVertexes){
         var index=0;
         this.controlPoints=[];
@@ -24,6 +28,9 @@ class MyPatch {
         }
     }
 
+    /**
+     * Creates NURB surface
+     */
     makeSurface(){
         var nurbsSurface = new CGFnurbsSurface(this.npointsU-1,this.npointsV-1,this.controlPoints);
 

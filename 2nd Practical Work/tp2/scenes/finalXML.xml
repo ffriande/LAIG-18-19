@@ -225,20 +225,17 @@
         <!-- O bloco animations pode ser vazio, isto é, pode -->
         <!-- não ser declarada qualquer animação, linear ou circular -->
         <!-- Span é o tempo, em segundos, que a animação deve demorar -->
-        <linear id="linear1" span="1" >
-        <!--—- devem existir pelo menos dois pontos de controlo -->
-                <controlpoint xx="20" yy="0" zz="0" />
-                <controlpoint xx="0" yy="0" zz="-10" />
-                <controlpoint xx="5" yy="5" zz="5" />               
-                <controlpoint xx="20" yy="0" zz="0" />             
-                <controlpoint xx="25" yy="0" zz="0" />   
-        </linear>
-        <linear id="linear2" span="10" >
+        <linear id="linear1" span="30" >
         <!--—- devem existir pelo menos dois pontos de controlo -->
                 <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="0" yy="10" zz="20" />
+                <controlpoint xx="5" yy="15" zz="15" />               
+                <controlpoint xx="0" yy="20" zz="25" />        
+        </linear>
+        <linear id="linear2" span="40" >
+        <!--—- devem existir pelo menos dois pontos de controlo -->
+                <controlpoint xx="20" yy="20" zz="25" />
                 <controlpoint xx="15" yy="0" zz="-10" />
-                <controlpoint xx="0" yy="0" zz="1" />               
-                <controlpoint xx="20" yy="0" zz="0" />
         </linear>
         <!-- center corresponde ao ponto que serve -->
         <!-- de centro da animação circular -->
@@ -247,7 +244,7 @@
         <!-- startang e rotang correspondem, nomeadamente, -->
         <!-- ao angulo inicial (em graus) e -->
         <!-- total de rotação (em graus) -->
-        <circular id="circular1" span="15" center="0 0 0" radius="5" startang="0" rotang="5600" />               
+        <circular id="circular1" span="25" center="20 10 10" radius="5" startang="0" rotang="5600" />               
     </animations>
        
 
@@ -340,7 +337,7 @@
         <!-- fator de escala das coordenadas de textura (para o numero de
         repeticoes no plano) -->
 
-        <water id="water" idtexture="water" idwavemap="heightmap_waves_128" parts="20" heightscale="0.5" texscale="10" />
+        <water id="water" idtexture="water" idwavemap="heightmap_waves_128" parts="50" heightscale="0.8" texscale="10" />
 
 
         <primitive id="square">
@@ -376,12 +373,22 @@
    
         <!--TEMPORARY-->
     
-        <component id="plane1">
+     
+        
+    <component id="vehicle">
             <transformation>
 
-                <translate x="2.5" y="2.5" z="10"/>
-                 
+
             </transformation>
+            
+            <animations>
+                
+                <animationref id="linear1" />
+                <animationref id="linear2" />
+                <animationref id="circular1" />
+                <animationref id="linear2" />
+
+            </animations>
 
             <materials>
                 <material id ="yellow"/>
@@ -390,26 +397,11 @@
             <texture id="none" length_s="1" length_t="1"/>
 
             <children>
-                <primitiveref id="plane"/>
+                <primitiveref id="vehicle"/>
             </children>
         </component>
 
-         <component id="patch3">
-            <transformation>
 
-                <translate x="5.5" y="2.5" z="11"/>
-            </transformation>
-
-            <materials>
-                <material id ="yellow"/>
-            </materials>
-
-            <texture id="none" length_s="1" length_t="1"/>
-
-            <children>
-                <primitiveref id="asd"/>
-            </children>
-        </component>
 
 
 
@@ -451,8 +443,8 @@
         </component>
         <component id="shader">
             <transformation>
-                <translate x="0" y="0" z="0"/>
-                 <scale x="0.1" y="0.1" z="0.1"/>
+                <translate x="32" y="0" z="10"/>
+                 <scale x="25" y="15" z="25"/>
                
             </transformation>
 
@@ -469,8 +461,8 @@
 
         <component id="shaderwater">
             <transformation>
-                <translate x="0" y="10" z="0"/>
-                 <scale x="100" y="100" z="100"/>
+                <translate x="32" y="1.8" z="10"/>
+                 <scale x="25" y="15" z="25"/>
                
             </transformation>
 
@@ -1479,8 +1471,6 @@
             </transformation>
 
             <animations>
-                <animationref id="linear2" />
-                <animationref id="linear1" />
             </animations>
 
             <materials>
@@ -2004,7 +1994,6 @@
             </transformation>
 
             <animations>
-                <animationref id="circular1" />
             </animations>
 
             <materials>
@@ -2039,7 +2028,9 @@
 
             <children>
                 <componentref id="shaderwater"/>
-                <componentref id="shader"/>
+                
+               <componentref id="shader"/>
+                <componentref id="vehicle"/>
                 <componentref id="floor_black_all"/>   
                 <componentref id="left_wall"/>
                 <componentref id="back_wall"/>
@@ -2050,10 +2041,7 @@
 				<componentref id="tables"/>
 				<componentref id="pillows"/>
 				<componentref id="pizza_slice"/>
-                <componentref id="plane1"/>
-                <componentref id="patch2"/>
-                <componentref id="patch1"/>
-                <componentref id="patch3"/>
+
                 <componentref id="patchcylinder"/>
                
             </children>

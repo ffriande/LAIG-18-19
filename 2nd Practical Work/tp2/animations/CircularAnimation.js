@@ -11,11 +11,19 @@ class CircularAnimation extends Animation
         this.speed=this.totalDistance/this.time;
     }
 
+    /**
+     * Updates animation values.
+     * @param {float} deltaT
+     */
     update(deltaT){
         this.distanceCovered = this.speed * deltaT;
         this.angle = this.init_ang + this.distanceCovered/this.radius;
     }
 
+        /**
+     * Applies transformation previously calculated by update function.
+     * @param {MyNode} node
+     */
     apply(node){
 	
         mat4.identity(node.animationMatrix);
