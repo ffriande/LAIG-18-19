@@ -1884,7 +1884,6 @@ class MySceneGraph {
            if(current.leaves[i].type == "rectangle" || current.leaves[i].type == "triangle")                                            
                 current.leaves[i].primitive.setST(current.textureS,current.textureT);           //a ser definidas sem valores S e T --> corrigir isto
                            
-
                 current.leaves[i].primitive.display();
         }
         

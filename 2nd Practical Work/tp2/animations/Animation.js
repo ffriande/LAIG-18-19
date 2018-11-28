@@ -31,9 +31,10 @@ class Animation {
 		var v1 = this.vectorNorm(vector1);
 		var v2 = this.vectorNorm(vector2);
 
+		v2[1]=0;
     	var prodVect = (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]);
  
- 	 	return Math.acos(prodVect);
+ 	 	return Math.acos(prodVect) - 90*DEGREE_TO_RAD;
     }
 
     subtractPoints(point1, point2) {

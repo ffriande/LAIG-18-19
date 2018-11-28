@@ -225,17 +225,18 @@
         <!-- O bloco animations pode ser vazio, isto é, pode -->
         <!-- não ser declarada qualquer animação, linear ou circular -->
         <!-- Span é o tempo, em segundos, que a animação deve demorar -->
-        <linear id="linear1" span="30" >
+        <linear id="linear1" span="15" >
         <!--—- devem existir pelo menos dois pontos de controlo -->
                 <controlpoint xx="0" yy="0" zz="0" />
                 <controlpoint xx="0" yy="10" zz="20" />
-                <controlpoint xx="5" yy="15" zz="15" />               
-                <controlpoint xx="0" yy="20" zz="25" />        
+                <controlpoint xx="0" yy="15" zz="10" />               
+                <controlpoint xx="20" yy="0" zz="10" />        
         </linear>
-        <linear id="linear2" span="40" >
+        <linear id="linear2" span="10" >
         <!--—- devem existir pelo menos dois pontos de controlo -->
-                <controlpoint xx="20" yy="20" zz="25" />
-                <controlpoint xx="15" yy="0" zz="-10" />
+                <controlpoint xx="0" yy="0" zz="0" />
+                <controlpoint xx="20" yy="0" zz="0" />                
+                <controlpoint xx="20" yy="15" zz="10" />
         </linear>
         <!-- center corresponde ao ponto que serve -->
         <!-- de centro da animação circular -->
@@ -382,10 +383,6 @@
             </transformation>
             
             <animations>
-                
-                <animationref id="linear1" />
-                <animationref id="linear2" />
-                <animationref id="circular1" />
                 <animationref id="linear2" />
 
             </animations>

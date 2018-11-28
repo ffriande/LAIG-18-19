@@ -42,8 +42,10 @@ class LinearAnimation extends Animation {
         this.relativeDistance = this.distanceCovered/this.distanceStacks[i];
 
         // calculate rotation angle
-        this.angle = this.angleBetween([0,0,1],this.subtractPoints(this.control_points[i],this.control_points[i+1]));
-        
+        if(i!=this.distanceStacks.length-1)
+       		this.angle = this.angleBetween([0,0,1],this.subtractPoints(this.control_points[i],this.control_points[i+1]));
+        else
+        	this.angle = this.angleBetween([0,0,1],this.subtractPoints(this.control_points[i],this.control_points[i-1]))-90*DEGREE_TO_RAD; 
     }
 
         /**
@@ -63,7 +65,7 @@ class LinearAnimation extends Animation {
 		 (this.p2[1] - this.p1[1]) * this.relativeDistance, 
 		 (this.p2[2] - this.p1[2]) * this.relativeDistance ]);		
 		
- 		mat4.rotateY(node.animationMatrix,node.animationMatrix, this.angle);
+ 		mat4.rotate(node.animationMatrix,node.animationMatrix, this.angle,[0,1,0]);
 
     }
 

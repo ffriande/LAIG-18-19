@@ -161,7 +161,7 @@ var beak =
         this.scene.pushMatrix();
         this.scene.rotate(90*DEGREE_TO_RAD,1,0,0);
         this.scene.rotate(-180*DEGREE_TO_RAD,0,1,0);
-        this.scene.rotate(90*DEGREE_TO_RAD,0,0,1);
+        this.scene.rotate(180*DEGREE_TO_RAD,0,0,1);
         this.scene.scale(0.2,0.2,0.1);
    
       
