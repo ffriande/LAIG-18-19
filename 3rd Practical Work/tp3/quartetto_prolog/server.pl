@@ -103,10 +103,19 @@ print_header_line(_).
 
 % Require your Prolog Files here
 
+:-include('src/quartetto.pl').
+
+parse_input(initBoard, Board):-
+	initialBoard(Board).
+
+parse_input(valid_moves(Board,Row,NumColumn),MovesList):-
+	valid_moves(Board,Row,NumColumn,MovesList),
+	write(MovesList).
+
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
 
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
-	
+

@@ -13,8 +13,7 @@ class MyCell extends CGFobject{
 								 [x, 0, size+z, 1 ]								 
 							]
 						];
-						
-		console.log(this.controlvertexes);
+					
     	var nurbsSurface = new CGFnurbsSurface(1, 1, this.controlvertexes);
 
 		this.surface = new CGFnurbsObject(this.scene, 20, 20, nurbsSurface ); // must provide an object with the function getPoint(u, v) (CGFnurbsSurface has it)
@@ -33,12 +32,27 @@ class MyCell extends CGFobject{
 				this.mat2.setDiffuse(0.9, 0.9, 0.9, 1);
 				this.mat2.setSpecular(0.1, 0.1, 0.1, 1);
 				this.mat2.setShininess(10);
+
+				this.matPickable = new CGFappearance(this.scene);
+				this.matPickable.setAmbient(0.9, 0.1, 0.2, 1);
+				this.matPickable.setDiffuse(0.9, 0.9, 0.9, 1);
+				this.matPickable.setSpecular(0.1, 0.1, 0.1, 1);
+				this.matPickable.setShininess(10);
+	}
+
+	becomePickable(){
+		this.moveable=1;
 	}
 
 	display(){
-		if(this.mat==1)
+		if(!this.moveable){
+			if(this.mat==1)
 			this.mat1.apply();
-		else this.mat2.apply();
+			else if(this.mat==0)
+			this.mat2.apply();
+		}
+		else 		
+			this.matPickable.apply();
 		this.surface.display();
 	}
 }

@@ -13,8 +13,12 @@ class MyLeaf
 
          switch (this.type)
         {  
+            case 'piece':
+                this.primitive = this.values;
+                // this.graph.board=this.primitive;
+                break;
             case 'board':
-                this.primitive = new MyQuartetto(this.graph.scene, this.values[0]);
+                this.primitive = this.graph.scene.setBoard(this.values[0]);
                 // this.graph.board=this.primitive;
                 break;
             case 'vehicle':

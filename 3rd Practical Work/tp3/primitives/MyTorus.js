@@ -66,6 +66,7 @@ class MyTorus extends CGFobject{
 
 
 
+        this.updateTexCoordsGLBuffers();
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }

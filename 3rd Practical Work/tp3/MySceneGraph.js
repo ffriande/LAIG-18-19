@@ -1396,6 +1396,7 @@ class MySceneGraph {
                             return "unable to parse board's size_per_cell for ID= " + primitiveId;
                         else
                         boardPrimitive.push(size_per_cell);  
+                        this.size_per_cell=size_per_cell;
                             
                         primitive.push(boardPrimitive);
                     }  
@@ -1889,7 +1890,6 @@ class MySceneGraph {
         currMaterial.setTexture(currTexture);
         currMaterial.apply();
 
-       //console.log(currTexture);
       
 
       for (let i = 0; i < current.leaves.length; i++) {

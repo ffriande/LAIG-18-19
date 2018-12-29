@@ -18,7 +18,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
                 'game/MyBoard.js','game/MyCell.js','game/MyPiece.js','game/MyQuartetto.js',
                 'shaders/MyShaderTerrain.js', 'shaders/MyShaderWater.js',
                 'animations/Animation.js','animations/LinearAnimation.js','animations/CircularAnimation.js',
-                'quartetto-prolog/PrologRequests.js',
+                'quartetto_prolog/PrologRequests.js',
 				
 main=function()
 {

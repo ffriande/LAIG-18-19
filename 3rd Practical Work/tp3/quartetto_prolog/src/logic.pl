@@ -131,14 +131,15 @@ getPiecesListAux([H|T], Row, Column, Symbol,PiecesPositionsListAux,PiecesPositio
 %%  2. Row of the piece 
 %%  3. Number of the column of the piece
 %%  4. List of the valid moves
-valid_moves(Board,Row,NumColumn,MovesList):-
+valid_moves(Board,Row,NumColumn,MovesListA):-
     listColumnDown(Board,MovesList1,Row,NumColumn,_TempMovesList),
     listColumnUp(Board,MovesList2,Row,NumColumn,_TempMovesList1),
     listRowRight(Board,MovesList3,Row,NumColumn,_TempMovesList2),
     listRowLeft(Board,MovesList4,Row,NumColumn,_TempMovesList3),
     append(MovesList1,MovesList2,MovesListAux),
     append(MovesListAux,MovesList3,MovesListAux1),
-    append(MovesListAux1,MovesList4,MovesList),!.
+    append(MovesListAux1,MovesList4,MovesList),
+    append(MovesList,[],MovesListA),!.
 
 %% List valid moves of a given piece in a downwards direction.
 %%  1. Current game board 
@@ -150,8 +151,8 @@ listColumnDown(Board,FinalList,Row,NumColumn,ListTemp) :-
     Row1 is Row + 1,
     ((Row1 < 9,
     checkCell(Board,Row1,NumColumn,0),
-    numberColumn(Column,NumColumn),
-    append(ListTemp,[[Row1,Column]],ListAux),
+    %%numberColumn(Column,NumColumn),
+    append(ListTemp,[[Row1,NumColumn]],ListAux),
     listColumnDown(Board,FinalList,Row1,NumColumn,ListAux));
     append([],ListTemp,FinalList)).
 
@@ -160,8 +161,8 @@ listColumnUp(Board,FinalList,Row,NumColumn,ListTemp) :-
     Row1 is Row - 1,
     ((Row1 > 0, 
     checkCell(Board,Row1,NumColumn,0),
-    numberColumn(Column,NumColumn),
-    append(ListTemp,[[Row1,Column]],ListAux),
+    %%numberColumn(Column,NumColumn),
+    append(ListTemp,[[Row1,NumColumn]],ListAux),
     listColumnUp(Board,FinalList,Row1,NumColumn,ListAux));
     append([],ListTemp,FinalList)).
 
@@ -170,8 +171,8 @@ listRowRight(Board,FinalList,Row,NumColumn,ListTemp) :-
     NumColumn1 is NumColumn + 1,
     ((NumColumn1 < 9,
     checkCell(Board,Row,NumColumn1,0),
-    numberColumn(Column,NumColumn1),
-    append(ListTemp,[[Row,Column]],ListAux),
+    %%numberColumn(Column,NumColumn1),
+    append(ListTemp,[[Row,NumColumn1]],ListAux),
     listRowRight(Board,FinalList,Row,NumColumn1,ListAux));
     append([],ListTemp,FinalList)).
 
@@ -180,8 +181,9 @@ listRowLeft(Board,FinalList,Row,NumColumn,ListTemp) :-
     NumColumn1 is NumColumn - 1,
     ((NumColumn1 > 0,
     checkCell(Board,Row,NumColumn1,0),
-    numberColumn(Column,NumColumn1),
-    append(ListTemp,[[Row,Column]],ListAux),
+    %%numberColumn(Column,NumColumn1),
+    append(ListTemp,[[Row,NumColumn1]],ListAux),
+    write(ListAux), nl,
     listRowLeft(Board,FinalList,Row,NumColumn1,ListAux));
     append([],ListTemp,FinalList)).
 

@@ -25,24 +25,24 @@
     </ambient>
 
     <lights>
-        <omni id="top_light" enabled="1">
+        <omni id="top_light" enabled="0">
             <location x="3.5" y="15" z="3.5" w="0" />
             <ambient r="0.1" g="0.1" b="0.1" a="1"/>
             <diffuse r="0.7" g="0.7" b="0.7" a="1"/>
             <specular r="0.7" g="0.7" b="0.7" a="1"/>
         </omni>
 
-        <spot id="tables_light" enabled="0" angle="55" exponent="20">
-            <location x="6" y="5" z="22" w="0" />
-            <target x="6" y="0" z="22" />
-            <ambient r="0" g="0" b="0" a="0"/>
-            <diffuse r="0.5" g="0.5" b="0.5" a="0"/>
-            <specular r="0.5" g="0.5" b="0.5" a="0"/>
+        <spot id="spot1" enabled="1" angle="0" exponent="0">
+            <location x="-6" y="0.5" z="-4" w="0" />
+            <target x="6" y="0.5" z="20" />
+            <ambient r="1" g="1" b="1" a="1"/>
+            <diffuse r="0" g="0" b="0" a="1"/>
+            <specular r="1" g="1" b="1" a="1"/>
         </spot>
 
-        <spot id="pins_light" enabled="0" angle="55" exponent="40">
+        <spot id="spot2" enabled="0" angle="55" exponent="40">
             <location x="6" y="5" z="2" w="0" />
-            <target x="6" y="0" z="2" />
+            <target x="6" y="0" z="8" />
             <ambient r="0" g="0" b="0" a="0"/>
             <diffuse r="0.5" g="0.5" b="0.5" a="0"/>
             <specular r="0.5" g="0.5" b="0.5" a="0"/>

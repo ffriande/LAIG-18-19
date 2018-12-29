@@ -22,6 +22,11 @@ class XMLscene extends CGFscene {
         this.scenario=0;
     }
 
+    setBoard(size){
+        this.game=new MyQuartetto(this.graph.scene, size);
+        return this.game.board;
+    }
+
     /**
      * Initializes the scene, setting some WebGL defaults, initializing the camera and the axis.
      * @param {CGFApplication} application
@@ -55,6 +60,10 @@ class XMLscene extends CGFscene {
      */
     initCameras() {
         this.camera = new CGFcamera(0.4,0.1,500,vec3.fromValues(15, 15, 15),vec3.fromValues(0, 0, 0));
+        // this.cameras[0] = new CGFcamera(0.4,0.1,500,vec3.fromValues(15, 15, 15),vec3.fromValues(0, 0, 0));
+        // this.cameras[1] = new CGFcamera(0.4,0.1,500,vec3.fromValues(1, 25, 10),vec3.fromValues(0, 0, 0));
+    
+        // this.camera = this.cameras[0];
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -197,6 +206,50 @@ class XMLscene extends CGFscene {
         // ---- END Background, camera and axis setup
     }
 
+
+    /**
+     * Updates the entire scene.
+     * @param {float} currTime
+     */
+    update(currTime) {
+
+        //  this.time = (Math.cos(currTime/1000))/ 2 + 0.5;
+        if (this.before_updateTime == -1)
+                    this.graph.update(0)
+        else
+            this.graph.update(currTime - this.before_updateTime);
+
+        this.before_updateTime = currTime;
+
+        this.updateUniformValues(currTime);
+    }
+
+    logPicking() {
+        if (this.pickMode == false) {
+            if (this.pickResults != null && this.pickResults.length > 0) {
+                for (var i = 0; i < this.pickResults.length; i++) {
+                    var obj = this.pickResults[i][0];
+                    if (obj) {
+                        
+                        var customId = this.pickResults[i][1];
+                        console.log("Picked object: " + obj + ", with pick id " + customId);
+
+                        this.game.handlePick(customId,obj);
+                    }
+                }
+                this.pickResults.splice(0, this.pickResults.length);
+            }
+        }
+    }
+
+
+
+    //INTERFACE
+    startGame(){
+        this.game.start(this.gameMode,this.level);
+    }
+
+    
     /**
      * Switches primitives materials when 'M' or 'm' keys are pushed. This function is called by MyInterface.
      */
@@ -222,39 +275,6 @@ class XMLscene extends CGFscene {
      */
     getDefaultView() {
         return this.graph.default;
-    }
-
-    /**
-     * Updates the entire scene.
-     * @param {float} currTime
-     */
-    update(currTime) {
-
-        //  this.time = (Math.cos(currTime/1000))/ 2 + 0.5;
-        if (this.before_updateTime == -1)
-            this.graph.update(0);
-        else
-            this.graph.update(currTime - this.before_updateTime);
-
-        this.before_updateTime = currTime;
-
-        this.updateUniformValues(currTime);
-    }
-
-    logPicking() {
-
-        if (this.pickMode == false) {
-            if (this.pickResults != null && this.pickResults.length > 0) {
-                for (var i = 0; i < this.pickResults.length; i++) {
-                    var obj = this.pickResults[i][0];
-                    if (obj) {
-                        var customId = this.pickResults[i][1];
-                        console.log("Picked object: " + obj + ", with pick id " + customId);
-                    }
-                }
-                this.pickResults.splice(0, this.pickResults.length);
-            }
-        }
     }
 
     updateUniformValues(date) {//         for(var i=0;i<this.graph.shaders.length;i++)

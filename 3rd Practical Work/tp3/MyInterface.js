@@ -29,31 +29,30 @@ class MyInterface extends CGFinterface {
      */
     addOptionsGroup() {
         let config = {
-            // newGame: this.requestNewConfig,
-            gameMode: 0,
-            gameLevel: 0,
+            newGame: this.new_game,
+            game_mode: 0,
+            game_level: 0,
             // changeCamera: this.updateCamera,
             // quitServer: this.quitServer,
-            // theme: THEME.LEGACY,
+            scenario: 1,
             // film: this.playFilm,
             scene: this.scene
         };
    
    
         let configFolder = this.gui.addFolder('Configuration');
-        configFolder.add(config, 'gameMode', {
+        configFolder.add(config, 'game_mode', {
             'Human vs Human': 0,
-            'Human vs CPU': 1,
-            'CPU vs CPU': 2
+            'Human vs CPU': 1,         
+            'CPU vs Human': 2,
+            'CPU vs CPU': 3
         }).name('Game Mode');
    
-        configFolder.add(config, 'gameLevel', {
+        configFolder.add(config, 'game_level', {
             'Easy': 0,
             'Hard': 1
         }).name('Difficulty');
    
-   
-        // configFolder.add(config, 'newGame').name('New Game');
         // configFolder.add(config, 'changeCamera').name('Change Camera');
         // configFolder.add(config, 'film').name('Play Film');
         // configFolder.add(config, 'quitServer').name('Quit Server');
@@ -63,6 +62,7 @@ class MyInterface extends CGFinterface {
              'Normal': 1,
              'Second': 2
         }).name('Scenario');
+        configFolder.add(config, 'newGame').name('New Game');
     }
     /**
      * Adds a folder containing the IDs of the lights passed as parameter.
@@ -111,6 +111,12 @@ class MyInterface extends CGFinterface {
         group.onFinishChange(function(value){
             scene.setNewCamera(value);
         });
+    }
+
+    new_game(){
+        this.scene.gameMode=this.game_mode;
+        this.scene.level=this.level;
+        this.scene.startGame();
     }
 
 }

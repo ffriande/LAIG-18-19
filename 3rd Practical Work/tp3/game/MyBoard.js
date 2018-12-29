@@ -3,16 +3,6 @@ class MyBoard extends CGFobject {
         super(scene);
         this.size_per_cell=size_per_cell;
         // this.plane = new MyPlane(this.scene, 40,40);
-        this.matrix =
-            [[0,0,1,1,1,1,0,0,],
-            [0,0,0,0,0,0,0,0,0 ],
-            [0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0],
-            [0,0,2,2,2,2,0,0],];
-
         this.translations = [];
         let rowTrans=[];
         for(let i=0; i<BOARD_SIZE;i++){
@@ -41,7 +31,32 @@ class MyBoard extends CGFobject {
             }
          cntr++;
          }
-   
+    }
+
+    pickableCells(possibleMoves){
+        var cells_moves=[];
+        let cellId=0;
+        for(let j=0;j<possibleMoves.length;j++){
+            cellId=(possibleMoves[j][0]-1)*8+possibleMoves[j][1]-1;
+            cells_moves.push(cellId);
+        }   
+        cells_moves.sort(function(a, b){return a - b});
+        let k=0;
+        for(let i=0; i<this.cells.length;i++){
+            if(i==cells_moves[k]){
+                this.cells[i].becomePickable();
+                k++;
+
+                if(k==cells_moves.length)
+                break;
+            }
+        }
+    }
+
+    clearValid(){
+        for(let i=0;i<this.cells.length;i++)
+            if(this.cells[i].moveable==1)
+                this.cells[i].moveable=0;
     }
 
     display(){

@@ -3,7 +3,7 @@ function getPrologRequest(requestString, onSuccess, onError, port) {
     let request = new XMLHttpRequest();
     request.open('GET', 'http://localhost:' + requestPort + '/' + requestString, true);
 
-    request.onload = onSuccess || function(data){console.log("Request successful. Reply: " + data.target.response);};
+    request.onload = onSuccess ;
 
     request.onerror = onError || prologRequestError;
 
@@ -14,4 +14,19 @@ function getPrologRequest(requestString, onSuccess, onError, port) {
 function prologRequestError(data) {
     console.log('Prolog request error:');
     console.log(data);
+}
+
+function getInitBoard(func){
+        let request='initBoard';
+        getPrologRequest(request,func);
+}
+
+function getValidMoves(board, row, col,func){
+    
+    let request='valid_moves'+'('+
+                 //JSON.stringify(board)+
+                 board+
+                 ','
+                 + row +','+ col+')';
+    getPrologRequest(request,func);
 }
