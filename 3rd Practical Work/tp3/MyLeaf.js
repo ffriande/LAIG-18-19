@@ -15,7 +15,6 @@ class MyLeaf
         {  
             case 'piece':
                 this.primitive = this.values;
-                // this.graph.board=this.primitive;
                 break;
             case 'board':
                 this.primitive = this.graph.scene.setBoard(this.values[0]);

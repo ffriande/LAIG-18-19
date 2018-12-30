@@ -17,7 +17,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
                 'primitives/MyPlane.js','primitives/MyPatch.js','primitives/MyCylinder2.js','primitives/MyVehicle.js',
                 'game/MyBoard.js','game/MyCell.js','game/MyPiece.js','game/MyQuartetto.js',
                 'shaders/MyShaderTerrain.js', 'shaders/MyShaderWater.js',
-                'animations/Animation.js','animations/LinearAnimation.js','animations/CircularAnimation.js',
+                'animations/Animation.js','animations/LinearAnimation.js','animations/CircularAnimation.js','animations/PieceAnimation.js',
                 'quartetto_prolog/PrologRequests.js',
 				
 main=function()

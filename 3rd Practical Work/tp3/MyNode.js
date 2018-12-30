@@ -7,8 +7,8 @@ class MyNode
 	constructor(graph,id) 
 	{
 		this.graph = graph;
-    	this.id = id;
-    	this.children = [];
+		this.id = id;
+		this.children = [];
 	    this.leaves = [];
 	    this.materials = [];
 	    this.activeMaterial = null;
@@ -102,8 +102,16 @@ class MyNode
 					//so that the delta time of the following animation is reset(next update)	
 					this.animation_time_passed_by+=this.animations[i].time;
 					this.animations[i].finished=true;
+					if(this.leaves[0] instanceof MyPiece){
+						this.animations.splice(i,1);
+						this.leaves[0].setPosition(this.leaves[0].position2be)
+						
+					}
 				}
-			}       
+			//else 
+			//	this.animations.splice(i,1);
+			}
+
 	};
 
 	updateShaders(deltaTime){

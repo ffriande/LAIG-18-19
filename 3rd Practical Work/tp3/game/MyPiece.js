@@ -45,6 +45,12 @@ class MyPiece extends CGFobject{
 
     setPosition(translate){
         this.translation=translate;
+        mat4.translate(this.node.transformMatrix, this.node.transformMatrix, this.translation);
+                                          
+    }
+
+    setNode(node){
+        this.node=node
     }
 
     move(cellId){
@@ -52,10 +58,10 @@ class MyPiece extends CGFobject{
         let z1= this.translation[2];
         let x2=(cellId%10 -1) * this.scene.graph.size_per_cell + this.scene.graph.size_per_cell/2;
         let z2=(Math.trunc(cellId/10)-1) * this.scene.graph.size_per_cell + this.scene.graph.size_per_cell/2;
-        let mediumPoint=[(x1+x2)/2,0,(z1+z2)/2];
-        let mediumLength=Math.sqrt((x2-x1)^2+(z2-z1)^2)/2;
-        console.log(mediumPoint)
-        console.log(mediumLength)
+        let mediumPoint=[(x2+x1)/2,0,(z2+z1)/2];
+        let mediumLength=Math.sqrt(Math.pow((x2-x1),2)+Math.pow((z2-z1),2))/2;
+        this.node.addAnimation(new PieceAnimation(15,mediumPoint,mediumLength,0,180,this.translation))
+        this.position2be=([x2,0,z2])
     }
     
     display(){
@@ -67,8 +73,8 @@ class MyPiece extends CGFobject{
             index=1011+(this.translation[2]-s/2)/s*10+(this.translation[0]-s/2)/s;
         this.scene.registerForPick(index, this);
 
-        this.scene.pushMatrix();
-        this.scene.translate(this.translation[0],this.translation[1],this.translation[2]);
+        // this.scene.pushMatrix();
+        // this.scene.translate(this.translation[0],this.translation[1],this.translation[2]);
         this.scene.pushMatrix();
         this.scene.rotate(-90*DEGREE_TO_RAD,1,0,0);
         this.pieceText.apply();  
@@ -82,6 +88,6 @@ class MyPiece extends CGFobject{
         this.torus2.display();
         this.scene.popMatrix();
         this.scene.popMatrix();
-        this.scene.popMatrix();
+        // this.scene.popMatrix();
     }
 }

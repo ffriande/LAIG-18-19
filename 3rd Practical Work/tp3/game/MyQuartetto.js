@@ -39,8 +39,16 @@ class MyQuartetto{
     start(gamemode,level){
         var graph=this.scene.graph;
         for(let i=0;i<4;i++){ 
-            graph.nodes[graph.root].addLeaf(new MyLeaf(graph,"piece",this.piecesBlack[i]))
-            graph.nodes[graph.root].addLeaf(new MyLeaf(graph,"piece",this.piecesWhite[i]))
+            let black="black"+i;
+            let white="white"+i;
+            graph.nodes[black] = new MyNode(this, black);
+            graph.nodes[black].addLeaf(new MyLeaf(graph,"piece",this.piecesBlack[i]))
+            this.piecesBlack[i].setNode(graph.nodes[black])
+            graph.nodes[white] = new MyNode(this, white);
+            graph.nodes[white].addLeaf(new MyLeaf(graph,"piece",this.piecesWhite[i]))
+            this.piecesWhite[i].setNode(graph.nodes[white])
+            graph.nodes[graph.root].addChild(white)
+            graph.nodes[graph.root].addChild(black)
         }
         this.game_mode=gamemode;
         getInitBoard(this.setBoardMatrix.bind(this));
