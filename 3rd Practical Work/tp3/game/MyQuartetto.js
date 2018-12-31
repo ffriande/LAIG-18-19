@@ -30,10 +30,10 @@ class MyQuartetto{
     this.currentState = this.state.WAITING_FOR_START;
     this.previousState = this.state.WAITING_FOR_START;
 
-     //\STATE MACHINE//  
+
 
     this.pickedPiece=null;
-    this.totalTime =0;
+    this.justMovedPiece=0;
     }
 
     start(gamemode,level){
@@ -99,9 +99,12 @@ class MyQuartetto{
             else{     //caso em que é para escolher jogada possível
                 if(obj instanceof MyCell){
                     if(obj.moveable){
+                        this.justMovedPiece=1;
                         this.pickedPiece.move(customId)
+                        this.updateMatrix(this.pickedPiece,customId)
                         this.previousState=this.currentState
                         this.currentState=this.state.PIECE_MOVING
+                        // this.pickedPiece=null; 
                         this.board.clearValid();
                     }
                     else{
@@ -128,6 +131,18 @@ class MyQuartetto{
         this.update_pieces();
     }   
     /////////////////////
+
+    updateMatrix(movedPiece,destinationCell){
+        let s=this.scene.graph.size_per_cell;
+        let rowMoved=(movedPiece.translation[2]-s/2)/s;
+        let colMoved=(movedPiece.translation[0]-s/2)/s;
+        let colDest=destinationCell%10-1;
+        let rowDest=Math.trunc(destinationCell/10)-1;
+        let color=0;
+        if(movedPiece.white_black) color=1; else color=2;
+        this.matrix[rowMoved][colMoved]=0;
+        this.matrix[rowDest][colDest]=color;
+    } 
     
     display(){
         for(let i=0;i<4;i++){          

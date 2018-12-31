@@ -45,8 +45,7 @@ class MyPiece extends CGFobject{
 
     setPosition(translate){
         this.translation=translate;
-        mat4.translate(this.node.transformMatrix, this.node.transformMatrix, this.translation);
-                                          
+        mat4.translate(this.node.transformMatrix, this.node.transformMatrix, this.translation);                                   
     }
 
     setNode(node){
@@ -60,8 +59,8 @@ class MyPiece extends CGFobject{
         let z2=(Math.trunc(cellId/10)-1) * this.scene.graph.size_per_cell + this.scene.graph.size_per_cell/2;
         let mediumPoint=[(x2+x1)/2,0,(z2+z1)/2];
         let mediumLength=Math.sqrt(Math.pow((x2-x1),2)+Math.pow((z2-z1),2))/2;
-        this.node.addAnimation(new PieceAnimation(15,mediumPoint,mediumLength,0,180,this.translation))
-        this.position2be=([x2,0,z2])
+        this.node.addAnimation(new PieceAnimation(5,mediumPoint,mediumLength,0,180,this.translation))
+        this.position2be=([x2-x1,0,z2-z1])
     }
     
     display(){

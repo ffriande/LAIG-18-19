@@ -24,7 +24,8 @@ class MyNode
     	mat4.identity(this.animationMatrix);
 
     	this.animation_time_passed_by=0;	
-	};
+	this.piece_animation_time_since=0;
+};
 
 	/**
      * Adds Node child.
@@ -89,6 +90,26 @@ class MyNode
 
         deltaTime=deltaTime/1000 - this.animation_time_passed_by;
 		var i=0;
+	if(this.leaves[0].primitive!=null &&this.leaves[0].primitive instanceof MyPiece){
+		if(this.animations[0]!=null && this.animations[0].finished==false){
+			if(this.leaves[0].primitive.scene.game.justMovedPiece){
+				this.leaves[0].primitive.scene.game.justMovedPiece=0
+				this.piece_animation_time_since=deltaTime;	
+			}
+			deltaTime-=this.piece_animation_time_since;
+			if(this.animations[0].time >= deltaTime){
+				this.animations[0].update(deltaTime);
+				this.animations[0].apply(this);
+
+			}
+			else{
+				this.animations[0].finished=true;
+				this.animations.splice(0,1);
+				this.leaves[0].primitive.scene.game.currentState=this.leaves[0].primitive.scene.game.state.CHOOSING_PIECE
+				this.leaves[0].primitive.setPosition(this.leaves[0].primitive.position2be)
+			}}
+	}
+	else{
          for(i; i<this.animations.length;i++){
 			if(this.animations[i].finished==false)
 				if(this.animations[i].time >= deltaTime){
@@ -102,15 +123,11 @@ class MyNode
 					//so that the delta time of the following animation is reset(next update)	
 					this.animation_time_passed_by+=this.animations[i].time;
 					this.animations[i].finished=true;
-					if(this.leaves[0] instanceof MyPiece){
-						this.animations.splice(i,1);
-						this.leaves[0].setPosition(this.leaves[0].position2be)
-						
-					}
+
 				}
 			//else 
 			//	this.animations.splice(i,1);
-			}
+			}}
 
 	};
 
